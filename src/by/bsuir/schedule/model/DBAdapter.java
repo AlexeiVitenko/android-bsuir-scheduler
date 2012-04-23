@@ -1,0 +1,67 @@
+package by.bsuir.schedule.model;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.GregorianCalendar;
+
+import by.bsuir.schedule.parser.Pushable;
+
+/**
+ * 
+ * @author Alexei
+ *
+ */
+public class DBAdapter implements Pushable, Closeable{
+	protected static DBAdapter mInstance;
+	public static DBAdapter getInstance(){
+		if (mInstance == null) {
+			mInstance = new DBAdapter();
+		}
+		return mInstance;
+	}
+	
+	protected DBAdapter(){
+		
+	}
+	
+	/**
+	 * Возвращает структуру типа Day.
+	 * @param day
+	 * @param month
+	 * @param year
+	 */
+	public Day getDay(GregorianCalendar day){
+		return new Day(day);
+	}
+	
+	/**
+	 * Проверяет, является ли день учебным необходимо для календаря месяца.
+	 * @param day
+	 * @param month
+	 * @param year
+	 * @return
+	 */
+	public boolean isWorkDay(GregorianCalendar day){
+		return day.get(GregorianCalendar.DAY_OF_WEEK)!=GregorianCalendar.SUNDAY;
+	}
+	
+	public Pair getPair(GregorianCalendar date, int scheduleId){
+		//TODO определить
+		return (new Day(date).getPair(scheduleId));
+	}
+	
+	public void changeNote(GregorianCalendar day, int schId, String note){
+		//TODO реализовать
+	}
+	
+	@Override
+	public void push(by.bsuir.schedule.parser.Lesson lesson) {
+		//TODO Определить
+	}
+
+	@Override
+	public void close() throws IOException {
+		// TODO Auto-generated method stub
+	}
+
+}

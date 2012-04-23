@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item android:id="@+id/menu_item_day"
+        android:icon="@drawable/ic_menu_day" 
+        android:title="@string/menu_item_day" />
+    
+    <item android:id="@+id/menu_item_week"
+        android:icon="@drawable/ic_menu_week"
+        android:title="@string/menu_item_week"
+        android:enabled="false" />
+    
+    <item android:id="@+id/menu_item_month"
+        android:icon="@drawable/ic_menu_month"
+        android:title="@string/menu_item_month" />
+    
+    <item android:id="@+id/menu_item_refresh"
+        android:icon="@drawable/ic_menu_refresh"
+        android:title="@string/menu_item_refresh" />
+    
+    <item android:id="@+id/menu_item_preferences"
+        android:icon="@drawable/ic_menu_preferences"
+        android:title="@string/menu_item_preferences" />
+    
+    <item android:id="@+id/menu_item_info_details"
+        android:icon="@drawable/ic_menu_info_details"
+        android:title="@string/menu_item_info_details" />
+    
+</menu>
