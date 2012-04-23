@@ -6,8 +6,6 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
-import by.bsuir.scheduler.Lesson;
-
 
 public class Day {
 	private DBAdapter mDbAdapter;

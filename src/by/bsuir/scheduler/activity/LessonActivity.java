@@ -7,7 +7,6 @@ import java.util.List;
 import by.bsuir.schedule.model.DBAdapter;
 import by.bsuir.schedule.model.Pair;
 import by.bsuir.scheduler.DayPagerAdapter;
-import by.bsuir.scheduler.Lesson;
 
 import by.bsuir.scheduler.R;
 

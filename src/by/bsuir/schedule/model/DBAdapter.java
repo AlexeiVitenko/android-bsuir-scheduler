@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.GregorianCalendar;
 
+import by.bsuir.schedule.parser.Lesson;
 import by.bsuir.schedule.parser.Pushable;
 
 /**
@@ -27,19 +28,15 @@ public class DBAdapter implements Pushable, Closeable{
 	/**
 	 * Возвращает структуру типа Day.
 	 * @param day
-	 * @param month
-	 * @param year
 	 */
 	public Day getDay(GregorianCalendar day){
 		return new Day(day);
 	}
 	
 	/**
-	 * Проверяет, является ли день учебным необходимо для календаря месяца.
+	 * Проверяет, является ли день учебным. Необходимо для календаря месяца и подгрузки дней.
 	 * @param day
-	 * @param month
-	 * @param year
-	 * @return
+	 * @return true - если да.
 	 */
 	public boolean isWorkDay(GregorianCalendar day){
 		return day.get(GregorianCalendar.DAY_OF_WEEK)!=GregorianCalendar.SUNDAY;
@@ -55,7 +52,10 @@ public class DBAdapter implements Pushable, Closeable{
 	}
 	
 	@Override
-	public void push(by.bsuir.schedule.parser.Lesson lesson) {
+	/**
+	 * Наш адаптер также будет принимать пары от парсера. В этом ему поможет наш метод
+	 */
+	public void push(Lesson lesson) {
 		//TODO Определить
 	}
 
