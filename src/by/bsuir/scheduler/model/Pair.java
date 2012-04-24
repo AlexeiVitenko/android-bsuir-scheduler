@@ -1,4 +1,4 @@
-package by.bsuir.schedule.model;
+package by.bsuir.scheduler.model;
 
 /**
  * 

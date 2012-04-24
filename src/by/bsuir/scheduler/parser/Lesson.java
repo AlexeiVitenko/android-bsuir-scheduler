@@ -1,4 +1,4 @@
-package by.bsuir.schedule.parser;
+package by.bsuir.scheduler.parser;
 
 public class Lesson {
 	private int mWeek;

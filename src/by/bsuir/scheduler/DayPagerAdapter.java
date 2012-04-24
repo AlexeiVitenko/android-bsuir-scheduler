@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import by.bsuir.schedule.model.DBAdapter;
-import by.bsuir.schedule.model.Day;
 import by.bsuir.scheduler.R;
 
 import by.bsuir.scheduler.activity.LessonActivity;
+import by.bsuir.scheduler.model.DBAdapter;
+import by.bsuir.scheduler.model.Day;
 
 import android.content.Context;
 import android.content.Intent;

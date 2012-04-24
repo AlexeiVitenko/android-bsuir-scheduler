@@ -1,4 +1,4 @@
-package by.bsuir.schedule.model;
+package by.bsuir.scheduler.model;
 
 import java.util.ArrayList;
 import java.util.Date;

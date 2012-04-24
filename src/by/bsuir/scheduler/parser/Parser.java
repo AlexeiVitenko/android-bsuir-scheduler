@@ -1,4 +1,4 @@
-package by.bsuir.schedule.parser;
+package by.bsuir.scheduler.parser;
 
 import java.io.BufferedReader;
 import java.io.File;

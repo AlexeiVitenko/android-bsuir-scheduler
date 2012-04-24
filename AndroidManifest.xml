@@ -39,7 +39,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation" >
         </activity>
         <activity
-            android:name="by.bsuir.scheduler.activity.SettingsActivity"
+            android:name=".activity.SettingsActivity"
             android:label="@string/app_name" 
             android:configChanges="keyboard|keyboardHidden|orientation">
         </activity>

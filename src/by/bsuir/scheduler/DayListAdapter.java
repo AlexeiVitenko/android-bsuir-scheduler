@@ -3,8 +3,8 @@ package by.bsuir.scheduler;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.bsuir.schedule.model.Pair;
 import by.bsuir.scheduler.R;
+import by.bsuir.scheduler.model.Pair;
 
 import android.content.Context;
 import android.graphics.Color;

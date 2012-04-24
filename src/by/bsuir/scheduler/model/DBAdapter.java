@@ -1,11 +1,11 @@
-package by.bsuir.schedule.model;
+package by.bsuir.scheduler.model;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.GregorianCalendar;
 
-import by.bsuir.schedule.parser.Lesson;
-import by.bsuir.schedule.parser.Pushable;
+import by.bsuir.scheduler.parser.Lesson;
+import by.bsuir.scheduler.parser.Pushable;
 
 /**
  * 
