@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="2dp" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+		<TextView
+		    android:id="@+id/lesson_Day" 
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center"
+		    android:textSize="18sp"
+		    />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp" >
+
+            <TextView
+                android:layout_weight="1."
+                android:id="@+id/lesson_subject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Предмет" 
+                android:textSize="14sp"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_weight="1."
+                android:id="@+id/lesson_teacher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Преподаватель"
+                android:textSize="12sp" />
+            <TextView
+                android:layout_weight="1."
+                android:id="@+id/lesson_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Тип"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:textSize="7pt" >
+
+            <TextView
+                android:id="@+id/lesson_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="00:00-00:00"
+                android:textSize="7pt" />
+
+            <TextView
+                android:id="@+id/lesson_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:text="ауд. 000-0"
+                android:textSize="8pt" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/lesson_note"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:minLines="5"
+        android:background="@android:color/background_light"
+        android:textColor="@android:color/black"
+        android:text="Заметка" />
+
+</LinearLayout>
