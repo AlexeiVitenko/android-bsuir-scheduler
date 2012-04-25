@@ -1,7 +1,7 @@
 package by.bsuir.scheduler.model;
 
 class DBColumns {
-	
+	//
 	public static final String NAME = "name";
 	public static final String SCHEDULE_ID = "schedule_id";
 	public static final String START_HOUR = "start_hour";
