@@ -18,8 +18,8 @@ class DBHelper extends SQLiteOpenHelper {
 	private static final String SUBJECT_TYPE_TABLE_NAME = "subject_type";
 	private static final String DAY_TABLE_NAME = "day";
 	private static final String TEACHER_TABLE_NAME = "teacher";
-	private static final String[] DAYS = {"Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"};
-	private static final String[] SUBJECT_TYPES = {"", "Лекция", "Практическое занятие", "Лабораторная работа", "Курсовое проектирование"};
+	private static final String[] DAYS = {"РїРѕРЅРµРґРµР»СЊРЅРёРє", "РІС‚РѕСЂРЅРёРє", "СЃСЂРµРґР°", "С‡РµС‚РІРµСЂРі", "РїСЏС‚РЅРёС†Р°", "СЃСѓР±Р±РѕС‚Р°"};
+	private static final String[] SUBJECT_TYPES = {"", "Р»РµРєС†РёСЏ", "РїСЂР°РєС‚РёС‡РµСЃРєРѕРµ Р·Р°РЅСЏС‚РёРµ", "Р»Р°Р±РѕСЂР°С‚РѕСЂРЅР°СЏ СЂР°Р±РѕС‚Р°", "РєСѓСЂСЃРѕРІРѕРµ РїСЂРѕРµРєС‚РёСЂРѕРІР°РЅРёРµ"};
 	private static final String SCHEDULE_VIEW_NAME = "schedule_view";
 	
 	public DBHelper(Context context) {
@@ -235,7 +235,7 @@ WHERE subject._id = schedule.subject_id and subject_type._id = schedule.subject_
 		values.put(DBColumns.SUBJECT_ID, addSubjectItem(subjectName));
 		values.put(DBColumns.SUBJECT_TYPE_ID, getItemId(SUBJECT_TYPE_TABLE_NAME, DBColumns.NAME, subjectType));
 		values.put(DBColumns.TIME_ID, addTimeItem(startHour, startMinutes, endHour, endMinutes));
-		values.put(DBColumns.DAY_ID, getItemId(DAY_TABLE_NAME, DBColumns.NAME, dayName)); // добавить значения проверку на "пн" или "понедельник"
+		values.put(DBColumns.DAY_ID, getItemId(DAY_TABLE_NAME, DBColumns.NAME, dayName)); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ "пїЅпїЅ" пїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 		values.put(DBColumns.WEEK, week);
 		values.put(DBColumns.ROOM, room);
 		values.put(DBColumns.TEACHER_ID, teacherName);
