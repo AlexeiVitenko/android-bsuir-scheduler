@@ -63,7 +63,7 @@ public class SchedulerActivity extends Activity {
 
 		case R.id.menu_item_month:
 			intent = new Intent(this, MonthActivity.class);
-			startActivity(intent);
+			startActivityForResult(intent,RESULT_DAY);
 			return true;
 
 		case R.id.menu_item_refresh:

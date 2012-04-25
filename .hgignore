@@ -1,0 +1,15 @@
+
+syntax: regexp
+^bin/res$
+syntax: regexp
+^bin/res$
+syntax: regexp
+^bin/AndroidManifest\.xml$
+syntax: regexp
+^bin/classes\.dex$
+syntax: regexp
+^bin/jarlist\.cache$
+syntax: regexp
+^bin/resources\.ap_$
+syntax: regexp
+^bin/rrr\.txt$
