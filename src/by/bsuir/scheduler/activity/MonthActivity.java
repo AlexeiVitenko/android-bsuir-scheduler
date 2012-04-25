@@ -11,26 +11,27 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class MonthActivity extends Activity {
-	
+	public static final int GET_DAY = 1;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		MonthPagerAdapter monthPagerAdapter = new MonthPagerAdapter(17, 6, GregorianCalendar.JANUARY, this);
-
+		// вводим кол-во недель текущего сема и дату 2ого сема.
+		MonthPagerAdapter monthPagerAdapter = new MonthPagerAdapter(17, 6,
+				GregorianCalendar.FEBRUARY, this);
 		ViewPager viewPager = new ViewPager(this);
 		viewPager.setAdapter(monthPagerAdapter);
 		viewPager.setCurrentItem(monthPagerAdapter.getCurrentItem());
 
 		setContentView(viewPager);
-		
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -44,7 +45,6 @@ public class MonthActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.menu_item_day:
 			intent = new Intent(this, SchedulerActivity.class);
-			intent.putExtra("day", "23.04.2012");
 			startActivity(intent);
 			return true;
 
@@ -53,7 +53,6 @@ public class MonthActivity extends Activity {
 			return true;
 
 		case R.id.menu_item_month:
-			//
 			return true;
 
 		case R.id.menu_item_refresh:
