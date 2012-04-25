@@ -3,7 +3,7 @@
     package="by.bsuir.scheduler"
     android:versionCode="1"
     android:versionName="0.1 pre-alpha" >
-    <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="7" />
     
     <application
         android:icon="@drawable/ic_launcher"

@@ -123,19 +123,18 @@ public class Parser {
 	
 	private void parseDay(Node row){
 		NodeList columns = row.getChildNodes();
-		System.out.println(row.getFirstChild().getTextContent());
-		String day = row.getFirstChild().getTextContent();
+		String day = row.getFirstChild().getFirstChild().getNodeValue();
 		List<Lesson> lessons = new ArrayList<Lesson>(); 
 		int length = row.getChildNodes().item(2).getChildNodes().getLength();
 		
 		for (int i = 0; i < length; i++) {
 			Node div = columns.item(1).getChildNodes().item(i);
-			String[] weeks = div.getTextContent().split(",");
+			String[] weeks = (div.getFirstChild().getNodeValue()==null?"":div.getFirstChild().getNodeValue()).split(",");
 			String [] params = new String[columns.getLength()-1];
 			for (int j = 2; j < columns.getLength(); j++) {
 				
 				Node d = columns.item(j).getChildNodes().item(i);
-				params[j-1]=d.getTextContent();	
+				params[j-1]=d.getFirstChild().getNodeValue()==null?"":d.getFirstChild().getNodeValue();	
 			}
 			for (int k = 0; k < weeks.length; k++) {
 				if (params[2].equals(""+mSubGroup)||params[2].equals("")) {
