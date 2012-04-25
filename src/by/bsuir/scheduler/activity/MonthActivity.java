@@ -44,8 +44,10 @@ public class MonthActivity extends Activity {
 		Intent intent;
 		switch (item.getItemId()) {
 		case R.id.menu_item_day:
+			/*
 			intent = new Intent(this, SchedulerActivity.class);
-			startActivity(intent);
+			startActivity(intent);*/
+			finish();
 			return true;
 
 		case R.id.menu_item_week:
