@@ -38,8 +38,10 @@ public class SchedulerActivity extends Activity {
 		Log.i("SchedulerActivity", "onActivityResult");
 		if (resultCode == RESULT_DAY) {
 			dayPagerAdapter = new DayPagerAdapter(this, data.getLongExtra(GridCellAdapter.DAY, System.currentTimeMillis()));
+			viewPager = new ViewPager(this);
 			viewPager.setAdapter(dayPagerAdapter);
 			viewPager.setCurrentItem(dayPagerAdapter.POSITION, false);
+			setContentView(viewPager);
 		} else super.onActivityResult(requestCode, resultCode, data);
 	}
 
