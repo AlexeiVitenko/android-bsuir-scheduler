@@ -19,7 +19,7 @@ import android.widget.DatePicker;
 
 public class SettingsActivity extends PreferenceActivity {
 	private static final int DATE_DIALOG=1001;
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("DD.MM.yyyy");
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 	
 	private Preference mSemesterLength;
 	private Preference mStartDate;
@@ -43,7 +43,7 @@ public class SettingsActivity extends PreferenceActivity {
 				return false;
 			}
 		});
-		mStartDate.setSummary(formatDate(mPref.getLong(getString(R.string.semester_start_day), -1)));
+		mStartDate.setSummary(formatDate(mPref.getLong(getString(R.string.semester_start_day), System.currentTimeMillis())));
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class SettingsActivity extends PreferenceActivity {
 		switch (id) {
 		case DATE_DIALOG:
 			GregorianCalendar gc = new GregorianCalendar();
-			gc.setTimeInMillis(mPref.getLong(getString(R.string.semester_start_day), -1));
+			gc.setTimeInMillis(mPref.getLong(getString(R.string.semester_start_day), System.currentTimeMillis()));
 			DatePickerDialog dpd = new DatePickerDialog(this, new OnDateSetListener() {
 				
 				@Override
@@ -70,19 +70,19 @@ public class SettingsActivity extends PreferenceActivity {
 			return super.onCreateDialog(id);
 		}
 	}
-	
+	/*
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		switch (id) {
 		case DATE_DIALOG:
-			
+			((DatePickerDialog)dialog).set
 			break;
 		default:
 			super.onPrepareDialog(id, dialog);
 			break;
 		}
 	}
-	
+	*/
 	private static String formatDate(long date ){
 		return dateFormat.format(new Date(date));
 	}
