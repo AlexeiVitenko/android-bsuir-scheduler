@@ -24,10 +24,12 @@ public class DayListAdapter extends BaseAdapter {
 
 	private LayoutInflater inflater;
 	private List<Pair> mPairs;
+	private GregorianCalendar currentDay;
 
-	public DayListAdapter(Context context, List<Pair> pairs) {
+	public DayListAdapter(Context context, GregorianCalendar day, List<Pair> pairs) {
 		inflater = LayoutInflater.from(context);
 		mPairs = pairs;
+		currentDay = day;
 	}
 
 	public void setList(List<Pair> mPairs) {
@@ -89,7 +91,10 @@ public class DayListAdapter extends BaseAdapter {
 		int nMinute = time.get(GregorianCalendar.MINUTE);
 		int nDay = time.get(GregorianCalendar.DAY_OF_MONTH);
 		int nMonth = time.get(GregorianCalendar.MONTH);
-
+		int cDay = currentDay.get(GregorianCalendar.DAY_OF_MONTH);
+		int cMomth = currentDay.get(GregorianCalendar.MONTH);
+		
+		if (nDay == cDay && nMonth == cMomth) {
 		if (nHour > times[0] || (nHour == times[0] && nMinute > times[1])) {
 			if (nHour < times[2] || (nHour == times[2] && nMinute < times[3])) {
 				double pct = (double) (60 * (nHour - times[0]) + (nMinute - times[1])) / 90;
@@ -109,6 +114,7 @@ public class DayListAdapter extends BaseAdapter {
 			}
 		} else {
 			holder.statusBar.setBackgroundColor(Color.GRAY);
+		}
 		}
 
 		switch (lesson.getType()) {

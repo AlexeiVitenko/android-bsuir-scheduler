@@ -116,7 +116,7 @@ public class DayPagerAdapter extends PagerAdapter {
 		((TextView) view.findViewById(R.id.month_genitive))
 				.setText(months[needed.get(GregorianCalendar.MONTH)]);
 
-		final DayListAdapter adapter = new DayListAdapter(mContext,
+		final DayListAdapter adapter = new DayListAdapter(mContext, needed,
 				day.getPairs());
 
 		ListView listView = (ListView) view.findViewById(R.id.listView1);
