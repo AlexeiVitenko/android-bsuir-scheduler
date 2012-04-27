@@ -13,5 +13,11 @@
     <string name="dialog_save">Сохранить</string>
     <string name="dialog_clear">Очистить</string>
     <string name="dialog_cancel">Отмена</string>
+    <string name="semester">Семестр</string>
+    <string name="weeks_number">Длина семетра в неделях</string>
+    <string name="semester_length">Длина семестра</string>
+    <string name="semester_length_weeks">semester_length_weeks</string>
+    <string name="semester_start_day">semester_start_day</string>
+    <string name="semester_start">Начало семестра</string>
 
 </resources>
