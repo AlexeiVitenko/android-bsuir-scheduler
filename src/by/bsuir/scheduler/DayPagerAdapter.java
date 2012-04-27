@@ -25,8 +25,6 @@ import android.widget.TextView;
 public class DayPagerAdapter extends PagerAdapter {
 	public static final int POSITION = 502;
 	private static final int LOOPS = 300;
-	public static final String[] daysOfWeek = new String[] { "Воскресенье",
-			"Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" };
 
 	private Context mContext;
 	private LayoutInflater mInflater;
@@ -48,7 +46,7 @@ public class DayPagerAdapter extends PagerAdapter {
 		while (!mAdapter.isWorkDay(mCurrentDay)) {
 			mCurrentDay.add(GregorianCalendar.DAY_OF_YEAR, -1);
 		}
-		////
+		// //
 		mCurrentDayPosition--;
 		dayLeft = new GregorianCalendar();
 		dayLeft.setTimeInMillis(currentDay);
@@ -96,18 +94,17 @@ public class DayPagerAdapter extends PagerAdapter {
 		// ////////////////////////////////////////////////////////////////////////////
 		view = mInflater.inflate(R.layout.day_page, null);
 
-		TextView dayOfWeek = (TextView) view.findViewById(R.id.day_of_week);
-		// ЗАГЛУШКА
-		dayOfWeek
+		String[] daysOfWeek = mContext.getResources().getStringArray(
+				R.array.days_of_week);
+		String[] months = mContext.getResources().getStringArray(
+				R.array.months_genitive);
+		((TextView) view.findViewById(R.id.day_of_week))
 				.setText(daysOfWeek[needed.get(GregorianCalendar.DAY_OF_WEEK) - 1]
 						+ ", ");
-		//
-
-		TextView dayDate = (TextView) view.findViewById(R.id.day_date);
-		// ЗАГЛУШКА
-		dayDate.setText((needed.get(GregorianCalendar.DAY_OF_MONTH)) + "."
-				+ (needed.get(GregorianCalendar.MONTH) + 1));
-		//
+		((TextView) view.findViewById(R.id.day_date)).setText(needed
+				.get(GregorianCalendar.DAY_OF_MONTH) + " ");
+		((TextView) view.findViewById(R.id.month_genitive))
+				.setText(months[needed.get(GregorianCalendar.MONTH)]);
 
 		final DayListAdapter adapter = new DayListAdapter(mContext,
 				day.getPairs());

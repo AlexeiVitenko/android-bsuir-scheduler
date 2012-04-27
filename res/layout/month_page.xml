@@ -46,6 +46,7 @@
         android:verticalSpacing="-1px" >
 
         <TextView
+            android:id="@+id/Mo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
@@ -53,36 +54,42 @@
             android:text="ПН" />
 
         <TextView
+            android:id="@+id/Tu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.14"
             android:text="ВТ" />
 
         <TextView
+            android:id="@+id/We"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.14"
             android:text="СР" />
 
         <TextView
+            android:id="@+id/Th"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.14"
             android:text="ЧТ" />
 
         <TextView
+            android:id="@+id/Fr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.14"
             android:text="ПТ" />
 
         <TextView
+            android:id="@+id/Sa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.14"
             android:text="СБ" />
 
         <TextView
+            android:id="@+id/Su"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.15"

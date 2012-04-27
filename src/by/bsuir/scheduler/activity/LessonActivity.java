@@ -27,8 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class LessonActivity extends Activity {
-	public static final String DAY="day";
-	public static final String PAIR="pair";
+	public static final String DAY = "day";
+	public static final String PAIR = "pair";
 	private final static int DIALOG = 1;
 	private int lessonID;
 
@@ -36,23 +36,32 @@ public class LessonActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.lesson);
-				// /
+		// /
 		// /типа запрос в БД
 		// /
 		GregorianCalendar day = new GregorianCalendar();
 		day.setTimeInMillis(getIntent().getLongExtra(DAY, -1));
-		Pair lesson = DBAdapter.getInstance().getPair(day, getIntent().getIntExtra(PAIR, -1));
-		((TextView)findViewById(R.id.lesson_Day)).setText(""+DayPagerAdapter.daysOfWeek[day.get(GregorianCalendar.DAY_OF_WEEK)-1]+"  "+day.get(GregorianCalendar.DAY_OF_MONTH)+
-				"."+(day.get(GregorianCalendar.MONTH)+1));
-		TextView subject = (TextView) findViewById(R.id.lesson_subject);
-		subject.setText(lesson.getLesson());
-		TextView teacher = (TextView) findViewById(R.id.lesson_teacher);
-		teacher.setText(lesson.getTeacher());
-		((TextView)findViewById(R.id.lesson_type)).setText(lesson.getStringType());
+		Pair lesson = DBAdapter.getInstance().getPair(day,
+				getIntent().getIntExtra(PAIR, -1));
+		
+		String[] daysOfWeek = getResources().getStringArray(
+				R.array.days_of_week);
+		String[] months = getResources()
+				.getStringArray(R.array.months_genitive);
+		((TextView) findViewById(R.id.day_of_week)).setText(daysOfWeek[day
+				.get(GregorianCalendar.DAY_OF_WEEK) - 1] + ", ");
+		((TextView) findViewById(R.id.day_date)).setText(day
+				.get(GregorianCalendar.DAY_OF_MONTH) + " ");
+		((TextView) findViewById(R.id.month_genitive)).setText(
+				months[day.get(GregorianCalendar.MONTH)]);
+
+		((TextView) findViewById(R.id.lesson_subject)).setText(lesson.getLesson());
+		((TextView) findViewById(R.id.lesson_teacher)).setText(lesson.getTeacher());
+		((TextView) findViewById(R.id.lesson_type)).setText(lesson.getStringType());
 		TextView time = (TextView) findViewById(R.id.lesson_time);
-		time.setText(String.format("%d:%d-%d:%d", lesson.getTime()[0],lesson.getTime()[1],lesson.getTime()[2],lesson.getTime()[3]));
-		TextView room = (TextView) findViewById(R.id.lesson_room);
-		room.setText("ауд. " + lesson.getRoom());
+		time.setText(String.format("%d:%d-%d:%d", lesson.getTime()[0],
+				lesson.getTime()[1], lesson.getTime()[2], lesson.getTime()[3]));
+		((TextView) findViewById(R.id.lesson_room)).setText("ауд. " + lesson.getRoom());
 		TextView note = (TextView) findViewById(R.id.lesson_note);
 		note.setText(lesson.getNote());
 		note.setOnLongClickListener(new OnLongClickListener() {
@@ -78,7 +87,7 @@ public class LessonActivity extends Activity {
 
 	private Dialog createNoteDialog(Context context) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(R.string.dialog_title);
+		builder.setTitle(R.string.note);
 		View view = (LinearLayout) getLayoutInflater().inflate(
 				R.layout.note_dialog, null);
 		builder.setView(view);
@@ -111,7 +120,6 @@ public class LessonActivity extends Activity {
 		((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEUTRAL)
 				.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
-						Log.i("sdfsdf", "sdfsdfs");
 						note.setText("");
 					}
 				});

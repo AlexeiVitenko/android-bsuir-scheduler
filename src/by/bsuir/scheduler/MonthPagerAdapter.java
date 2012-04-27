@@ -101,9 +101,6 @@ public class MonthPagerAdapter extends PagerAdapter {
 
 	private List<View> generatePages(ViewGroup container, int month, int year) {
 		List<View> list = new ArrayList<View>();
-		String[] months = { "Январь", "Февраль", "Март", "Апрель", "Май",
-				"Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь",
-				"Декабрь" };
 		int sep = GregorianCalendar.SEPTEMBER;
 		int dec = GregorianCalendar.DECEMBER;
 		int may = GregorianCalendar.MAY;
@@ -119,6 +116,9 @@ public class MonthPagerAdapter extends PagerAdapter {
 		}
 
 		if ((endMonth - startMonth) > 0) {
+
+			String[] months = context.getResources().getStringArray(
+					R.array.months);
 			for (int i = startMonth; i <= endMonth; i++) {
 				GridCellAdapter gridCellAdapter = new GridCellAdapter(context,
 						R.layout.day_of_month, i, year);
@@ -131,6 +131,15 @@ public class MonthPagerAdapter extends PagerAdapter {
 				((TextView) view.findViewById(R.id.year)).setText("" + year);
 				((GridView) view.findViewById(R.id.calendar))
 						.setAdapter(gridCellAdapter);
+
+				int[] daysOfWeekID = { R.id.Mo, R.id.Tu, R.id.We, R.id.Th,
+						R.id.Fr, R.id.Sa, R.id.Su };
+				String[] daysOfWeek = context.getResources().getStringArray(
+						R.array.days_of_week_abb);
+				for (int j = 0; j < 7; j++) {
+					((TextView) view.findViewById(daysOfWeekID[j]))
+							.setText(daysOfWeek[j]);
+				}
 
 				list.add(view);
 			}

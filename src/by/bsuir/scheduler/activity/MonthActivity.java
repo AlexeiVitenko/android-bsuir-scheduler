@@ -2,9 +2,7 @@ package by.bsuir.scheduler.activity;
 
 import java.util.GregorianCalendar;
 
-import by.bsuir.scheduler.DayPagerAdapter;
 import by.bsuir.scheduler.MonthPagerAdapter;
-
 import by.bsuir.scheduler.R;
 
 import android.app.Activity;
@@ -31,7 +29,7 @@ public class MonthActivity extends Activity {
 
 		setContentView(viewPager);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -44,9 +42,6 @@ public class MonthActivity extends Activity {
 		Intent intent;
 		switch (item.getItemId()) {
 		case R.id.menu_item_day:
-			/*
-			intent = new Intent(this, SchedulerActivity.class);
-			startActivity(intent);*/
 			finish();
 			return true;
 

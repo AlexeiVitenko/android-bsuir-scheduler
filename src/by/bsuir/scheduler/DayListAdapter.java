@@ -81,7 +81,7 @@ public class DayListAdapter extends BaseAdapter {
 		int [] times = lesson.getTime();
 		holder.timeStart.setText(""+times[0]+":"+times[1]);
 		holder.timeEnd.setText("- "+times[2]+":"+times[3]);
-		// ЗАГЛУШКА
+		
 		switch (lesson.getType()) {
 		case 1:
 			holder.classType.setImageResource(R.drawable.ic_lecture);
@@ -96,10 +96,10 @@ public class DayListAdapter extends BaseAdapter {
 			holder.classType.setImageResource(R.drawable.ic_control);
 			break;
 		default:
-			holder.classType.setImageBitmap(null);
+			holder.classType.setImageResource(R.drawable.physical_culture);
 			break;
 		}
-		//
+		
 		holder.subject.setText(lesson.getLesson());
 		holder.room.setText(lesson.getRoom());
 		holder.teacher.setText(lesson.getTeacher());
