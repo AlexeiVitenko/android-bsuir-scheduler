@@ -93,6 +93,7 @@ public class DayListAdapter extends BaseAdapter {
 		int nMonth = time.get(GregorianCalendar.MONTH);
 		int cDay = currentDay.get(GregorianCalendar.DAY_OF_MONTH);
 		int cMomth = currentDay.get(GregorianCalendar.MONTH);
+		int green = Color.rgb(0, 178, 0);
 		
 		if (nDay == cDay && nMonth == cMomth) {
 		if (nHour > times[0] || (nHour == times[0] && nMinute > times[1])) {
@@ -101,21 +102,23 @@ public class DayListAdapter extends BaseAdapter {
 				double sR = Color.red(Color.GRAY);
 				double sG = Color.green(Color.GRAY);
 				double sB = Color.blue(Color.GRAY);
-				double gR = Color.red(Color.GREEN) - sR;
-				double gG = Color.green(Color.GREEN) - sG;
-				double gB = Color.blue(Color.GREEN) - sB;
+				double gR = Color.red(green) - sR;
+				double gG = Color.green(green) - sG;
+				double gB = Color.blue(green) - sB;
 				Log.i("DayListAdapter", "" + pct);
 				Log.i("DayListAdapter", "" + (int) (sR + gR * pct) + " "
 						+ (int) (sG + gG * pct) + " " + (int) (sB + gB * pct));
 				holder.statusBar.setBackgroundColor(Color.rgb((int) (sR + gR
 						* pct), (int) (sG + gG * pct), (int) (sB + gB * pct)));
 			} else {
-				holder.statusBar.setBackgroundColor(Color.GREEN);
+				holder.statusBar.setBackgroundColor(green);
 			}
 		} else {
 			holder.statusBar.setBackgroundColor(Color.GRAY);
 		}
 		}
+
+		holder.statusBar.setBackgroundColor(green);
 
 		switch (lesson.getType()) {
 		case 1:
