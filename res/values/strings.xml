@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="hello">Hello World, SchedulerActivity!</string>
+    <string name="app_name">Scheduler</string>
+    <string name="menu_item_day">День</string>
+    <string name="menu_item_week">Неделя</string>
+    <string name="menu_item_month">Месяц</string>
+    <string name="menu_item_refresh">Обновить</string>
+    <string name="menu_item_preferences">Настройки</string>
+    <string name="menu_item_info_details">О Scheduler</string>
+    <string name="dialog_title">Заметка</string>
+    <string name="dialog_save">Сохранить</string>
+    <string name="dialog_clear">Очистить</string>
+    <string name="dialog_cancel">Отмена</string>
+    <string name="semester">Семестр</string>
+    <string name="weeks_number">Длина семетра в неделях</string>
+    <string name="semester_length">Длина семестра</string>
+    <string name="semester_length_weeks">semester_length_weeks</string>
+    <string name="semester_start_day">semester_start_day</string>
+    <string name="semester_start">Начало семестра</string>
     <string name="app_name">Scheduler</string>
     <string name="menu_item_day">Day</string>
     <string name="menu_item_week">Week</string>
@@ -60,4 +78,10 @@
         <item>December</item>
     </string-array>
 
+<string name="semester">Семестр</string>
+    <string name="weeks_number">Длина семетра в неделях</string>
+    <string name="semester_length">Длина семестра</string>
+    <string name="semester_length_weeks">semester_length_weeks</string>
+    <string name="semester_start_day">semester_start_day</string>
+    <string name="semester_start">Начало семестра</string>
 </resources>
