@@ -32,7 +32,7 @@ public class SettingsActivity extends PreferenceActivity {
 		mPref = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		mSemesterLength = findPreference(getString(R.string.semester_length_weeks));
-		mSemesterLength.setSummary(""+mPref.getString(getString(R.string.semester_length_weeks),""+(-1))+" недель");
+		mSemesterLength.setSummary(""+mPref.getString(getString(R.string.semester_length_weeks),""+(-1))+getString(R.string.weeks));
 		
 		mStartDate = findPreference(getString(R.string.semester_start_day));
 		mStartDate.setOnPreferenceClickListener(new OnPreferenceClickListener() {

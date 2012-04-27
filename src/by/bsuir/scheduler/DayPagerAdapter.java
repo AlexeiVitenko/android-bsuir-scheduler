@@ -1,6 +1,7 @@
 package by.bsuir.scheduler;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import by.bsuir.scheduler.model.Day;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -25,7 +28,9 @@ import android.widget.TextView;
 public class DayPagerAdapter extends PagerAdapter {
 	public static final int POSITION = 502;
 	private static final int LOOPS = 300;
-
+	private final GregorianCalendar mStartDay = new GregorianCalendar();
+	private final GregorianCalendar mEndDay = new GregorianCalendar();
+	
 	private Context mContext;
 	private LayoutInflater mInflater;
 	// private List<View> mPages;
@@ -37,6 +42,12 @@ public class DayPagerAdapter extends PagerAdapter {
 
 	public DayPagerAdapter(Context context, long currentDay) {
 		mContext = context;
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+		mStartDay.setTimeInMillis(pref.getLong(mContext.getString(R.string.semester_start_day), -1));
+		mEndDay.setTimeInMillis(mStartDay.getTimeInMillis());
+		mEndDay.add(GregorianCalendar.WEEK_OF_YEAR, Integer.parseInt(pref.getString(mContext.getString(R.string.semester_length_weeks),""+ 18)));
+		mEndDay.add(Calendar.DAY_OF_YEAR, -1);
+		
 		mInflater = LayoutInflater.from(mContext);
 		mAdapter = DBAdapter.getInstance();
 

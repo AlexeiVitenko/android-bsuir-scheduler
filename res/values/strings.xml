@@ -14,11 +14,10 @@
     <string name="dialog_clear">Clear</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="semester">Семестр</string>
-	<string name="weeks_number">Длина семетра в неделях</string>
-	<string name="semester_length">Длина семестра</string>
+	<string name="semester_length">Semester length</string>
 	<string name="semester_length_weeks">semester_length_weeks</string>
 	<string name="semester_start_day">semester_start_day</string>
-	<string name="semester_start">Начало семестра</string>
+	<string name="semester_start">First day</string>
 
     <string-array name="days_of_week">
         <item>Sunday</item>
@@ -66,4 +65,5 @@
         <item>November</item>
         <item>December</item>
     </string-array>
+        <string name="weeks">" weeks"</string>
 </resources>
