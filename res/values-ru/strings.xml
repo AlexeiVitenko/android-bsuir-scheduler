@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Scheduler</string>
+    <string name="menu_item_day">День</string>
+    <string name="menu_item_week">Неделя</string>
+    <string name="menu_item_month">Месяц</string>
+    <string name="menu_item_refresh">Обновить</string>
+    <string name="menu_item_preferences">Настройки</string>
+    <string name="menu_item_info_details">О Scheduler</string>
+    <string name="note">Заметка</string>
+    <string name="dialog_save">Сохранить</string>
+    <string name="dialog_clear">Очистить</string>
+    <string name="dialog_cancel">Отмена</string>
+
+    <string-array name="days_of_week">
+        <item>Воскресенье</item>
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+    </string-array>
+    <string-array name="days_of_week_abb">
+        <item>ПН</item>
+        <item>ВТ</item>
+        <item>СР</item>
+        <item>ЧТ</item>
+        <item>ПТ</item>
+        <item>СБ</item>
+        <item>ВС</item>
+    </string-array>
+    <string-array name="months">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </string-array>
+    <string-array name="months_genitive">
+        <item>января</item>
+        <item>февраля</item>
+        <item>марта</item>
+        <item>апреля</item>
+        <item>мая</item>
+        <item>июня</item>
+        <item>июля</item>
+        <item>августа</item>
+        <item>сентября</item>
+        <item>октября</item>
+        <item>ноября</item>
+        <item>декабря</item>
+    </string-array>
+
+</resources>
