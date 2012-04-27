@@ -48,7 +48,7 @@ public class Day {
 	}
 	
 	private void generatePairs(){
-		Pair lesson1 = new Pair(this, 0, 0, "Ололлогия", 1,"лк", "108-4", "Иванов", new int[]{8,0,9,35}, null, 1);
+		Pair lesson1 = new Pair(this, 0, 0, "Ололлогия", 1,"лк", "108-4", "Иванов", new int[]{8,00,9,35}, null, 1);
 		Pair lesson2 = new Pair(this, 0, 1, "Ололлогия", 3,"лр", "210-4", "Иванов", new int[]{9,45,11,20}, null, 2);
 		Pair lesson3 = new Pair(this, 0, 0, "Физра", -1,"", "", "", new int[] {11,40,13,25}, null, 3);
 		mPairs.add(lesson1);
