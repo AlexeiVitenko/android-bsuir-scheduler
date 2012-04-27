@@ -33,7 +33,6 @@ public class DayPagerAdapter extends PagerAdapter {
 	
 	private Context mContext;
 	private LayoutInflater mInflater;
-	// private List<View> mPages;
 	private GregorianCalendar mCurrentDay;
 	private GregorianCalendar dayLeft;
 	private GregorianCalendar dayRight;
