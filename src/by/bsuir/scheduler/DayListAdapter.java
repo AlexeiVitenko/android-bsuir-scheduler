@@ -128,10 +128,12 @@ public class DayListAdapter extends BaseAdapter {
 			holder.classType.setImageResource(R.drawable.ic_laboratory);
 			break;
 		case 4:
-			holder.classType.setImageResource(R.drawable.ic_control);
+			holder.classType.setImageResource(R.drawable.ic_course);
+			break;
+		case -1:
+			holder.classType.setImageResource(R.drawable.ic_physical_culture);
 			break;
 		default:
-			holder.classType.setImageResource(R.drawable.physical_culture);
 			break;
 		}
 
