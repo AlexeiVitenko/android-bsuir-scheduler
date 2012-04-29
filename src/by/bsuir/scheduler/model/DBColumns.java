@@ -18,5 +18,9 @@ class DBColumns {
 	public static final String TEXT = "text";
 	public static final String DATE = "date";
 	public static final String SUBGROUP = "subgroup";
+	public static final String VIEW_SUBJECT = "subject";
+	public static final String VIEW_SUBJECT_TYPE = "subject_type";
+	public static final String VIEW_DAY = "day";
+	public static final String VIEW_TEACHER = "teacher";
 	
 }
