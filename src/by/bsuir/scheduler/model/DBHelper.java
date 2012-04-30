@@ -282,7 +282,7 @@ teacher._id = schedule.teacher_id; */
 		values.put(DBColumns.SUBJECT_ID, addSubjectItem(subjectName));
 		values.put(DBColumns.SUBJECT_TYPE_ID, getItemWithNameValue(SUBJECT_TYPE_TABLE_NAME, DBColumns.NAME, subjectType));
 		values.put(DBColumns.TIME_ID, addTimeItem(startHour, startMinutes, endHour, endMinutes));
-		values.put(DBColumns.DAY_ID, dayId); // �������� �������� �������� �� "��" ��� "�����������"
+		values.put(DBColumns.DAY_ID, dayId);
 		values.put(DBColumns.WEEK, week);
 		values.put(DBColumns.ROOM, room);
 		values.put(DBColumns.TEACHER_ID, addTeacherItem(teacherName));

@@ -10,6 +10,7 @@ import by.bsuir.scheduler.activity.LessonActivity;
 import by.bsuir.scheduler.model.DBAdapter;
 import by.bsuir.scheduler.model.Day;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
@@ -40,7 +41,7 @@ public class DayPagerAdapter extends PagerAdapter {
 	public DayPagerAdapter(Context context, long currentDay) {
 		mContext = context;
 		mInflater = LayoutInflater.from(mContext);
-		mAdapter = DBAdapter.getInstance();
+		mAdapter = DBAdapter.getInstance(context.getApplicationContext());
 
 		mCurrentDay = new GregorianCalendar();
 		mCurrentDay.setTimeInMillis(currentDay);
