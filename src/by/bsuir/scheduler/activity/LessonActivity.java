@@ -42,7 +42,7 @@ public class LessonActivity extends Activity {
 		// /
 		GregorianCalendar day = new GregorianCalendar();
 		day.setTimeInMillis(getIntent().getLongExtra(DAY, -1));
-		Pair lesson = DBAdapter.getInstance(getApplicationContext()).getPair(day, getIntent().getIntExtra(PAIR, -1));
+		Pair lesson = DBAdapter.getInstance(getApplicationContext()).getPair(day); //, getIntent().getIntExtra(PAIR, -1));
 		((TextView)findViewById(R.id.lesson_Day)).setText(""+DayPagerAdapter.daysOfWeek[day.get(GregorianCalendar.DAY_OF_WEEK)-1]+"  "+day.get(GregorianCalendar.DAY_OF_MONTH)+
 				"."+(day.get(GregorianCalendar.MONTH)+1));
 		TextView subject = (TextView) findViewById(R.id.lesson_subject);

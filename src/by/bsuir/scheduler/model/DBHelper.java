@@ -1,14 +1,21 @@
 package by.bsuir.scheduler.model;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 class DBHelper extends SQLiteOpenHelper {
+	
 	private static final String DATABASE_NAME = "scheduledb";
 	private static final int DATABASE_VERSION = 1;
 	private static final String SCHEDULE_TABLE_NAME = "schedule";
@@ -21,6 +28,8 @@ class DBHelper extends SQLiteOpenHelper {
 	private static final String[] DAYS = {"воскресение","понедельник", "вторник", "среда", "четверг", "пятница", "суббота"};
 	private static final String[] SUBJECT_TYPES = {"", "лекция", "практическое занятие", "лабораторная работа", "курсовое проектирование"};
 	private static final String SCHEDULE_VIEW_NAME = "schedule_view";
+	private static final String TAG = "DBHelper";
+	private static final String DATE_FORMAT = "dd.MM.yyyy";
 	
 	public DBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -191,19 +200,30 @@ teacher._id = schedule.teacher_id; */
 		onCreate(db);
 	}
 	
+	@SuppressWarnings("finally")
 	private long getItemWithNameValue(String tableName, String columnName, String value){
-		Cursor cursor = getReadableDatabase().query(
-				tableName,
-				new String[] {BaseColumns._ID, columnName},
-				columnName + " =? ",
-				new String[] {value},
-				null, null, null
-				);
-		if (cursor != null)
-			cursor.moveToFirst();
-		else
+		try {
+			Cursor cursor = getReadableDatabase().query(
+					tableName,
+					new String[] {BaseColumns._ID, columnName},
+					columnName + " =? ",
+					new String[] {value},
+					null, null, null
+					);
+			if (cursor != null)
+				cursor.moveToFirst();
+			else
+				return -1;
+			return cursor.getInt(0);
+		} catch (Exception e) {
+			Log.d(TAG, e.getMessage() 
+					+ "Cannot get item with Name = " 
+					+ columnName 
+					+ " and value = " 
+					+ value);
+		} finally {
 			return -1;
-		return cursor.getInt(0);
+		}
 	}
 	
 	private long addSubjectItem(String subjectName){
@@ -265,15 +285,64 @@ teacher._id = schedule.teacher_id; */
 		return resultId;
 	}
 	
-	private long addNoteItem(long scheduleId, String text, String date) {
+	public long updateNote(long scheduleId, String text, GregorianCalendar date) {
+		SQLiteDatabase db = getWritableDatabase();
+		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date);
+		
+		Cursor cursor = db.query(
+				NOTE_TABLE_NAME,
+				null,
+				DBColumns.SCHEDULE_ID + " =? AND" + DBColumns.DATE + " =? ",
+				new String[] {String.valueOf(scheduleId), qDate},
+				null, null, null
+			);
+		
+		if(cursor.getCount() != 0) {
+			ContentValues values = new ContentValues();
+			values.put(DBColumns.TEXT, text);
+			return db.update(
+					NOTE_TABLE_NAME,
+					values,
+					DBColumns.SCHEDULE_ID + " =? AND" + DBColumns.DATE + " =? ",
+					new String[] {String.valueOf(scheduleId), qDate}
+				);
+		} else {
+			db.close();
+			return addNoteItem(scheduleId, text, date);
+		}		
+	}
+	
+	private long addNoteItem(long scheduleId, String text, GregorianCalendar date) {
+		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date);
 		SQLiteDatabase db = getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(DBColumns.SCHEDULE_ID, scheduleId);
 		values.put(DBColumns.TEXT, text);
-		values.put(DBColumns.DATE, date);
+		values.put(DBColumns.DATE, qDate);
 		long noteId = db.insert(NOTE_TABLE_NAME, null, values);
 		db.close();
 		return noteId;
+	}
+	
+	public String getNote(long scheduleId, GregorianCalendar date) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		String qDate = date.get(
+							GregorianCalendar.DAY_OF_MONTH) + "."
+							+ +date.get(GregorianCalendar.MONTH) + "."
+							+ +date.get(GregorianCalendar.YEAR
+						);
+		Cursor cursor = db.query(
+							NOTE_TABLE_NAME,
+							new String[] { DBColumns.TEXT },
+							DBColumns.SCHEDULE_ID + " =? AND " + DBColumns.DATE + " =? " ,
+							new String[] { String.valueOf(scheduleId), qDate },
+							null, null, null
+						);
+		db.close();
+		if(cursor.isNull(cursor.getColumnIndex(DBColumns.TEXT)))
+			return "";
+		else
+			return cursor.getString((cursor.getColumnIndex(DBColumns.TEXT)));
 	}
 	
 	public void addScheduleItem(String subjectName, String subjectType, int startHour, int startMinutes, int endHour, int endMinutes, int dayId, int week, String room, String teacherName, int subgroup) {
