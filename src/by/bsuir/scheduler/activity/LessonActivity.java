@@ -12,6 +12,7 @@ import by.bsuir.scheduler.model.Pair;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,7 +42,7 @@ public class LessonActivity extends Activity {
 		// /
 		GregorianCalendar day = new GregorianCalendar();
 		day.setTimeInMillis(getIntent().getLongExtra(DAY, -1));
-		Pair lesson = DBAdapter.getInstance().getPair(day, getIntent().getIntExtra(PAIR, -1));
+		Pair lesson = DBAdapter.getInstance(getApplicationContext()).getPair(day, getIntent().getIntExtra(PAIR, -1));
 		((TextView)findViewById(R.id.lesson_Day)).setText(""+DayPagerAdapter.daysOfWeek[day.get(GregorianCalendar.DAY_OF_WEEK)-1]+"  "+day.get(GregorianCalendar.DAY_OF_MONTH)+
 				"."+(day.get(GregorianCalendar.MONTH)+1));
 		TextView subject = (TextView) findViewById(R.id.lesson_subject);

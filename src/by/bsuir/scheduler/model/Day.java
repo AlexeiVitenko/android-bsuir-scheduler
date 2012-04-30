@@ -20,9 +20,9 @@ public class Day {
 		return mPairs;
 	}
 	
-	protected Day(GregorianCalendar day){
+	protected Day(GregorianCalendar day, DBAdapter dbAdapter){
 		mDate = day;
-		mDbAdapter = DBAdapter.getInstance();
+		mDbAdapter = dbAdapter;
 		mPairs = new ArrayList<Pair>();
 		generatePairs();
 	}
