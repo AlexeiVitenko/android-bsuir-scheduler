@@ -8,6 +8,7 @@ import java.util.GregorianCalendar;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.BaseColumns;
+import android.util.Log;
 import by.bsuir.scheduler.DayPagerAdapter;
 import by.bsuir.scheduler.parser.Lesson;
 import by.bsuir.scheduler.parser.Pushable;
@@ -90,6 +91,7 @@ public class DBAdapter implements Pushable, Closeable{
 	 * Наш адаптер также будет принимать пары от парсера. В этом ему поможет наш метод
 	 */
 	public void push(Lesson lesson) { // для реализации метода необходимо наличие get/set у экземпляров класса Lesson
+		Log.i("push", lesson.getLesson());
 		mDBHelper.addScheduleItem(lesson.getLesson(), DBHelper.SUBJECT_TYPES[lesson.getType()], lesson.getBeginningHours(), lesson.getBeginningMinutes(), lesson.getEndingHours(), lesson.getEndingMinutes(),lesson.getDay() , lesson.getWeek(), lesson.getRoom(), lesson.getTeacher(), lesson.getSubGroup());
 	}
 

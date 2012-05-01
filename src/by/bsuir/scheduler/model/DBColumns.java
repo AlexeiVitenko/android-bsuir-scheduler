@@ -15,7 +15,7 @@ class DBColumns {
 	public static final String WEEK = "week";
 	public static final String ROOM = "room";
 	public static final String TEACHER_ID = "teacher_id";
-	public static final String TEXT = "text";
+	public static final String TEXT_NOTE = "text_note";
 	public static final String DATE = "date";
 	public static final String SUBGROUP = "subgroup";
 	public static final String VIEW_SUBJECT = "subject";
