@@ -364,6 +364,6 @@ teacher._id = schedule.teacher_id; */
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor cursor = db.query(DAY_TABLE_NAME, new String[]{DBColumns.NAME}, DBColumns.DAY_ID + " = " + dayId, null, null, null, null, null);
 		String dayName = cursor.getString(cursor.getColumnIndex(DBColumns.NAME));
-		return db.query(SCHEDULE_VIEW_NAME, null, DBColumns.VIEW_DAY + " = " + dayName, null, null, null, null, DBColumns.VIEW_DAY);
+		return db.query(SCHEDULE_VIEW_NAME, null, DBColumns.VIEW_DAY + " = " + dayName, null, null, null, null, DBColumns.START_HOUR);
 	}
 }
