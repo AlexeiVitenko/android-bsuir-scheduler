@@ -2,6 +2,7 @@ package by.bsuir.scheduler.model;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import android.content.Context;
@@ -26,11 +27,11 @@ public class DBAdapter implements Pushable, Closeable{
 	}
 	
 	private Context mContext;
-	private DBHelper dbHelper;
+	private DBHelper mDBHelper;
 	
 	protected DBAdapter(Context context){
 		mContext = context;
-		dbHelper = new DBHelper(context);
+		mDBHelper = new DBHelper(context);
 	}
 	
 	/**
@@ -38,7 +39,7 @@ public class DBAdapter implements Pushable, Closeable{
 	 * @param day
 	 */
 	public Day getDay(GregorianCalendar day){
-		Cursor cursor = dbHelper.getDay(String.valueOf(day.get(GregorianCalendar.DAY_OF_WEEK)));
+	//	Cursor cursor = mDBHelper.getDay(String.valueOf(day.get(GregorianCalendar.DAY_OF_WEEK)));
 		return new Day(day, this);
 	}
 	
@@ -48,8 +49,9 @@ public class DBAdapter implements Pushable, Closeable{
 	 * @return true - если да.
 	 */
 	public boolean isWorkDay(GregorianCalendar day){
-		Cursor cursor = dbHelper.getDay(String.valueOf(day.get(GregorianCalendar.DAY_OF_WEEK)));
-		if(cursor.getCount() != 0)
+	//	Cursor cursor = mDBHelper.getDay(String.valueOf(day.get(GregorianCalendar.DAY_OF_WEEK)));
+	//	if(cursor.getCount() != 0)
+		if(day.get(Calendar.DAY_OF_WEEK)!=Calendar.SUNDAY)
 			//TODO добавить проверку на номер подгруппы и номер недели
 			return true;
 		else
@@ -58,7 +60,7 @@ public class DBAdapter implements Pushable, Closeable{
 	}
 	
 	public Pair getPair(GregorianCalendar date) { // убрал параметр int scheduleId, т.к. получаю его из курсора
-		Cursor cursor = dbHelper.getDay(String.valueOf(date.get(GregorianCalendar.DAY_OF_WEEK)));
+		Cursor cursor = mDBHelper.getDay(String.valueOf(date.get(GregorianCalendar.DAY_OF_WEEK)));
 		//TODO добавить проверку на номер подгруппы и номер недели
 		int[] times = new int[] {
 				cursor.getInt(cursor.getColumnIndex(DBColumns.START_HOUR)),
@@ -74,13 +76,13 @@ public class DBAdapter implements Pushable, Closeable{
 		String room = cursor.getString(cursor.getColumnIndex(DBColumns.ROOM));
 		String teacher = cursor.getString(cursor.getColumnIndex(DBColumns.VIEW_TEACHER));
 		int schedule = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID));
-		String note = dbHelper.getNote(schedule, date);
+		String note = mDBHelper.getNote(schedule, date);
 		Pair pair = new Pair(new Day(date, this), week, subGroup, lesson, type, sType, room, teacher, times, note, schedule); // не уверен по поводу правильности параметра container
 		return pair; //(new Day(date, this).getPair(scheduleId));
 	}
 	
 	public void changeNote(GregorianCalendar day, int scheduleId, String note){
-		dbHelper.updateNote(scheduleId, note, day);
+		mDBHelper.updateNote(scheduleId, note, day);
 	}
 	
 	@Override
@@ -88,13 +90,13 @@ public class DBAdapter implements Pushable, Closeable{
 	 * Наш адаптер также будет принимать пары от парсера. В этом ему поможет наш метод
 	 */
 	public void push(Lesson lesson) { // для реализации метода необходимо наличие get/set у экземпляров класса Lesson
-		//TODO Определить
+		mDBHelper.addScheduleItem(lesson.getLesson(), DBHelper.SUBJECT_TYPES[lesson.getType()], lesson.getBeginningHours(), lesson.getBeginningMinutes(), lesson.getEndingHours(), lesson.getEndingMinutes(),lesson.getDay() , lesson.getWeek(), lesson.getRoom(), lesson.getTeacher(), lesson.getSubGroup());
 	}
 
 	@Override
 	public void close() throws IOException {
 		// TODO Auto-generated method stub
-		dbHelper.close();
+		mDBHelper.close();
 	}
 
 }

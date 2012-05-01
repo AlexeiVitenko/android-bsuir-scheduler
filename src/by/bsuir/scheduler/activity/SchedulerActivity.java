@@ -6,6 +6,9 @@ import by.bsuir.scheduler.DayPagerAdapter;
 import by.bsuir.scheduler.GridCellAdapter;
 
 import by.bsuir.scheduler.R;
+import by.bsuir.scheduler.model.DBAdapter;
+import by.bsuir.scheduler.parser.Parser;
+import by.bsuir.scheduler.parser.ParserListiner;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -67,7 +70,21 @@ public class SchedulerActivity extends Activity {
 			return true;
 
 		case R.id.menu_item_refresh:
-			//
+			Parser p = new Parser("951005", 1, DBAdapter.getInstance(getApplicationContext()), new ParserListiner() {
+				
+				@Override
+				public void onException(Exception e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void onComplete() {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			p.parseSchedule();
 			return true;
 
 		case R.id.menu_item_preferences:
