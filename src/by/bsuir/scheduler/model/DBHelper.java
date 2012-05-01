@@ -33,6 +33,7 @@ class DBHelper extends SQLiteOpenHelper {
 	
 	public DBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		context.deleteDatabase(DATABASE_NAME);
 	}
 
 	@Override
@@ -45,6 +46,7 @@ class DBHelper extends SQLiteOpenHelper {
 				" (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ DBColumns.NAME + " TEXT);";
 		db.execSQL(sql);
+		Log.i(TAG, sql);
 		
 		/*=====Day=====*/
 		sql = "CREATE TABLE " + DAY_TABLE_NAME + 
@@ -55,6 +57,7 @@ class DBHelper extends SQLiteOpenHelper {
 			sql = "INSERT INTO " + DAY_TABLE_NAME + " (" + DBColumns.NAME+ ") VALUES ('" + day + "');";
 			db.execSQL(sql);
 		}
+		Log.i(TAG, sql);
 		
 		/*=====Subject_type=====*/
 		sql = "CREATE TABLE " + SUBJECT_TYPE_TABLE_NAME + 
@@ -65,13 +68,14 @@ class DBHelper extends SQLiteOpenHelper {
 			sql = "INSERT INTO " + SUBJECT_TYPE_TABLE_NAME + " (" + DBColumns.NAME + ") VALUES ('" + type + "');";
 			db.execSQL(sql);
 		}
-
+		Log.i(TAG, sql);
 		
 		/*=====Teacher=====*/
 		sql = "CREATE TABLE " + TEACHER_TABLE_NAME + 
 				" (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ DBColumns.NAME + " TEXT);";
 		db.execSQL(sql);
+		Log.i(TAG, sql);
 		
 		/*=====Time=====*/
 		sql = "CREATE TABLE " + TIME_TABLE_NAME + 
@@ -80,28 +84,39 @@ class DBHelper extends SQLiteOpenHelper {
 				+ DBColumns.START_MINUTES + " INTEGER, "
 				+ DBColumns.END_HOUR + " INTEGER, "
 				+ DBColumns.END_MINUTES + " INTEGER);";
+		Log.i(TAG, sql);
 		db.execSQL(sql);
 		
 		/*=====Schedule=====*/
 		sql = "CREATE TABLE " + SCHEDULE_TABLE_NAME + 
 				" (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ DBColumns.SUBJECT_ID + " INTEGER, "
+				+ DBColumns.SUBJECT_TYPE_ID + " INTEGER, "
+				+ DBColumns.TIME_ID + " INTEGER, "
+				+ DBColumns.DAY_ID + " INTEGER, "
+				+ DBColumns.TEACHER_ID + " INTEGER, "
+				+ DBColumns.WEEK + " INTEGER DEFAULT 0, "
+				+ DBColumns.ROOM + " TEXT, "
+				+ DBColumns.SUBGROUP + " INTEGER DEFAULT 0, "
 				+ "FOREIGN KEY(" + DBColumns.SUBJECT_ID + ") REFERENCES " + SUBJECT_TABLE_NAME + "(" + BaseColumns._ID + "), "
 				+ "FOREIGN KEY(" + DBColumns.SUBJECT_TYPE_ID + ") REFERENCES " + SUBJECT_TYPE_TABLE_NAME + "(" + BaseColumns._ID + "), "
 				+ "FOREIGN KEY(" + DBColumns.TIME_ID + ") REFERENCES " + TIME_TABLE_NAME + "(" + BaseColumns._ID + "), "
 				+ "FOREIGN KEY(" + DBColumns.DAY_ID + ") REFERENCES " + DAY_TABLE_NAME + "(" + BaseColumns._ID + "), "
-				+ DBColumns.WEEK + " INTEGER DEFAULT 0, "
-				+ DBColumns.ROOM + " TEXT, "
-				+ "FOREIGN KEY(" + DBColumns.TEACHER_ID + ") REFERENCES " + TEACHER_TABLE_NAME + "(" + BaseColumns._ID + "), "
-				+ DBColumns.SUBGROUP + " INTEGER DEFAULT 0);";
+				+ "FOREIGN KEY(" + DBColumns.TEACHER_ID + ") REFERENCES " + TEACHER_TABLE_NAME + "(" + BaseColumns._ID + "));";
+		
+		Log.i(TAG, sql);
 		db.execSQL(sql);
+		
 		
 		/*=====Note=====*/
 		sql = "CREATE TABLE " + NOTE_TABLE_NAME + 
 				" (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ "FOREIGN KEY(" + DBColumns.SCHEDULE_ID + ") REFERENCES " + SCHEDULE_TABLE_NAME + "(" + BaseColumns._ID + "), "
-				+ DBColumns.TEXT + " TEXT, "
-				+ DBColumns.DATE + " TEXT;";
+				+ DBColumns.SCHEDULE_ID + " INTEGER, "
+				+ DBColumns.TEXT_NOTE + " TEXT, "
+				+ DBColumns.DATE + " TEXT,"
+				+ "FOREIGN KEY(" + DBColumns.SCHEDULE_ID + ") REFERENCES " + SCHEDULE_TABLE_NAME + "(" + BaseColumns._ID + "));";
 		db.execSQL(sql);
+		Log.i(TAG, sql);
 		
 		/*=====Schedule_view=====*/
 		/*
@@ -200,34 +215,34 @@ teacher._id = schedule.teacher_id; */
 		onCreate(db);
 	}
 	
-	@SuppressWarnings("finally")
 	private long getItemWithNameValue(String tableName, String columnName, String value){
 		try {
-			Cursor cursor = getReadableDatabase().query(
+			SQLiteDatabase db = this.getReadableDatabase();
+			Cursor cursor = db.query(
 					tableName,
-					new String[] {BaseColumns._ID, columnName},
-					columnName + " =? ",
+					new String[]{BaseColumns._ID, columnName},
+					columnName + " = ? ",
 					new String[] {value},
 					null, null, null
 					);
-			if (cursor != null)
-				cursor.moveToFirst();
-			else
+			cursor.moveToFirst();
+			if (cursor.isNull(cursor.getColumnIndex(BaseColumns._ID)))
 				return -1;
-			return cursor.getInt(0);
+			else
+				return cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
 		} catch (Exception e) {
 			Log.d(TAG, e.getMessage() 
-					+ "Cannot get item with Name = " 
+					+ "Cannot get item with column = " 
 					+ columnName 
 					+ " and value = " 
 					+ value);
-		} finally {
 			return -1;
-		}
+		} 
 	}
 	
 	private long addSubjectItem(String subjectName){
 		long itemId = getItemWithNameValue(SUBJECT_TABLE_NAME, DBColumns.NAME, subjectName);
+		
 		if(itemId < 0) { //item doesn't exist
 			SQLiteDatabase db = this.getWritableDatabase();
 			ContentValues values = new ContentValues();
@@ -256,22 +271,19 @@ teacher._id = schedule.teacher_id; */
 	
 	private long addTimeItem(int startHour, int startMinutes, int endHour, int endMinutes){
 		long resultId;
-		Cursor cursor = getReadableDatabase()
-				.query(TIME_TABLE_NAME,
-						new String[] { BaseColumns._ID, },
-						DBColumns.START_HOUR + "=?  AND "
-								+ DBColumns.START_MINUTES + "=? AND "
-								+ DBColumns.END_HOUR + "=? AND "
-								+ DBColumns.END_MINUTES + "=?",
-						new String[] { String.valueOf(startHour),
-								String.valueOf(startMinutes),
-								String.valueOf(endHour),
-								String.valueOf(endMinutes) }, null, null,
-						null);
-		if (cursor != null) 									// item exists
-			resultId = cursor.getLong(0);
-		else { 													//item doesn't exist
-			SQLiteDatabase db = getWritableDatabase();
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.query(
+			TIME_TABLE_NAME,
+			new String[] { BaseColumns._ID, DBColumns.START_HOUR},
+			DBColumns.START_HOUR + "=?",
+			new String[] { String.valueOf(startHour)}, null, null,
+			null
+		);
+		
+		cursor.moveToFirst();		
+		if (cursor.getCount() == 0) {
+			Log.i(TAG, "time doesn't exist");
 			ContentValues values = new ContentValues();
 			values.put(DBColumns.START_HOUR, startHour);
 			values.put(DBColumns.START_MINUTES, startMinutes);
@@ -279,7 +291,11 @@ teacher._id = schedule.teacher_id; */
 			values.put(DBColumns.END_MINUTES, endMinutes);
 			resultId = db.insert(TIME_TABLE_NAME, null, values);
 			db.close();
+			
 		}
+		else													
+			resultId = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+		
 		cursor.close();
 		
 		return resultId;
@@ -299,7 +315,7 @@ teacher._id = schedule.teacher_id; */
 		
 		if(cursor.getCount() != 0) {
 			ContentValues values = new ContentValues();
-			values.put(DBColumns.TEXT, text);
+			values.put(DBColumns.TEXT_NOTE, text);
 			return db.update(
 					NOTE_TABLE_NAME,
 					values,
@@ -317,7 +333,7 @@ teacher._id = schedule.teacher_id; */
 		SQLiteDatabase db = getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(DBColumns.SCHEDULE_ID, scheduleId);
-		values.put(DBColumns.TEXT, text);
+		values.put(DBColumns.TEXT_NOTE, text);
 		values.put(DBColumns.DATE, qDate);
 		long noteId = db.insert(NOTE_TABLE_NAME, null, values);
 		db.close();
@@ -328,25 +344,24 @@ teacher._id = schedule.teacher_id; */
 		SQLiteDatabase db = this.getReadableDatabase();
 		String qDate = date.get(
 							GregorianCalendar.DAY_OF_MONTH) + "."
-							+ +date.get(GregorianCalendar.MONTH) + "."
-							+ +date.get(GregorianCalendar.YEAR
+							+ date.get(GregorianCalendar.MONTH) + "."
+							+ date.get(GregorianCalendar.YEAR
 						);
 		Cursor cursor = db.query(
 							NOTE_TABLE_NAME,
-							new String[] { DBColumns.TEXT },
+							new String[] { DBColumns.TEXT_NOTE },
 							DBColumns.SCHEDULE_ID + " =? AND " + DBColumns.DATE + " =? " ,
 							new String[] { String.valueOf(scheduleId), qDate },
 							null, null, null
 						);
 		db.close();
-		if(cursor.isNull(cursor.getColumnIndex(DBColumns.TEXT)))
+		if(cursor.isNull(cursor.getColumnIndex(DBColumns.TEXT_NOTE)))
 			return "";
 		else
-			return cursor.getString((cursor.getColumnIndex(DBColumns.TEXT)));
+			return cursor.getString((cursor.getColumnIndex(DBColumns.TEXT_NOTE)));
 	}
 	
 	public void addScheduleItem(String subjectName, String subjectType, int startHour, int startMinutes, int endHour, int endMinutes, int dayId, int week, String room, String teacherName, int subgroup) {
-		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(DBColumns.SUBJECT_ID, addSubjectItem(subjectName));
 		values.put(DBColumns.SUBJECT_TYPE_ID, getItemWithNameValue(SUBJECT_TYPE_TABLE_NAME, DBColumns.NAME, subjectType));
@@ -356,6 +371,7 @@ teacher._id = schedule.teacher_id; */
 		values.put(DBColumns.ROOM, room);
 		values.put(DBColumns.TEACHER_ID, addTeacherItem(teacherName));
 		values.put(DBColumns.SUBGROUP, subgroup);
+		SQLiteDatabase db = this.getWritableDatabase();
 		db.insert(SCHEDULE_TABLE_NAME, null, values);
 		db.close();
 	}
