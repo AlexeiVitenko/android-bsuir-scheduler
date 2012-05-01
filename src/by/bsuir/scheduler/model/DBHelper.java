@@ -26,7 +26,7 @@ class DBHelper extends SQLiteOpenHelper {
 	private static final String DAY_TABLE_NAME = "day";
 	private static final String TEACHER_TABLE_NAME = "teacher";
 	private static final String[] DAYS = {"воскресение","понедельник", "вторник", "среда", "четверг", "пятница", "суббота"};
-	private static final String[] SUBJECT_TYPES = {"", "лекция", "практическое занятие", "лабораторная работа", "курсовое проектирование"};
+	protected static final String[] SUBJECT_TYPES = {"", "лекция", "практическое занятие", "лабораторная работа", "курсовое проектирование"};
 	private static final String SCHEDULE_VIEW_NAME = "schedule_view";
 	private static final String TAG = "DBHelper";
 	private static final String DATE_FORMAT = "dd.MM.yyyy";

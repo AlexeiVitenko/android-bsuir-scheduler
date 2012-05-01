@@ -149,6 +149,7 @@ public class Parser {
 		}
 		for (Lesson lesson : lessons) { //TODO and this
 			System.out.println(lesson);
+			mBridge.push(lesson);
 		}
 	}
 }
