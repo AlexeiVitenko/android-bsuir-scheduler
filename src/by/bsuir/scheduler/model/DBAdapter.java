@@ -6,10 +6,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.provider.BaseColumns;
 import android.util.Log;
-import by.bsuir.scheduler.DayPagerAdapter;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.parser.Lesson;
 import by.bsuir.scheduler.parser.Pushable;
@@ -27,7 +24,7 @@ public class DBAdapter implements Pushable, Closeable{
 		}
 		return mInstance;
 	}
-	
+	private GregorianCalendar septFirst = new GregorianCalendar(2011, 8, 31);
 	private Context mContext;
 	private DBHelper mDBHelper;
 	private String[] daysOfWeek;
@@ -44,7 +41,8 @@ public class DBAdapter implements Pushable, Closeable{
 	 * @param day
 	 */
 	public Day getDay(GregorianCalendar day){
-	//	Cursor cursor = mDBHelper.getDay(String.valueOf(day.get(GregorianCalendar.DAY_OF_WEEK)));
+		
+	//	Cursor cursor = mDBHelper.getDay(day.get(GregorianCalendar.DAY_OF_WEEK)+1);
 		return new Day(day, this);
 	}
 	
@@ -65,9 +63,9 @@ public class DBAdapter implements Pushable, Closeable{
 	}
 	
 	public Pair getPair(GregorianCalendar date) { // убрал параметр int scheduleId, т.к. получаю его из курсора
-		Cursor cursor = mDBHelper.getDay(String.valueOf(date.get(GregorianCalendar.DAY_OF_WEEK)));
+	//	Cursor cursor = mDBHelper.getDay(String.valueOf(date.get(GregorianCalendar.DAY_OF_WEEK)));
 		//TODO добавить проверку на номер подгруппы и номер недели
-		int[] times = new int[] {
+		/*int[] times = new int[] {
 				cursor.getInt(cursor.getColumnIndex(DBColumns.START_HOUR)),
 				cursor.getInt(cursor.getColumnIndex(DBColumns.START_MINUTES)),
 				cursor.getInt(cursor.getColumnIndex(DBColumns.END_HOUR)),
@@ -84,6 +82,8 @@ public class DBAdapter implements Pushable, Closeable{
 		String note = mDBHelper.getNote(schedule, date);
 		Pair pair = new Pair(new Day(date, this), week, subGroup, lesson, type, sType, room, teacher, times, note, schedule); // не уверен по поводу правильности параметра container
 		return pair; //(new Day(date, this).getPair(scheduleId));
+	*/
+		return null;
 	}
 	
 	public void changeNote(GregorianCalendar day, int scheduleId, String note){
@@ -95,14 +95,11 @@ public class DBAdapter implements Pushable, Closeable{
 	 * Наш адаптер также будет принимать пары от парсера. В этом ему поможет наш метод
 	 */
 	public void push(Lesson lesson) { // для реализации метода необходимо наличие get/set у экземпляров класса Lesson
-		Log.i("push", lesson.getLesson());
-		mDBHelper.addScheduleItem(lesson.getLesson(), DBHelper.SUBJECT_TYPES[lesson.getType()], lesson.getBeginningHours(), lesson.getBeginningMinutes(), lesson.getEndingHours(), lesson.getEndingMinutes(),lesson.getDay() , lesson.getWeek(), lesson.getRoom(), lesson.getTeacher(), lesson.getSubGroup());
-	}
+		mDBHelper.addScheduleItem(lesson.getLesson(), DBHelper.SUBJECT_TYPES[lesson.getType()], lesson.getBeginningHours(), lesson.getBeginningMinutes(), lesson.getEndingHours(), lesson.getEndingMinutes(),lesson.getDay() , lesson.getWeek(), lesson.getRoom(), lesson.getTeacher(), lesson.getSubGroup());}
 
 	@Override
 	public void close() throws IOException {
 		// TODO Auto-generated method stub
 		mDBHelper.close();
 	}
-
 }

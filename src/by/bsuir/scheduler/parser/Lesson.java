@@ -55,24 +55,24 @@ public class Lesson {
 	}
 	
 	public Lesson(String day, String week, String time, String subGroup, String lesson, String type, String room, String prepod){
-		mDay = 0;
+		mDay = 1;
 		if (day.equals("пн")) {
-			mDay = 1;
-		}
-		if (day.equals("вт")) {
 			mDay = 2;
 		}
-		if (day.equals("ср")) {
+		if (day.equals("вт")) {
 			mDay = 3;
 		}
-		if (day.equals("чт")) {
+		if (day.equals("ср")) {
 			mDay = 4;
 		}
-		if (day.equals("пт")) {
+		if (day.equals("чт")) {
 			mDay = 5;
 		}
-		if (day.equals("сб")) {
+		if (day.equals("пт")) {
 			mDay = 6;
+		}
+		if (day.equals("сб")) {
+			mDay = 7;
 		}
 		
 		//0 - общая

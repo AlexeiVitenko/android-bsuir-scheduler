@@ -1,17 +1,8 @@
 package by.bsuir.scheduler;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-import by.bsuir.scheduler.R;
-
-import by.bsuir.scheduler.activity.LessonActivity;
-import by.bsuir.scheduler.model.DBAdapter;
-import by.bsuir.scheduler.model.Day;
-
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,9 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.TextView;
+import by.bsuir.scheduler.activity.LessonActivity;
+import by.bsuir.scheduler.model.DBAdapter;
+import by.bsuir.scheduler.model.Day;
 
 public class DayPagerAdapter extends PagerAdapter {
 	public static final int POSITION = 502;

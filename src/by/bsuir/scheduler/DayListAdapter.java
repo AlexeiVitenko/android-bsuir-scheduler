@@ -1,17 +1,11 @@
 package by.bsuir.scheduler;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.TimeZone;
-
-import by.bsuir.scheduler.R;
-import by.bsuir.scheduler.model.Pair;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import by.bsuir.scheduler.model.Pair;
 
 public class DayListAdapter extends BaseAdapter {
 

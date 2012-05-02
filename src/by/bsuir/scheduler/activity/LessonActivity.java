@@ -1,38 +1,30 @@
 package by.bsuir.scheduler.activity;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
-
-import by.bsuir.scheduler.DayPagerAdapter;
-
-import by.bsuir.scheduler.R;
-import by.bsuir.scheduler.model.DBAdapter;
-import by.bsuir.scheduler.model.Pair;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnLongClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import by.bsuir.scheduler.R;
+import by.bsuir.scheduler.model.DBAdapter;
+import by.bsuir.scheduler.model.Pair;
 
 public class LessonActivity extends Activity {
 	public static final String DAY="day";
 	public static final String PAIR="pair";
 	private final static int DIALOG = 1;
 	private String[] daysOfWeek;
-	private int lessonID;
+	//private int lessonID;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
