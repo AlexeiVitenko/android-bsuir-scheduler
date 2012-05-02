@@ -114,7 +114,7 @@ public class DayPagerAdapter extends PagerAdapter {
 						+ ", ");
 		//
 		// ЗАГЛУШКА
-		dayDate.setText((needed.get(GregorianCalendar		((TextView) view.findViewById(R.id.day_date)).setText(needed
+		((TextView) view.findViewById(R.id.day_date)).setText(needed
 				.get(GregorianCalendar.DAY_OF_MONTH) + " ");
 		((TextView) view.findViewById(R.id.month_genitive))
 				.setText(months[needed.get(GregorianCalendar.MONTH)]);
