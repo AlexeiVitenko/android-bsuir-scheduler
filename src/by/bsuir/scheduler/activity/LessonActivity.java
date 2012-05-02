@@ -43,7 +43,7 @@ public class LessonActivity extends Activity {
 		GregorianCalendar day = new GregorianCalendar();
 		day.setTimeInMillis(getIntent().getLongExtra(DAY, -1));
 		Pair lesson = DBAdapter.getInstance(getApplicationContext()).getPair(day); //, getIntent().getIntExtra(PAIR, -1));
-		((TextView)findViewById(R.id.lesson_Day)).setText(""+DayPagerAdapter.daysOfWeek[day.get(GregorianCalendar.DAY_OF_WEEK)-1]+"  "+day.get(GregorianCalendar.DAY_OF_MONTH)+
+		((TextView)findViewById(R.id.day_of_week)).setText(""+DayPagerAdapter.daysOfWeek[day.get(GregorianCalendar.DAY_OF_WEEK)-1]+"  "+day.get(GregorianCalendar.DAY_OF_MONTH)+
 				"."+(day.get(GregorianCalendar.MONTH)+1));
 		TextView subject = (TextView) findViewById(R.id.lesson_subject);
 		subject.setText(lesson.getLesson());
@@ -79,7 +79,7 @@ public class LessonActivity extends Activity {
 
 	private Dialog createNoteDialog(Context context) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(R.string.dialog_title);
+		builder.setTitle(R.string.note);
 		View view = (LinearLayout) getLayoutInflater().inflate(
 				R.layout.note_dialog, null);
 		builder.setView(view);
