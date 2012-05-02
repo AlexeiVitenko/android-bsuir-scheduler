@@ -2,62 +2,97 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:padding="2dp" >
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#808080"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/day_of_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DayOfWeek, "
+                android:textColor="@android:color/black"
+                android:textSize="9pt" />
+
+            <TextView
+                android:id="@+id/day_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00 "
+                android:textColor="@android:color/black"
+                android:textSize="8pt" />
+
+            <TextView
+                android:id="@+id/month_genitive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="month"
+                android:textColor="@android:color/black"
+                android:textSize="8pt" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="#808080"
         android:orientation="vertical" >
-		<TextView
-		    android:id="@+id/lesson_Day" 
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:layout_gravity="center"
-		    android:textSize="18sp"
-		    />
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp" >
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal" >
 
             <TextView
-                android:layout_weight="1."
                 android:id="@+id/lesson_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Предмет" 
-                android:textSize="14sp"
-                android:textColor="@android:color/white" />
+                android:layout_weight="0.5"
+                android:text="Предмет"
+                android:textColor="@android:color/white"
+                android:textSize="8pt" />
 
             <TextView
-                android:layout_weight="1."
-                android:id="@+id/lesson_teacher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Преподаватель"
-                android:textSize="12sp" />
-            <TextView
-                android:layout_weight="1."
                 android:id="@+id/lesson_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.5"
                 android:text="Тип"
-                android:textSize="12sp" />
+                android:textSize="7pt" />
+
+            <TextView
+                android:id="@+id/lesson_teacher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3."
+                android:text="Преподаватель"
+                android:textSize="7pt" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:textSize="7pt" >
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal" >
 
             <TextView
                 android:id="@+id/lesson_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:text="00:00-00:00"
                 android:textSize="7pt" />
 
@@ -71,14 +106,29 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/lesson_note"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:minLines="5"
-        android:background="@android:color/background_light"
-        android:textColor="@android:color/black"
-        android:text="Заметка" />
+        android:orientation="vertical"
+        android:padding="3dp" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/note"
+            android:textSize="7pt" />
+
+        <TextView
+            android:id="@+id/lesson_note"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="#616161"
+            android:minLines="10"
+            android:padding="5dp"
+            android:text="Текст заметки..."
+            android:textColor="@android:color/primary_text_dark"
+            android:textSize="7pt" />
+    </LinearLayout>
 
 </LinearLayout>

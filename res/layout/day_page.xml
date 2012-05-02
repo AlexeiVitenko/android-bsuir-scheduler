@@ -30,11 +30,18 @@
                 android:id="@+id/day_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00 month"
+                android:text="00 "
+                android:textColor="@android:color/black"
+                android:textSize="8pt" />
+
+            <TextView
+                android:id="@+id/month_genitive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="month"
                 android:textColor="@android:color/black"
                 android:textSize="8pt" />
         </LinearLayout>
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -54,21 +61,23 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="#80808080"
-            android:orientation="horizontal" 
-            android:gravity="center">
-			<ImageView
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_toLeftOf="@+id/alarm_time"
-                android:src="@drawable/ic_lock_idle_alarm" />
-         	<TextView
+                android:src="@drawable/alarm" />
+
+            <TextView
                 android:id="@+id/alarm_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="00:00"
-                android:textSize="32sp" />
+                android:textSize="15pt" />
         </LinearLayout>
     </RelativeLayout>
 

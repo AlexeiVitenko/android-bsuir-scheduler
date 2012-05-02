@@ -41,8 +41,10 @@ public class SchedulerActivity extends Activity {
 		Log.i("SchedulerActivity", "onActivityResult");
 		if (resultCode == RESULT_DAY) {
 			dayPagerAdapter = new DayPagerAdapter(this, data.getLongExtra(GridCellAdapter.DAY, System.currentTimeMillis()));
+			viewPager = new ViewPager(this);
 			viewPager.setAdapter(dayPagerAdapter);
 			viewPager.setCurrentItem(dayPagerAdapter.POSITION, false);
+			setContentView(viewPager);
 		} else super.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -66,7 +68,7 @@ public class SchedulerActivity extends Activity {
 
 		case R.id.menu_item_month:
 			intent = new Intent(this, MonthActivity.class);
-			startActivity(intent);
+			startActivityForResult(intent, RESULT_DAY);
 			return true;
 
 		case R.id.menu_item_refresh:
@@ -89,7 +91,7 @@ public class SchedulerActivity extends Activity {
 
 		case R.id.menu_item_preferences:
 			intent = new Intent(this, SettingsActivity.class);
-			startActivityForResult(intent, MonthActivity.GET_DAY);
+			startActivity(intent);
 			return true;
 
 		case R.id.menu_item_info_details:
