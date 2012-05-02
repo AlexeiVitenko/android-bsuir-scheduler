@@ -1,15 +1,5 @@
 package by.bsuir.scheduler.activity;
 
-import java.util.GregorianCalendar;
-
-import by.bsuir.scheduler.DayPagerAdapter;
-import by.bsuir.scheduler.GridCellAdapter;
-
-import by.bsuir.scheduler.R;
-import by.bsuir.scheduler.model.DBAdapter;
-import by.bsuir.scheduler.parser.Parser;
-import by.bsuir.scheduler.parser.ParserListiner;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +8,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import by.bsuir.scheduler.DayPagerAdapter;
+import by.bsuir.scheduler.GridCellAdapter;
+import by.bsuir.scheduler.R;
+import by.bsuir.scheduler.model.DBAdapter;
+import by.bsuir.scheduler.parser.Parser;
+import by.bsuir.scheduler.parser.ParserListiner;
 
 public class SchedulerActivity extends Activity {
 	public static final int RESULT_DAY = 2;
@@ -31,7 +27,7 @@ public class SchedulerActivity extends Activity {
 
 		viewPager = new ViewPager(this);
 		viewPager.setAdapter(dayPagerAdapter);
-		viewPager.setCurrentItem(dayPagerAdapter.POSITION, false);
+		viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
 		setContentView(viewPager);
 
 	}
@@ -43,7 +39,7 @@ public class SchedulerActivity extends Activity {
 			dayPagerAdapter = new DayPagerAdapter(this, data.getLongExtra(GridCellAdapter.DAY, System.currentTimeMillis()));
 			viewPager = new ViewPager(this);
 			viewPager.setAdapter(dayPagerAdapter);
-			viewPager.setCurrentItem(dayPagerAdapter.POSITION, false);
+			viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
 			setContentView(viewPager);
 		} else super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -72,6 +68,7 @@ public class SchedulerActivity extends Activity {
 			return true;
 
 		case R.id.menu_item_refresh:
+			long startTime = System.currentTimeMillis();
 			Parser p = new Parser("951005", 1, DBAdapter.getInstance(getApplicationContext()), new ParserListiner() {
 				
 				@Override
@@ -87,6 +84,7 @@ public class SchedulerActivity extends Activity {
 				}
 			});
 			p.parseSchedule();
+			Log.d("Parse time", ""+(System.currentTimeMillis()-startTime));
 			return true;
 
 		case R.id.menu_item_preferences:

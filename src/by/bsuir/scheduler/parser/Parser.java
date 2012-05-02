@@ -24,6 +24,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.util.Log;
+
 public class Parser {
 	static private final String URL = "http://www.bsuir.by/psched/schedulegroup?group=";
 	private HttpClient mClient;
@@ -32,6 +34,7 @@ public class Parser {
 	private Pushable mBridge;
 	private ParserListiner mListiner;
 	
+	private int counter = 0;
 	/**
 	 * 
 	 * @param group - группа. String
@@ -111,6 +114,7 @@ public class Parser {
 		} catch (ParserConfigurationException e) {
 			if (mListiner!=null) mListiner.onException(e);
 		}
+		Log.d("Counter",""+counter);
 	}
 
 	private void parseTable(Node tableTag){
@@ -140,16 +144,15 @@ public class Parser {
 				if (params[2].equals(""+mSubGroup)||params[2].equals("")) {
 					int ii = 1;
 					Lesson l = new Lesson(day, weeks[k], params[ii++], params[ii++],
-							params[ii++], params[ii++], params[ii++], params[ii++]);
-					if (mBridge!=null)	mBridge.push(l);
-					
+							params[ii++], params[ii++], params[ii++], params[ii++]);					
 					lessons.add(l); //TODO delete this
 				}
 			}
 		}
 		for (Lesson lesson : lessons) { //TODO and this
-			System.out.println(lesson);
+//			System.out.println(lesson);
 			mBridge.push(lesson);
+			counter++;
 		}
 	}
 }

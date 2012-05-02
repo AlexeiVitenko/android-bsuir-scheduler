@@ -1,8 +1,6 @@
 package by.bsuir.scheduler.model;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import android.content.ContentValues;
@@ -11,10 +9,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import android.text.format.DateFormat;
 import android.util.Log;
 
 class DBHelper extends SQLiteOpenHelper {
+	private long mTotalTime = 0;
+	
+	private int count;
 	
 	private static final String DATABASE_NAME = "scheduledb";
 	private static final int DATABASE_VERSION = 1;
@@ -33,7 +33,7 @@ class DBHelper extends SQLiteOpenHelper {
 	
 	public DBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		context.deleteDatabase(DATABASE_NAME);
+	//	context.deleteDatabase(DATABASE_NAME);
 	}
 
 	@Override
@@ -173,7 +173,8 @@ teacher._id = schedule.teacher_id; */
 				 + TIME_TABLE_NAME + "." + BaseColumns._ID + "= " + SCHEDULE_TABLE_NAME + "." + DBColumns.TIME_ID + " and "
 				 + DAY_TABLE_NAME + "." + BaseColumns._ID + "= " + SCHEDULE_TABLE_NAME + "." + DBColumns.DAY_ID + " and "
 				 + TEACHER_TABLE_NAME + "." + BaseColumns._ID + "= " + SCHEDULE_TABLE_NAME + "." + DBColumns.TEACHER_ID + ";";
-				 
+		
+		
 		
 		/*sql = "CREATE VIEW %s AS SELECT %s.%s, %s.%s as \"%s\", %s.%s as \"%s\", %s.%s, %s.%s, %s.%s as \"%s\"," +
 				" %s.%s, %s.%s as \"%s\", %s.%s, %s.%s, %s.%s as \"%s\" " +
@@ -217,7 +218,10 @@ teacher._id = schedule.teacher_id; */
 	
 	private long getItemWithNameValue(String tableName, String columnName, String value){
 		try {
+			long t = System.currentTimeMillis();
 			SQLiteDatabase db = this.getReadableDatabase();
+			mTotalTime += (System.currentTimeMillis()-t);
+			Log.d("Total time", ""+mTotalTime);
 			Cursor cursor = db.query(
 					tableName,
 					new String[]{BaseColumns._ID, columnName},
@@ -244,7 +248,11 @@ teacher._id = schedule.teacher_id; */
 		long itemId = getItemWithNameValue(SUBJECT_TABLE_NAME, DBColumns.NAME, subjectName);
 		
 		if(itemId < 0) { //item doesn't exist
+			long t = System.currentTimeMillis();
 			SQLiteDatabase db = this.getWritableDatabase();
+
+			mTotalTime += (System.currentTimeMillis()-t);
+			Log.d("Total time", ""+mTotalTime);
 			ContentValues values = new ContentValues();
 			values.put(DBColumns.NAME, subjectName);
 			itemId = db.insert(SUBJECT_TABLE_NAME, null, values);
@@ -258,7 +266,12 @@ teacher._id = schedule.teacher_id; */
 	private long addTeacherItem(String teacher){
 		long itemId = getItemWithNameValue(TEACHER_TABLE_NAME, DBColumns.NAME, teacher);
 		if(itemId < 0) { //item doesn't exist
+
+			long t = System.currentTimeMillis();
 			SQLiteDatabase db = this.getWritableDatabase();
+
+			mTotalTime += (System.currentTimeMillis()-t);
+			Log.d("Total time", ""+mTotalTime);
 			ContentValues values = new ContentValues();
 			values.put(DBColumns.NAME, teacher );
 			itemId = db.insert(TEACHER_TABLE_NAME, null, values);
@@ -272,7 +285,12 @@ teacher._id = schedule.teacher_id; */
 	private long addTimeItem(int startHour, int startMinutes, int endHour, int endMinutes){
 		long resultId;
 
+
+		long t = System.currentTimeMillis();
 		SQLiteDatabase db = this.getWritableDatabase();
+
+		mTotalTime += (System.currentTimeMillis()-t);
+		Log.d("Total time", ""+mTotalTime);
 		Cursor cursor = db.query(
 			TIME_TABLE_NAME,
 			new String[] { BaseColumns._ID, DBColumns.START_HOUR},
@@ -283,7 +301,7 @@ teacher._id = schedule.teacher_id; */
 		
 		cursor.moveToFirst();		
 		if (cursor.getCount() == 0) {
-			Log.i(TAG, "time doesn't exist");
+			//Log.i(TAG, "time doesn't exist");
 			ContentValues values = new ContentValues();
 			values.put(DBColumns.START_HOUR, startHour);
 			values.put(DBColumns.START_MINUTES, startMinutes);
@@ -302,7 +320,12 @@ teacher._id = schedule.teacher_id; */
 	}
 	
 	public long updateNote(long scheduleId, String text, GregorianCalendar date) {
-		SQLiteDatabase db = getWritableDatabase();
+
+		long t = System.currentTimeMillis();
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		mTotalTime += (System.currentTimeMillis()-t);
+		Log.d("Total time", ""+mTotalTime);
 		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date);
 		
 		Cursor cursor = db.query(
@@ -330,7 +353,12 @@ teacher._id = schedule.teacher_id; */
 	
 	private long addNoteItem(long scheduleId, String text, GregorianCalendar date) {
 		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date);
-		SQLiteDatabase db = getWritableDatabase();
+
+		long t = System.currentTimeMillis();
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		mTotalTime += (System.currentTimeMillis()-t);
+		Log.d("Total time", ""+mTotalTime);
 		ContentValues values = new ContentValues();
 		values.put(DBColumns.SCHEDULE_ID, scheduleId);
 		values.put(DBColumns.TEXT_NOTE, text);
@@ -341,7 +369,10 @@ teacher._id = schedule.teacher_id; */
 	}
 	
 	public String getNote(long scheduleId, GregorianCalendar date) {
+		long t = System.currentTimeMillis();
 		SQLiteDatabase db = this.getReadableDatabase();
+		mTotalTime += (System.currentTimeMillis()-t);
+		Log.d("Total time", ""+mTotalTime);
 		String qDate = date.get(
 							GregorianCalendar.DAY_OF_MONTH) + "."
 							+ date.get(GregorianCalendar.MONTH) + "."
@@ -371,14 +402,20 @@ teacher._id = schedule.teacher_id; */
 		values.put(DBColumns.ROOM, room);
 		values.put(DBColumns.TEACHER_ID, addTeacherItem(teacherName));
 		values.put(DBColumns.SUBGROUP, subgroup);
+		long t = System.currentTimeMillis();
 		SQLiteDatabase db = this.getWritableDatabase();
+		mTotalTime += (System.currentTimeMillis()-t);
+		Log.d("Total time", ""+mTotalTime);
 		db.insert(SCHEDULE_TABLE_NAME, null, values);
 		db.close();
 	}
 	
-	public Cursor getDay(String dayId) {
+	public Cursor getDay(int dayId) {
+		long t = System.currentTimeMillis();
 		SQLiteDatabase db = getReadableDatabase();
-		Cursor cursor = db.query(DAY_TABLE_NAME, new String[]{DBColumns.NAME}, DBColumns.DAY_ID + " = " + dayId, null, null, null, null, null);
+		mTotalTime += (System.currentTimeMillis()-t);
+		Log.d("Total time", ""+mTotalTime);
+		Cursor cursor = db.query(DAY_TABLE_NAME, new String[]{DBColumns.NAME}, DBColumns.DAY_ID + " = " +(""+ dayId), null, null, null, null, null);
 		String dayName = cursor.getString(cursor.getColumnIndex(DBColumns.NAME));
 		return db.query(SCHEDULE_VIEW_NAME, null, DBColumns.VIEW_DAY + " = " + dayName, null, null, null, null, DBColumns.START_HOUR);
 	}
