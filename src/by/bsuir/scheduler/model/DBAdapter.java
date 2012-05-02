@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.provider.BaseColumns;
 import android.util.Log;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.parser.Lesson;
@@ -62,10 +64,10 @@ public class DBAdapter implements Pushable, Closeable{
 		//return day.get(GregorianCalendar.DAY_OF_WEEK)!=GregorianCalendar.SUNDAY;
 	}
 	
-	public Pair getPair(GregorianCalendar date) { // убрал параметр int scheduleId, т.к. получаю его из курсора
-	//	Cursor cursor = mDBHelper.getDay(String.valueOf(date.get(GregorianCalendar.DAY_OF_WEEK)));
+	public Pair getPair(GregorianCalendar date)  {//, int scheduleId) { // убрал параметр int scheduleId, т.к. получаю его из курсора
+		Cursor cursor = mDBHelper.getDay(date.get(GregorianCalendar.DAY_OF_WEEK));
 		//TODO добавить проверку на номер подгруппы и номер недели
-		/*int[] times = new int[] {
+		int[] times = new int[] {
 				cursor.getInt(cursor.getColumnIndex(DBColumns.START_HOUR)),
 				cursor.getInt(cursor.getColumnIndex(DBColumns.START_MINUTES)),
 				cursor.getInt(cursor.getColumnIndex(DBColumns.END_HOUR)),
@@ -80,9 +82,9 @@ public class DBAdapter implements Pushable, Closeable{
 		String teacher = cursor.getString(cursor.getColumnIndex(DBColumns.VIEW_TEACHER));
 		int schedule = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID));
 		String note = mDBHelper.getNote(schedule, date);
-		Pair pair = new Pair(new Day(date, this), week, subGroup, lesson, type, sType, room, teacher, times, note, schedule); // не уверен по поводу правильности параметра container
-		return pair; //(new Day(date, this).getPair(scheduleId));
-	*/
+		//Pair pair = new Pair(new Day(date, this), week, subGroup, lesson, type, sType, room, teacher, times, note, scheduleId); // не уверен по поводу правильности параметра container
+		//return pair; //(new Day(date, this).getPair(scheduleId));
+	
 		return null;
 	}
 	

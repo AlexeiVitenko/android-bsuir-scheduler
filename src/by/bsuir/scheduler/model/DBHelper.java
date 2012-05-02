@@ -148,14 +148,14 @@ day._id = schedule.day_id and
 teacher._id = schedule.teacher_id; */
 		
 		sql = "CREATE VIEW " + SCHEDULE_VIEW_NAME + " AS SELECT "
-				 + BaseColumns._ID + ", "
+				 + SCHEDULE_TABLE_NAME + "." + BaseColumns._ID + ", "
 				 + SUBJECT_TABLE_NAME + "." + DBColumns.NAME + " as " + DBColumns.VIEW_SUBJECT + ", "
 				 + SUBJECT_TYPE_TABLE_NAME + "." + DBColumns.NAME + " as " + DBColumns.VIEW_SUBJECT_TYPE + ", "
 				 + TIME_TABLE_NAME + "." + DBColumns.START_HOUR + ", "
 				 + TIME_TABLE_NAME + "." + DBColumns.START_MINUTES + ", "
 				 + TIME_TABLE_NAME + "." + DBColumns.END_HOUR + ", "
 				 + TIME_TABLE_NAME + "." + DBColumns.END_MINUTES + ", "
-				 + DAY_TABLE_NAME +  "." + DBColumns.NAME + ", "
+				 + DAY_TABLE_NAME +  "." + DBColumns.NAME + " as " + DBColumns.VIEW_DAY+ ", "
 				 + SCHEDULE_TABLE_NAME + "." + DBColumns.WEEK + ", "
 				 + SCHEDULE_TABLE_NAME + "." + DBColumns.ROOM + ", "
 				 + SCHEDULE_TABLE_NAME + "." + DBColumns.SUBGROUP + ", "
@@ -169,11 +169,12 @@ teacher._id = schedule.teacher_id; */
 				 + DAY_TABLE_NAME
 				 + " WHERE "
 				 + SUBJECT_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.SUBJECT_ID + " and "
-				 + SUBJECT_TYPE_TABLE_NAME + "." + BaseColumns._ID + "= " + SCHEDULE_TABLE_NAME + "." + DBColumns.SUBJECT_TYPE_ID + " and "
-				 + TIME_TABLE_NAME + "." + BaseColumns._ID + "= " + SCHEDULE_TABLE_NAME + "." + DBColumns.TIME_ID + " and "
-				 + DAY_TABLE_NAME + "." + BaseColumns._ID + "= " + SCHEDULE_TABLE_NAME + "." + DBColumns.DAY_ID + " and "
-				 + TEACHER_TABLE_NAME + "." + BaseColumns._ID + "= " + SCHEDULE_TABLE_NAME + "." + DBColumns.TEACHER_ID + ";";
-		
+				 + SUBJECT_TYPE_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.SUBJECT_TYPE_ID + " and "
+				 + TIME_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.TIME_ID + " and "
+				 + DAY_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.DAY_ID + " and "
+				 + TEACHER_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.TEACHER_ID + ";";
+		Log.i(TAG, sql);
+		db.execSQL(sql);
 		
 		
 		/*sql = "CREATE VIEW %s AS SELECT %s.%s, %s.%s as \"%s\", %s.%s as \"%s\", %s.%s, %s.%s, %s.%s as \"%s\"," +
@@ -230,10 +231,14 @@ teacher._id = schedule.teacher_id; */
 					null, null, null
 					);
 			cursor.moveToFirst();
-			if (cursor.isNull(cursor.getColumnIndex(BaseColumns._ID)))
+			if (cursor.getCount() == 0) {
+				cursor.close();
 				return -1;
-			else
-				return cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+			} else {
+				long result = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+				cursor.close();
+				return result;
+			}
 		} catch (Exception e) {
 			Log.d(TAG, e.getMessage() 
 					+ "Cannot get item with column = " 
