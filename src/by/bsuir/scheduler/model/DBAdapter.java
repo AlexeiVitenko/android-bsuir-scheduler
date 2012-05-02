@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.util.Log;
 import by.bsuir.scheduler.DayPagerAdapter;
+import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.parser.Lesson;
 import by.bsuir.scheduler.parser.Pushable;
 
@@ -29,10 +30,13 @@ public class DBAdapter implements Pushable, Closeable{
 	
 	private Context mContext;
 	private DBHelper mDBHelper;
+	private String[] daysOfWeek;
 	
 	protected DBAdapter(Context context){
 		mContext = context;
 		mDBHelper = new DBHelper(context);
+		daysOfWeek = mContext.getResources().getStringArray(
+				R.array.days_of_week);
 	}
 	
 	/**
@@ -73,7 +77,7 @@ public class DBAdapter implements Pushable, Closeable{
 		int subGroup = cursor.getInt(cursor.getColumnIndex(DBColumns.SUBGROUP));
 		String lesson = cursor.getString(cursor.getColumnIndex(DBColumns.VIEW_SUBJECT));
 		int type = cursor.getInt(cursor.getColumnIndex(DBColumns.VIEW_SUBJECT_TYPE));
-		String sType = DayPagerAdapter.daysOfWeek[type];
+		String sType = daysOfWeek[type];
 		String room = cursor.getString(cursor.getColumnIndex(DBColumns.ROOM));
 		String teacher = cursor.getString(cursor.getColumnIndex(DBColumns.VIEW_TEACHER));
 		int schedule = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID));

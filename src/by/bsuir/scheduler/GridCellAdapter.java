@@ -44,7 +44,7 @@ public class GridCellAdapter extends BaseAdapter implements OnClickListener {
 		currentDayOfMonth = GregorianCalendar.getInstance().get(
 				Calendar.DAY_OF_MONTH);
 		this.textViewResourceId = textViewResourceId;
-		mAdapter = DBAdapter.getInstance();
+		mAdapter = DBAdapter.getInstance(context.getApplicationContext());
 
 		printMonth(month, year);
 	}

@@ -31,19 +31,22 @@ public class LessonActivity extends Activity {
 	public static final String DAY="day";
 	public static final String PAIR="pair";
 	private final static int DIALOG = 1;
+	private String[] daysOfWeek;
 	private int lessonID;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.lesson);
+		daysOfWeek = this.getResources().getStringArray(
+					R.array.days_of_week);
 				// /
 		// /типа запрос в БД
 		// /
 		GregorianCalendar day = new GregorianCalendar();
 		day.setTimeInMillis(getIntent().getLongExtra(DAY, -1));
 		Pair lesson = DBAdapter.getInstance(getApplicationContext()).getPair(day); //, getIntent().getIntExtra(PAIR, -1));
-		((TextView)findViewById(R.id.day_of_week)).setText(""+DayPagerAdapter.daysOfWeek[day.get(GregorianCalendar.DAY_OF_WEEK)-1]+"  "+day.get(GregorianCalendar.DAY_OF_MONTH)+
+		((TextView)findViewById(R.id.day_of_week)).setText(""+daysOfWeek[day.get(GregorianCalendar.DAY_OF_WEEK)-1]+"  "+day.get(GregorianCalendar.DAY_OF_MONTH)+
 				"."+(day.get(GregorianCalendar.MONTH)+1));
 		TextView subject = (TextView) findViewById(R.id.lesson_subject);
 		subject.setText(lesson.getLesson());
