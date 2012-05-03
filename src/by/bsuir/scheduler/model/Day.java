@@ -14,6 +14,7 @@ public class Day {
 	private GregorianCalendar mDate;
 	private List<Pair> mPairs;
 	private Cursor mData;
+	private int mWeek;
 	public Pair getPair(int index){
 		return mPairs.get(index);
 	}
@@ -22,7 +23,7 @@ public class Day {
 		return mPairs;
 	}
 	
-	protected Day(GregorianCalendar day, Cursor data, DBAdapter dbAdapter){
+	protected Day(GregorianCalendar day, Cursor data, DBAdapter dbAdapter, int week){
 		mDate = day;
 		mDbAdapter = dbAdapter;
 		mPairs = new ArrayList<Pair>();
@@ -39,7 +40,11 @@ public class Day {
 		return -1;
 	}
 	public int getCurrentLessonIndex(Pair pair){
-		return -1;
+		return mPairs.indexOf(pair);
+	}
+	
+	public int getWeek(){
+		return mWeek;
 	}
 	
 	public Iterator<Pair> iterator() {

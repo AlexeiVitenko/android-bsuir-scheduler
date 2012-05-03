@@ -47,7 +47,22 @@ public class DBAdapter implements Pushable, Closeable{
 	 * @param day
 	 */
 	public Day getDay(GregorianCalendar day){
-		//FIXEME Неделю поменять, пока сделал первую
+		int week = getWeekNumber(day);
+		Cursor cursor = getDay(day.get(GregorianCalendar.DAY_OF_WEEK), week);
+		return new Day(day, cursor, this, week);
+	}
+	
+	/**
+	 * Проверяет, является ли день учебным. Необходимо для календаря месяца и подгрузки дней.
+	 * @param day
+	 * @return true - если да.
+	 */
+	public boolean isWorkDay(GregorianCalendar day){
+		Cursor cursor = getDay(day.get(GregorianCalendar.DAY_OF_WEEK),getWeekNumber(day));
+		return cursor.getCount()>0;
+	}
+	
+	private int getWeekNumber(GregorianCalendar day){
 		int weeks = 0;
 		if (day.get(Calendar.YEAR)>septFirst.get(Calendar.YEAR)) {
 			if (day.getMinimalDaysInFirstWeek()!=7) {
@@ -58,49 +73,33 @@ public class DBAdapter implements Pushable, Closeable{
 		}else{
 			weeks = day.get(Calendar.WEEK_OF_YEAR) - septFirst.get(Calendar.WEEK_OF_YEAR) + 1;
 		}
-		Cursor cursor = mDBHelper.getDay(day.get(GregorianCalendar.DAY_OF_WEEK),weeks%4+1);
-		return new Day(day, cursor, this);
+		return weeks%4+1;
 	}
 	
-	/**
-	 * Проверяет, является ли день учебным. Необходимо для календаря месяца и подгрузки дней.
-	 * @param day
-	 * @return true - если да.
-	 */
-	public boolean isWorkDay(GregorianCalendar day){
-	//	Cursor cursor = mDBHelper.getDay(String.valueOf(day.get(GregorianCalendar.DAY_OF_WEEK)));
-	//	if(cursor.getCount() != 0)
-		if(day.get(Calendar.DAY_OF_WEEK)!=Calendar.SUNDAY)
-			//TODO добавить проверку на номер подгруппы и номер недели
-			return true;
-		else
-			return false;
-		//return day.get(GregorianCalendar.DAY_OF_WEEK)!=GregorianCalendar.SUNDAY;
-	}
-	
-	public Pair getPair(GregorianCalendar date)  {//, int scheduleId) { // убрал параметр int scheduleId, т.к. получаю его из курсора
-	/*	Cursor cursor = mDBHelper.getDay(date.get(GregorianCalendar.DAY_OF_WEEK));
-		//TODO добавить проверку на номер подгруппы и номер недели
-		int[] times = new int[] {
-				cursor.getInt(cursor.getColumnIndex(DBColumns.START_HOUR)),
-				cursor.getInt(cursor.getColumnIndex(DBColumns.START_MINUTES)),
-				cursor.getInt(cursor.getColumnIndex(DBColumns.END_HOUR)),
-				cursor.getInt(cursor.getColumnIndex(DBColumns.END_MINUTES))
-		};
-		int week = cursor.getInt(cursor.getColumnIndex(DBColumns.WEEK));
-		int subGroup = cursor.getInt(cursor.getColumnIndex(DBColumns.SUBGROUP));
-		String lesson = cursor.getString(cursor.getColumnIndex(DBColumns.VIEW_SUBJECT));
-		int type = cursor.getInt(cursor.getColumnIndex(DBColumns.VIEW_SUBJECT_TYPE));
-		String sType = daysOfWeek[type];
-		String room = cursor.getString(cursor.getColumnIndex(DBColumns.ROOM));
-		String teacher = cursor.getString(cursor.getColumnIndex(DBColumns.VIEW_TEACHER));
-		int schedule = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID));
-		String note = mDBHelper.getNote(schedule, date);
-		//Pair pair = new Pair(new Day(date, this), week, subGroup, lesson, type, sType, room, teacher, times, note, scheduleId); // не уверен по поводу правильности параметра container
-		//return pair; //(new Day(date, this).getPair(scheduleId));
-	*/
+	public Pair getPair(GregorianCalendar date)  {
 		return null;
 	}
+	
+	public Cursor getDay(int dayOfWeek,int week) {
+		return mDBHelper.getReadableDatabase().query(DBHelper.SCHEDULE_VIEW_NAME, new String[]{
+				BaseColumns._ID,
+				DBColumns.DAY,
+				DBColumns.WEEK,
+				DBColumns.VIEW_SUBJECT,
+				DBColumns.SUBJECT_TYPE,
+				DBColumns.ROOM,
+				DBColumns.SUBGROUP,
+				DBColumns.VIEW_TEACHER,
+				DBColumns.START_HOUR,
+				DBColumns.START_MINUTES,
+				DBColumns.END_HOUR,
+				DBColumns.END_MINUTES
+		}
+		, DBColumns.DAY + " = ? AND "+DBColumns.WEEK + " IN (?,0)" , new String[]{
+				""+dayOfWeek,
+				""+week
+		}, null, null, DBColumns.START_HOUR);
+	} 
 	
 	public void changeNote(GregorianCalendar day, int scheduleId, String note){
 		mDBHelper.updateNote(scheduleId, note, day);
