@@ -1,6 +1,7 @@
 package by.bsuir.scheduler.activity;
 
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,7 +24,10 @@ public class LessonActivity extends Activity {
 	public static final String DAY="day";
 	public static final String PAIR="pair";
 	private final static int DIALOG = 1;
+	private Pair mLesson;
 	private String[] daysOfWeek;
+	private GregorianCalendar mTime;
+	private DBAdapter mAdapter;
 	//private int lessonID;
 
 	@Override
@@ -36,22 +40,22 @@ public class LessonActivity extends Activity {
 				// /
 		// /типа запрос в БД
 		// /
-		GregorianCalendar day = new GregorianCalendar();
-		day.setTimeInMillis(getIntent().getLongExtra(DAY, -1));
-		Pair lesson = DBAdapter.getInstance(getApplicationContext()).getPair(day); //, getIntent().getIntExtra(PAIR, -1));
-		((TextView)findViewById(R.id.day_of_week)).setText(""+daysOfWeek[day.get(GregorianCalendar.DAY_OF_WEEK)-1]+"  "+day.get(GregorianCalendar.DAY_OF_MONTH)+
-				"."+(day.get(GregorianCalendar.MONTH)+1));
+		mTime = new GregorianCalendar(Locale.getDefault());
+		mTime.setTimeInMillis(getIntent().getLongExtra(DAY, -1));
+		mLesson = ( mAdapter = DBAdapter.getInstance(getApplicationContext())).getPair(mTime); //, getIntent().getIntExtra(PAIR, -1));
+		((TextView)findViewById(R.id.day_of_week)).setText(""+daysOfWeek[mTime.get(GregorianCalendar.DAY_OF_WEEK)-1]+"  "+mTime.get(GregorianCalendar.DAY_OF_MONTH)+
+				"."+(mTime.get(GregorianCalendar.MONTH)+1));
 		TextView subject = (TextView) findViewById(R.id.lesson_subject);
-		subject.setText(lesson.getLesson());
+		subject.setText(mLesson.getLesson());
 		TextView teacher = (TextView) findViewById(R.id.lesson_teacher);
-		teacher.setText(lesson.getTeacher());
-		((TextView)findViewById(R.id.lesson_type)).setText(lessonType[lesson.getType()]);
+		teacher.setText(mLesson.getTeacher());
+		((TextView)findViewById(R.id.lesson_type)).setText(lessonType[mLesson.getType()]);
 		TextView time = (TextView) findViewById(R.id.lesson_time);
-		time.setText(String.format("%d:%d-%d:%d", lesson.getTime()[0],lesson.getTime()[1],lesson.getTime()[2],lesson.getTime()[3]));
+		time.setText(String.format("%d:%d-%d:%d", mLesson.getTime()[0],mLesson.getTime()[1],mLesson.getTime()[2],mLesson.getTime()[3]));
 		TextView room = (TextView) findViewById(R.id.lesson_room);
-		room.setText("ауд. " + lesson.getRoom());
+		room.setText("ауд. " + mLesson.getRoom());
 		TextView note = (TextView) findViewById(R.id.lesson_note);
-		note.setText(lesson.getNote());
+		note.setText(mLesson.getNote());
 		note.setOnLongClickListener(new OnLongClickListener() {
 			public boolean onLongClick(View v) {
 				showDialog(DIALOG);
@@ -80,17 +84,12 @@ public class LessonActivity extends Activity {
 				R.layout.note_dialog, null);
 		builder.setView(view);
 
-		String noteText = "текст заметки";
-		// /
-		// /обращаемся в БД за заметкой
-		// /
 		final EditText note = (EditText) view.findViewById(R.id.dialog_note);
-		note.setText(noteText);
+		note.setText(mLesson.getNote());
 
 		builder.setPositiveButton(R.string.dialog_save, new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				// типа сохраняем в БД
+				mLesson.setNote(note.getText().toString());
 			}
 		});
 

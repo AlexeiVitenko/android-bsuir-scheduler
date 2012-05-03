@@ -3,6 +3,7 @@ package by.bsuir.scheduler.activity;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import by.bsuir.scheduler.R;
 import android.app.DatePickerDialog;
@@ -85,7 +86,7 @@ public class SettingsActivity extends PreferenceActivity {
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DATE_DIALOG:
-			GregorianCalendar gc = new GregorianCalendar();
+			GregorianCalendar gc = new GregorianCalendar(Locale.getDefault());
 			gc.setTimeInMillis(mPref.getLong(getString(R.string.semester_start_day), System.currentTimeMillis()));
 			DatePickerDialog dpd = new DatePickerDialog(this, new OnDateSetListener() {
 				

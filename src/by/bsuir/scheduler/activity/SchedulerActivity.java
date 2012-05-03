@@ -22,16 +22,20 @@ public class SchedulerActivity extends Activity {
 	public static final int RESULT_DAY = 2;
 	private DayPagerAdapter dayPagerAdapter;
 	private ViewPager viewPager;
+	private DBAdapter mAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		dayPagerAdapter = new DayPagerAdapter(this, System.currentTimeMillis());
-
-		viewPager = new ViewPager(this);
-		viewPager.setAdapter(dayPagerAdapter);
-		viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
-		setContentView(viewPager);
+		mAdapter = DBAdapter.getInstance(getApplicationContext());
+		if (mAdapter.isFilling()) {
+			dayPagerAdapter = new DayPagerAdapter(this, System.currentTimeMillis());
+			viewPager = new ViewPager(this);
+			viewPager.setAdapter(dayPagerAdapter);
+			viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
+			setContentView(viewPager);
+		}
+		
 
 	}
 
@@ -66,10 +70,11 @@ public class SchedulerActivity extends Activity {
 			return true;
 
 		case R.id.menu_item_month:
-			intent = new Intent(this, MonthActivity.class);
-			startActivityForResult(intent, RESULT_DAY);
+			if (mAdapter.isFilling()) {
+				intent = new Intent(this, MonthActivity.class);
+				startActivityForResult(intent, RESULT_DAY);
+			}
 			return true;
-
 		case R.id.menu_item_refresh:
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			DBAdapter.getInstance(getApplicationContext()).refreshSchedule(prefs.getString(getString(R.string.group_number), ""+(-1)
