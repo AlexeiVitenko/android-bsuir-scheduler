@@ -75,7 +75,7 @@ public class SettingsActivity extends PreferenceActivity {
 			
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				mSubGroup.setSummary(((ListPreference)preference).getEntryValues()[Integer.parseInt((String)newValue)]);
+				mSubGroup.setSummary(getResources().getStringArray(R.array.preferences_sub_group_entries)[Integer.parseInt((String)newValue)]);
 				return true;
 			}
 		});

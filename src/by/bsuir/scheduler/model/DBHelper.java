@@ -17,7 +17,7 @@ class DBHelper extends SQLiteOpenHelper {
 	private int count;
 	
 	private static final String DATABASE_NAME = "scheduledb";
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 5;
 	private static final String SCHEDULE_TABLE_NAME = "schedule";
 	private static final String NOTE_TABLE_NAME = "note";
 	private static final String SUBJECT_TABLE_NAME = "subject";
@@ -147,7 +147,7 @@ time._id = schedule.time_id and
 day._id = schedule.DAY and 
 teacher._id = schedule.teacher_id; */
 		
-		sql = "CREATE VIEW IF NOT EXISTS " + SCHEDULE_VIEW_NAME + " AS SELECT "
+		sql = "CREATE VIEW " + SCHEDULE_VIEW_NAME + " AS SELECT "
 				 + SCHEDULE_TABLE_NAME + "." + BaseColumns._ID + ", "
 				 + SUBJECT_TABLE_NAME + "." + DBColumns.NAME + " as " + DBColumns.VIEW_SUBJECT + ", "
 				 //+ SUBJECT_TYPE_TABLE_NAME + "." + DBColumns.NAME + " as " + DBColumns.VIEW_SUBJECT_TYPE + ", "
@@ -208,7 +208,6 @@ teacher._id = schedule.teacher_id; */
 			return;
 		}
 		dropTables(db);
-		db.execSQL("DROP VIEW IF EXISTS " + SCHEDULE_VIEW_NAME);
 	}
 	
 	public void dropTables(SQLiteDatabase db){
@@ -220,6 +219,7 @@ teacher._id = schedule.teacher_id; */
 		db.execSQL("DROP TABLE IF EXISTS " + SUBJECT_TYPE_TABLE_NAME);
 	//	db.execSQL("DROP TABLE IF EXISTS " + DAY_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + SCHEDULE_TABLE_NAME);
+		db.execSQL("DROP VIEW IF EXISTS " + SCHEDULE_VIEW_NAME);
 		onCreate(db);
 	}
 	

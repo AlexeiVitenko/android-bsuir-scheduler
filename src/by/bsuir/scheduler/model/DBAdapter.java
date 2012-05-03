@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.util.Log;
+import android.widget.Toast;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.parser.Lesson;
 import by.bsuir.scheduler.parser.Parser;
@@ -28,7 +29,8 @@ public class DBAdapter implements Pushable, Closeable{
 		}
 		return mInstance;
 	}
-	private GregorianCalendar septFirst = new GregorianCalendar(2011, 8, 31);
+	//FIXEME доделать нормально
+	private GregorianCalendar septFirst = new GregorianCalendar(2011, 9, 1);
 	private Context mContext;
 	private DBHelper mDBHelper;
 	private String[] daysOfWeek;
@@ -46,7 +48,17 @@ public class DBAdapter implements Pushable, Closeable{
 	 */
 	public Day getDay(GregorianCalendar day){
 		//FIXEME Неделю поменять, пока сделал первую
-		Cursor cursor = mDBHelper.getDay(day.get(GregorianCalendar.DAY_OF_WEEK),1);
+		int weeks = 0;
+		if (day.get(Calendar.YEAR)>septFirst.get(Calendar.YEAR)) {
+			if (day.getMinimalDaysInFirstWeek()!=7) {
+				weeks--;
+			}
+			weeks += (new GregorianCalendar(2011, 11, 31).get(Calendar.WEEK_OF_YEAR)-septFirst.get(Calendar.WEEK_OF_YEAR)) +1;
+			weeks += day.get(Calendar.WEEK_OF_YEAR);
+		}else{
+			weeks = day.get(Calendar.WEEK_OF_YEAR) - septFirst.get(Calendar.WEEK_OF_YEAR) + 1;
+		}
+		Cursor cursor = mDBHelper.getDay(day.get(GregorianCalendar.DAY_OF_WEEK),weeks%4+1);
 		return new Day(day, cursor, this);
 	}
 	
@@ -95,6 +107,10 @@ public class DBAdapter implements Pushable, Closeable{
 	}
 	
 	public void refreshSchedule(String group, int subGroup, ParserListiner listiner){
+		if (group.equals("-1")) {
+			Toast.makeText(mContext, "Введите группу в настройках.", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		mDBHelper.dropTables(mDBHelper.getWritableDatabase());
 		long startTime = System.currentTimeMillis();
 		Parser p = new Parser(group, subGroup, this, listiner);
