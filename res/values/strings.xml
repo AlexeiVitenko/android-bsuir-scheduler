@@ -18,7 +18,23 @@
 	<string name="semester_length_weeks">semester_length_weeks</string>
 	<string name="semester_start_day">semester_start_day</string>
 	<string name="semester_start">First day</string>
-
+	
+	<string name="group_number">group_number</string>
+	<string name="sub_group_number">sub_group_number</string>
+	<string name="group">Group</string>
+	<string name="preference_sub_group_list">preference_sub_group_list</string>
+	<string name="subgroup">Subgroup</string>
+	
+	<string-array name="preferences_sub_group_entries">
+	    <item>All Group</item>
+	    <item>First</item>
+	    <item>Second</item>
+	</string-array>
+	<string-array name="preferences_sub_group_entriesValues">
+	    <item>0</item>
+	    <item>1</item>
+	    <item>2</item>
+	</string-array>
     <string-array name="days_of_week">
         <item>Sunday</item>
         <item>Monday</item>

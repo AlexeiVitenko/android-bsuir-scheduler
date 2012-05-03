@@ -32,6 +32,7 @@ public class LessonActivity extends Activity {
 		setContentView(R.layout.lesson);
 		daysOfWeek = this.getResources().getStringArray(
 					R.array.days_of_week);
+		String [] lessonType = this.getResources().getStringArray(R.array.lesson_types);
 				// /
 		// /типа запрос в БД
 		// /
@@ -44,7 +45,7 @@ public class LessonActivity extends Activity {
 		subject.setText(lesson.getLesson());
 		TextView teacher = (TextView) findViewById(R.id.lesson_teacher);
 		teacher.setText(lesson.getTeacher());
-		((TextView)findViewById(R.id.lesson_type)).setText(lesson.getStringType());
+		((TextView)findViewById(R.id.lesson_type)).setText(lessonType[lesson.getType()]);
 		TextView time = (TextView) findViewById(R.id.lesson_time);
 		time.setText(String.format("%d:%d-%d:%d", lesson.getTime()[0],lesson.getTime()[1],lesson.getTime()[2],lesson.getTime()[3]));
 		TextView room = (TextView) findViewById(R.id.lesson_room);

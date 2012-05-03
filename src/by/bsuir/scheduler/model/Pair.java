@@ -6,12 +6,12 @@ package by.bsuir.scheduler.model;
  * //TODO добавить геттеров
  */
 public class Pair{
-	private int mScheduleId;
+	private int mPairIndex;
 	private int mWeek;
 	private String mLesson;
 	private String mTeacher;
 	private String mRoom;
-	private String mStringType;
+//	private String mStringType;
 	private int mSubGroup;
 	private int mType;
 	private int mBeginningHours = -1;
@@ -21,22 +21,22 @@ public class Pair{
 	private Day mDay;
 	private String mNote;
 	
-	protected Pair(Day container, int week, int subGroup, String lesson, int type, String sType, String room, String teacher, int times[], String note, int schedule){
+	protected Pair(Day container, int week, int subGroup, String lesson, int type/*, String sType*/, String room, String teacher, int times[], int schedule){
 		mDay = container;
 		mSubGroup = subGroup;
 		mBeginningHours = times[0];
 		mBeginningMinutes = times[1];
 		mEndingHours = times[2];
 		mEndingMinutes = times[3];	
-		mStringType = sType;
+//		mStringType = sType;
 		mWeek = week;
 		mType = type;
 
 		mLesson = lesson;
 		mTeacher = teacher;
 		mRoom = room;
-		mNote = note;
-		mScheduleId = schedule;
+		mNote = "";
+		mPairIndex = schedule;
 	}
 	
 	public String getNote(){
@@ -45,7 +45,7 @@ public class Pair{
 	
 	public void setNote(String note){
 		mNote = note;
-		mDay.changeNote(mScheduleId, note);
+		mDay.changeNote(mPairIndex, note);
 	}
 	
 	@Override
@@ -69,10 +69,10 @@ public class Pair{
 	public int getType() {
 		return mType;
 	}
-	
+	/*
 	public String getStringType() {
 		return mStringType;
-	}
+	}*/
 	
 	public String getRoom(){
 		return mRoom;

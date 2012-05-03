@@ -5,12 +5,15 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
+import android.database.Cursor;
+import android.provider.BaseColumns;
+
 
 public class Day {
 	private DBAdapter mDbAdapter;
 	private GregorianCalendar mDate;
 	private List<Pair> mPairs;
-
+	private Cursor mData;
 	public Pair getPair(int index){
 		return mPairs.get(index);
 	}
@@ -19,10 +22,11 @@ public class Day {
 		return mPairs;
 	}
 	
-	protected Day(GregorianCalendar day, DBAdapter dbAdapter){
+	protected Day(GregorianCalendar day, Cursor data, DBAdapter dbAdapter){
 		mDate = day;
 		mDbAdapter = dbAdapter;
 		mPairs = new ArrayList<Pair>();
+		mData = data;
 		generatePairs();
 	}
 	/**
@@ -47,11 +51,43 @@ public class Day {
 	}
 	
 	private void generatePairs(){
-		Pair lesson1 = new Pair(this, 0, 0, "Ололлогия", 1,"лк", "108-4", "Иванов", new int[]{8,0,9,35}, null, 1);
-		Pair lesson2 = new Pair(this, 0, 1, "Ололлогия", 3,"лр", "210-4", "Иванов", new int[]{9,45,11,20}, null, 2);
-		Pair lesson3 = new Pair(this, 0, 0, "Физра", -1,"", "", "", new int[] {11,40,13,25}, null, 3);
-		mPairs.add(lesson1);
-		mPairs.add(lesson2);
-		mPairs.add(lesson3);
+		if (mData.getCount()<1) {
+			return;
+		}
+		int DAY = mData.getColumnIndex(DBColumns.DAY);
+		int WEEK = mData.getColumnIndex(DBColumns.WEEK);
+		int SUBJECT = mData.getColumnIndex(DBColumns.VIEW_SUBJECT);
+		int SUBJECT_TYPE = mData.getColumnIndex(DBColumns.SUBJECT_TYPE);
+		int ROOM = mData.getColumnIndex(DBColumns.ROOM);
+		int SUBGROUP = mData.getColumnIndex(DBColumns.SUBGROUP);
+		int TEACHER = mData.getColumnIndex(DBColumns.VIEW_TEACHER);
+		int START_HOUR = mData.getColumnIndex(DBColumns.START_HOUR);
+		int START_MINUTES = mData.getColumnIndex(DBColumns.START_MINUTES);
+		int END_HOUR = mData.getColumnIndex(DBColumns.END_HOUR);
+		int END_MINUTES = mData.getColumnIndex(DBColumns.END_MINUTES);
+		mData.moveToFirst();
+		int i = 0;
+		do {
+			mPairs.add(new Pair(this, 
+					mData.getInt(WEEK),
+					mData.getInt(SUBGROUP),
+					mData.getString(SUBJECT),
+					mData.getInt(SUBJECT_TYPE), 
+					mData.getString(ROOM),
+					mData.getString(TEACHER),
+					new int[]{
+					mData.getInt(START_HOUR),
+					mData.getInt(START_MINUTES),
+					mData.getInt(END_HOUR),
+					mData.getInt(END_MINUTES)
+				}, i));
+			i++;
+		} while (mData.moveToNext());
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		mData.close();
+		super.finalize();
 	}
 }

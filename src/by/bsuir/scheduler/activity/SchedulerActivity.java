@@ -2,12 +2,15 @@ package by.bsuir.scheduler.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 import by.bsuir.scheduler.DayPagerAdapter;
 import by.bsuir.scheduler.GridCellAdapter;
 import by.bsuir.scheduler.R;
@@ -68,12 +71,13 @@ public class SchedulerActivity extends Activity {
 			return true;
 
 		case R.id.menu_item_refresh:
-			DBAdapter.getInstance(getApplicationContext()).refreshSchedule("951005", 1, new ParserListiner() {
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			DBAdapter.getInstance(getApplicationContext()).refreshSchedule(prefs.getString(getString(R.string.group_number), ""+(-1)
+					), Integer.parseInt(prefs.getString(getString(R.string.preference_sub_group_list),""+ 0)), new ParserListiner() {
 				
 				@Override
 				public void onException(Exception e) {
-					// TODO Auto-generated method stub
-					
+					Toast.makeText(getApplicationContext(), "Очевидно, что-то пошло не так :(", Toast.LENGTH_SHORT).show();
 				}
 				
 				@Override
@@ -82,6 +86,12 @@ public class SchedulerActivity extends Activity {
 					
 				}
 			});
+			//FIXEME всё это в onComplete + возвращаться в тот день, который был текущим 
+			dayPagerAdapter = new DayPagerAdapter(this, System.currentTimeMillis());
+			viewPager = new ViewPager(this);
+			viewPager.setAdapter(dayPagerAdapter);
+			viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
+			setContentView(viewPager);
 			return true;
 
 		case R.id.menu_item_preferences:

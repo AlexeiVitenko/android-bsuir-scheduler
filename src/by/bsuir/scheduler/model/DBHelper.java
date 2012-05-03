@@ -302,30 +302,87 @@ teacher._id = schedule.teacher_id; */
 
 		mTotalTime += (System.currentTimeMillis()-t);
 		Log.d("Total time", ""+mTotalTime);
-		Cursor cursor = db.query(
-			TIME_TABLE_NAME,
-			new String[] { BaseColumns._ID, DBColumns.START_HOUR},
-			DBColumns.START_HOUR + "=?",
-			new String[] { String.valueOf(startHour)}, null, null,
-			null
-		);
-		
-		cursor.moveToFirst();		
-		if (cursor.getCount() == 0) {
-			//Log.i(TAG, "time doesn't exist");
-			ContentValues values = new ContentValues();
-			values.put(DBColumns.START_HOUR, startHour);
-			values.put(DBColumns.START_MINUTES, startMinutes);
-			values.put(DBColumns.END_HOUR, endHour);
-			values.put(DBColumns.END_MINUTES, endMinutes);
+		ContentValues values;
+		Cursor cursor;
+		switch (startHour) {
+		case -1:
+			values = new ContentValues();
+			values.put(DBColumns.START_HOUR, 8);
+			values.put(DBColumns.START_MINUTES, 00);
+			values.put(DBColumns.END_HOUR, 15);
+			values.put(DBColumns.END_MINUTES, 00);
 			resultId = db.insert(TIME_TABLE_NAME, null, values);
 			db.close();
+			break;
+		case 8:
+			cursor = db.query(
+					TIME_TABLE_NAME,
+					new String[] { BaseColumns._ID, DBColumns.START_HOUR, DBColumns.END_HOUR},
+					DBColumns.START_HOUR + "=?",
+					new String[] { String.valueOf(startHour)}, null, null,
+					null
+				);
+			cursor.moveToFirst();
+			switch (cursor.getCount()) {
+			case 0:
+				values = new ContentValues();
+				values.put(DBColumns.START_HOUR, startHour);
+				values.put(DBColumns.START_MINUTES, startMinutes);
+				values.put(DBColumns.END_HOUR, endHour);
+				values.put(DBColumns.END_MINUTES, endMinutes);
+				resultId = db.insert(TIME_TABLE_NAME, null, values);
+				db.close();	
+				break;
+			case 1:
+				if (cursor.getLong(cursor.getColumnIndex(DBColumns.END_HOUR))==15) {
+					values = new ContentValues();
+					values.put(DBColumns.START_HOUR, startHour);
+					values.put(DBColumns.START_MINUTES, startMinutes);
+					values.put(DBColumns.END_HOUR, endHour);
+					values.put(DBColumns.END_MINUTES, endMinutes);
+					resultId = db.insert(TIME_TABLE_NAME, null, values);
+					db.close();	
+				} else {
+					resultId = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+				}
+				break;
+			case 2:
+				while (cursor.getLong(cursor.getColumnIndex(DBColumns.END_HOUR))==15 & !cursor.isLast()) {
+					cursor.moveToNext();
+				}
+				resultId = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+				break;
+			default:
+				resultId = -1;
+				break;
+			}
+			break;
+		default:
+			cursor = db.query(
+					TIME_TABLE_NAME,
+					new String[] { BaseColumns._ID, DBColumns.START_HOUR},
+					DBColumns.START_HOUR + "=?",
+					new String[] { String.valueOf(startHour)}, null, null,
+					null
+				);
 			
+			cursor.moveToFirst();		
+			if (cursor.getCount() == 0) {
+				values = new ContentValues();
+				values.put(DBColumns.START_HOUR, startHour);
+				values.put(DBColumns.START_MINUTES, startMinutes);
+				values.put(DBColumns.END_HOUR, endHour);
+				values.put(DBColumns.END_MINUTES, endMinutes);
+				resultId = db.insert(TIME_TABLE_NAME, null, values);
+				db.close();	
+			}
+			else													
+				resultId = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+			
+			cursor.close();
+			break;
 		}
-		else													
-			resultId = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
 		
-		cursor.close();
 		
 		return resultId;
 	}
@@ -421,13 +478,24 @@ teacher._id = schedule.teacher_id; */
 		db.close();
 	}
 	
-	public Cursor getDay(int dayId) {
-		long t = System.currentTimeMillis();
-		SQLiteDatabase db = getReadableDatabase();
-		mTotalTime += (System.currentTimeMillis()-t);
-		Log.d("Total time", ""+mTotalTime);
-		Cursor cursor = db.query(DAY_TABLE_NAME, new String[]{DBColumns.NAME}, DBColumns.DAY + " = " +(""+ dayId), null, null, null, null, null);
-		String dayName = cursor.getString(cursor.getColumnIndex(DBColumns.NAME));
-		return db.query(SCHEDULE_VIEW_NAME, null, DBColumns.VIEW_DAY + " = " + dayName, null, null, null, null, DBColumns.START_HOUR);
+	public Cursor getDay(int dayOfWeek,int week) {
+		return getReadableDatabase().query(SCHEDULE_VIEW_NAME, new String[]{
+				BaseColumns._ID,
+				DBColumns.DAY,
+				DBColumns.WEEK,
+				DBColumns.VIEW_SUBJECT,
+				DBColumns.SUBJECT_TYPE,
+				DBColumns.ROOM,
+				DBColumns.SUBGROUP,
+				DBColumns.VIEW_TEACHER,
+				DBColumns.START_HOUR,
+				DBColumns.START_MINUTES,
+				DBColumns.END_HOUR,
+				DBColumns.END_MINUTES
+		}
+		, DBColumns.DAY + " = ? AND "+DBColumns.WEEK + " IN (?,0)" , new String[]{
+				""+dayOfWeek,
+				""+week
+		}, null, null, DBColumns.START_HOUR);
 	}
 }
