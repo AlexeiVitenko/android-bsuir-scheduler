@@ -1,5 +1,6 @@
 package by.bsuir.scheduler.activity;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -28,6 +29,7 @@ public class LessonActivity extends Activity {
 	private String[] daysOfWeek;
 	private GregorianCalendar mTime;
 	private DBAdapter mAdapter;
+	private TextView mNoteText;
 	//private int lessonID;
 
 	@Override
@@ -43,8 +45,8 @@ public class LessonActivity extends Activity {
 		mTime = new GregorianCalendar(Locale.getDefault());
 		mTime.setTimeInMillis(getIntent().getLongExtra(DAY, -1));
 		mLesson = ( mAdapter = DBAdapter.getInstance(getApplicationContext())).getPair(mTime); //, getIntent().getIntExtra(PAIR, -1));
-		((TextView)findViewById(R.id.day_of_week)).setText(""+daysOfWeek[mTime.get(GregorianCalendar.DAY_OF_WEEK)-1]+"  "+mTime.get(GregorianCalendar.DAY_OF_MONTH)+
-				"."+(mTime.get(GregorianCalendar.MONTH)+1));
+		((TextView)findViewById(R.id.day_of_week)).setText(""+daysOfWeek[mTime.get(GregorianCalendar.DAY_OF_WEEK)-1]+", "+mTime.get(GregorianCalendar.DAY_OF_MONTH)+
+				" "+getResources().getStringArray(R.array.months_genitive)[mTime.get(Calendar.MONTH)]);
 		TextView subject = (TextView) findViewById(R.id.lesson_subject);
 		subject.setText(mLesson.getLesson());
 		TextView teacher = (TextView) findViewById(R.id.lesson_teacher);
@@ -54,9 +56,9 @@ public class LessonActivity extends Activity {
 		time.setText(String.format("%d:%d-%d:%d", mLesson.getTime()[0],mLesson.getTime()[1],mLesson.getTime()[2],mLesson.getTime()[3]));
 		TextView room = (TextView) findViewById(R.id.lesson_room);
 		room.setText("ауд. " + mLesson.getRoom());
-		TextView note = (TextView) findViewById(R.id.lesson_note);
-		note.setText(mLesson.getNote());
-		note.setOnLongClickListener(new OnLongClickListener() {
+		mNoteText = (TextView) findViewById(R.id.lesson_note);
+		mNoteText.setText(mLesson.getNote());
+		mNoteText.setOnLongClickListener(new OnLongClickListener() {
 			public boolean onLongClick(View v) {
 				showDialog(DIALOG);
 				return true;
@@ -90,6 +92,7 @@ public class LessonActivity extends Activity {
 		builder.setPositiveButton(R.string.dialog_save, new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				mLesson.setNote(note.getText().toString());
+				mNoteText.setText(note.getText().toString());
 			}
 		});
 

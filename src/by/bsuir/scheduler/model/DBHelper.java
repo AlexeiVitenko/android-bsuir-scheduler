@@ -354,12 +354,8 @@ class DBHelper extends SQLiteOpenHelper {
 	}
 	
 	public String getNote(long scheduleId, GregorianCalendar date) {
-		long t = System.currentTimeMillis();
-		SQLiteDatabase db = this.getReadableDatabase();
-		mTotalTime += (System.currentTimeMillis()-t);
-		Log.d("Total time", ""+mTotalTime);
 		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date.getTime());
-	/*	Cursor cursor = db.query(
+		Cursor cursor = this.getReadableDatabase().query(
 							NOTE_TABLE_NAME,
 							new String[] {
 									BaseColumns._ID,
@@ -367,14 +363,11 @@ class DBHelper extends SQLiteOpenHelper {
 									DBColumns.SCHEDULE_ID,
 									DBColumns.DATE
 									},
-						null,//	DBColumns.SCHEDULE_ID + " = "+scheduleId,// AND " + DBColumns.DATE + " = '"+qDate+"' " ,
+								DBColumns.SCHEDULE_ID + " = "+scheduleId+" AND " + DBColumns.DATE + " = '"+qDate+"' " ,
 							null,
 							null, null, null
-						);*/
-		Cursor cursor = db.query(    NOTE_TABLE_NAME, null, null, null, null, null, null);
 
-		db.close();
-		cursor.moveToFirst();
+						);
 		if(cursor.getCount()<=0)
 			return "";
 		else{
