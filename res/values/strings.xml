@@ -65,5 +65,12 @@
         <item>November</item>
         <item>December</item>
     </string-array>
+    <string-array name="lesson_types">
+        <item></item>
+        <item>Lection</item>
+        <item>Practical lesson</item>
+        <item>Laboratory work</item>
+        <item>Project ???? I can\'t translate it.</item>
+    </string-array>
         <string name="weeks">" weeks"</string>
 </resources>

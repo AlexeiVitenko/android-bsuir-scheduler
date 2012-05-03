@@ -17,7 +17,7 @@ class DBHelper extends SQLiteOpenHelper {
 	private int count;
 	
 	private static final String DATABASE_NAME = "scheduledb";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 3;
 	private static final String SCHEDULE_TABLE_NAME = "schedule";
 	private static final String NOTE_TABLE_NAME = "note";
 	private static final String SUBJECT_TABLE_NAME = "subject";
@@ -49,7 +49,7 @@ class DBHelper extends SQLiteOpenHelper {
 		Log.i(TAG, sql);
 		
 		/*=====Day=====*/
-		sql = "CREATE TABLE " + DAY_TABLE_NAME + 
+		/*sql = "CREATE TABLE " + DAY_TABLE_NAME + 
 				" (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ DBColumns.NAME + " TEXT);";
 		db.execSQL(sql);
@@ -58,7 +58,7 @@ class DBHelper extends SQLiteOpenHelper {
 			db.execSQL(sql);
 		}
 		Log.i(TAG, sql);
-		
+		*/
 		/*=====Subject_type=====*/
 		sql = "CREATE TABLE " + SUBJECT_TYPE_TABLE_NAME + 
 				" (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -91,17 +91,17 @@ class DBHelper extends SQLiteOpenHelper {
 		sql = "CREATE TABLE " + SCHEDULE_TABLE_NAME + 
 				" (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ DBColumns.SUBJECT_ID + " INTEGER, "
-				+ DBColumns.SUBJECT_TYPE_ID + " INTEGER, "
+				+ DBColumns.SUBJECT_TYPE + " INTEGER, "
 				+ DBColumns.TIME_ID + " INTEGER, "
-				+ DBColumns.DAY_ID + " INTEGER, "
+				+ DBColumns.DAY + " INTEGER, "
 				+ DBColumns.TEACHER_ID + " INTEGER, "
 				+ DBColumns.WEEK + " INTEGER DEFAULT 0, "
 				+ DBColumns.ROOM + " TEXT, "
 				+ DBColumns.SUBGROUP + " INTEGER DEFAULT 0, "
 				+ "FOREIGN KEY(" + DBColumns.SUBJECT_ID + ") REFERENCES " + SUBJECT_TABLE_NAME + "(" + BaseColumns._ID + "), "
-				+ "FOREIGN KEY(" + DBColumns.SUBJECT_TYPE_ID + ") REFERENCES " + SUBJECT_TYPE_TABLE_NAME + "(" + BaseColumns._ID + "), "
+				+ "FOREIGN KEY(" + DBColumns.SUBJECT_TYPE + ") REFERENCES " + SUBJECT_TYPE_TABLE_NAME + "(" + BaseColumns._ID + "), "
 				+ "FOREIGN KEY(" + DBColumns.TIME_ID + ") REFERENCES " + TIME_TABLE_NAME + "(" + BaseColumns._ID + "), "
-				+ "FOREIGN KEY(" + DBColumns.DAY_ID + ") REFERENCES " + DAY_TABLE_NAME + "(" + BaseColumns._ID + "), "
+				+ "FOREIGN KEY(" + DBColumns.DAY + ") REFERENCES " + DAY_TABLE_NAME + "(" + BaseColumns._ID + "), "
 				+ "FOREIGN KEY(" + DBColumns.TEACHER_ID + ") REFERENCES " + TEACHER_TABLE_NAME + "(" + BaseColumns._ID + "));";
 		
 		Log.i(TAG, sql);
@@ -142,36 +142,37 @@ FROM
 	day
 WHERE 
 subject._id = schedule.subject_id and 
-subject_type._id = schedule.subject_type_id and 
+subject_type._id = schedule.SUBJECT_TYPE and 
 time._id = schedule.time_id and 
-day._id = schedule.day_id and 
+day._id = schedule.DAY and 
 teacher._id = schedule.teacher_id; */
 		
-		sql = "CREATE VIEW " + SCHEDULE_VIEW_NAME + " AS SELECT "
+		sql = "CREATE VIEW IF NOT EXISTS " + SCHEDULE_VIEW_NAME + " AS SELECT "
 				 + SCHEDULE_TABLE_NAME + "." + BaseColumns._ID + ", "
 				 + SUBJECT_TABLE_NAME + "." + DBColumns.NAME + " as " + DBColumns.VIEW_SUBJECT + ", "
-				 + SUBJECT_TYPE_TABLE_NAME + "." + DBColumns.NAME + " as " + DBColumns.VIEW_SUBJECT_TYPE + ", "
+				 //+ SUBJECT_TYPE_TABLE_NAME + "." + DBColumns.NAME + " as " + DBColumns.VIEW_SUBJECT_TYPE + ", "
 				 + TIME_TABLE_NAME + "." + DBColumns.START_HOUR + ", "
 				 + TIME_TABLE_NAME + "." + DBColumns.START_MINUTES + ", "
 				 + TIME_TABLE_NAME + "." + DBColumns.END_HOUR + ", "
 				 + TIME_TABLE_NAME + "." + DBColumns.END_MINUTES + ", "
-				 + DAY_TABLE_NAME +  "." + DBColumns.NAME + " as " + DBColumns.VIEW_DAY+ ", "
+				 + SCHEDULE_TABLE_NAME +  "." + DBColumns.DAY + ", "
 				 + SCHEDULE_TABLE_NAME + "." + DBColumns.WEEK + ", "
 				 + SCHEDULE_TABLE_NAME + "." + DBColumns.ROOM + ", "
 				 + SCHEDULE_TABLE_NAME + "." + DBColumns.SUBGROUP + ", "
+				 + SCHEDULE_TABLE_NAME + "." + DBColumns.SUBJECT_TYPE + ", "
 				 + TEACHER_TABLE_NAME + "." + DBColumns.NAME + " as " + DBColumns.VIEW_TEACHER
 				 + " FROM " 
 				 + SCHEDULE_TABLE_NAME + ", " 
 				 + SUBJECT_TABLE_NAME + ", " 
-				 + SUBJECT_TYPE_TABLE_NAME + ", " 
+				 //+ SUBJECT_TYPE_TABLE_NAME + ", " 
 				 + TIME_TABLE_NAME + ", "
-				 + TEACHER_TABLE_NAME + ", "
-				 + DAY_TABLE_NAME
+				 + TEACHER_TABLE_NAME// + ", "
+				 //+ DAY_TABLE_NAME
 				 + " WHERE "
 				 + SUBJECT_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.SUBJECT_ID + " and "
-				 + SUBJECT_TYPE_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.SUBJECT_TYPE_ID + " and "
+			//	 + SUBJECT_TYPE_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.SUBJECT_TYPE + " and "
 				 + TIME_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.TIME_ID + " and "
-				 + DAY_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.DAY_ID + " and "
+				// + DAY_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.DAY + " and "
 				 + TEACHER_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.TEACHER_ID + ";";
 		Log.i(TAG, sql);
 		db.execSQL(sql);
@@ -195,9 +196,9 @@ teacher._id = schedule.teacher_id; */
 				TEACHER_TABLE_NAME,
 				DAY_TABLE_NAME, // WHERE =>
 				SUBJECT_TABLE_NAME, 		BaseColumns._ID, SCHEDULE_TABLE_NAME, DBColumns.SUBJECT_ID,
-				SUBJECT_TYPE_TABLE_NAME, 	BaseColumns._ID, SCHEDULE_TABLE_NAME, DBColumns.SUBJECT_TYPE_ID,
+				SUBJECT_TYPE_TABLE_NAME, 	BaseColumns._ID, SCHEDULE_TABLE_NAME, DBColumns.SUBJECT_TYPE,
 				TIME_TABLE_NAME, 			BaseColumns._ID, SCHEDULE_TABLE_NAME, DBColumns.TIME_ID,
-				DAY_TABLE_NAME, 			BaseColumns._ID, SCHEDULE_TABLE_NAME, DBColumns.DAY_ID,
+				DAY_TABLE_NAME, 			BaseColumns._ID, SCHEDULE_TABLE_NAME, DBColumns.DAY,
 				TEACHER_TABLE_NAME, 		BaseColumns._ID, SCHEDULE_TABLE_NAME, DBColumns.TEACHER_ID);*/
 	}
 
@@ -206,13 +207,18 @@ teacher._id = schedule.teacher_id; */
 		if (oldVersion >= newVersion){
 			return;
 		}
+		dropTables(db);
+		db.execSQL("DROP VIEW IF EXISTS " + SCHEDULE_VIEW_NAME);
+	}
+	
+	public void dropTables(SQLiteDatabase db){
 		Log.i("DBAdapter", "db upgraded");
 		db.execSQL("DROP TABLE IF EXISTS " + NOTE_TABLE_NAME); 
 		db.execSQL("DROP TABLE IF EXISTS " + TIME_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + TEACHER_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + SUBJECT_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + SUBJECT_TYPE_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + DAY_TABLE_NAME);
+	//	db.execSQL("DROP TABLE IF EXISTS " + DAY_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + SCHEDULE_TABLE_NAME);
 		onCreate(db);
 	}
@@ -397,12 +403,12 @@ teacher._id = schedule.teacher_id; */
 			return cursor.getString((cursor.getColumnIndex(DBColumns.TEXT_NOTE)));
 	}
 	
-	public void addScheduleItem(String subjectName, String subjectType, int startHour, int startMinutes, int endHour, int endMinutes, int dayId, int week, String room, String teacherName, int subgroup) {
+	public void addScheduleItem(String subjectName, int subjectType, int startHour, int startMinutes, int endHour, int endMinutes, int dayId, int week, String room, String teacherName, int subgroup) {
 		ContentValues values = new ContentValues();
 		values.put(DBColumns.SUBJECT_ID, addSubjectItem(subjectName));
-		values.put(DBColumns.SUBJECT_TYPE_ID, getItemWithNameValue(SUBJECT_TYPE_TABLE_NAME, DBColumns.NAME, subjectType));
+		values.put(DBColumns.SUBJECT_TYPE, subjectType);
 		values.put(DBColumns.TIME_ID, addTimeItem(startHour, startMinutes, endHour, endMinutes));
-		values.put(DBColumns.DAY_ID, dayId);
+		values.put(DBColumns.DAY, dayId);
 		values.put(DBColumns.WEEK, week);
 		values.put(DBColumns.ROOM, room);
 		values.put(DBColumns.TEACHER_ID, addTeacherItem(teacherName));
@@ -420,7 +426,7 @@ teacher._id = schedule.teacher_id; */
 		SQLiteDatabase db = getReadableDatabase();
 		mTotalTime += (System.currentTimeMillis()-t);
 		Log.d("Total time", ""+mTotalTime);
-		Cursor cursor = db.query(DAY_TABLE_NAME, new String[]{DBColumns.NAME}, DBColumns.DAY_ID + " = " +(""+ dayId), null, null, null, null, null);
+		Cursor cursor = db.query(DAY_TABLE_NAME, new String[]{DBColumns.NAME}, DBColumns.DAY + " = " +(""+ dayId), null, null, null, null, null);
 		String dayName = cursor.getString(cursor.getColumnIndex(DBColumns.NAME));
 		return db.query(SCHEDULE_VIEW_NAME, null, DBColumns.VIEW_DAY + " = " + dayName, null, null, null, null, DBColumns.START_HOUR);
 	}
