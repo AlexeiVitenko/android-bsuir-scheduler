@@ -11,7 +11,10 @@ import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -23,7 +26,10 @@ public class SettingsActivity extends PreferenceActivity {
 	
 	private Preference mSemesterLength;
 	private Preference mStartDate;
+	private EditTextPreference mGroupNumber;
+	private ListPreference mSubGroup;
 	private SharedPreferences mPref;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -32,9 +38,17 @@ public class SettingsActivity extends PreferenceActivity {
 		mPref = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		mSemesterLength = findPreference(getString(R.string.semester_length_weeks));
-		mSemesterLength.setSummary(""+mPref.getString(getString(R.string.semester_length_weeks),""+(-1))+getString(R.string.weeks));
+		mSemesterLength.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				mSemesterLength.setSummary(""+mPref.getString(getString(R.string.semester_length_weeks),""+(-1))+getString(R.string.weeks));
+				return false;
+			}
+		});
 		
 		mStartDate = findPreference(getString(R.string.semester_start_day));
+		mStartDate.setSummary(formatDate(mPref.getLong(getString(R.string.semester_start_day), System.currentTimeMillis())));
 		mStartDate.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			@Override
@@ -43,7 +57,28 @@ public class SettingsActivity extends PreferenceActivity {
 				return false;
 			}
 		});
-		mStartDate.setSummary(formatDate(mPref.getLong(getString(R.string.semester_start_day), System.currentTimeMillis())));
+		
+		mGroupNumber = (EditTextPreference) findPreference(getString(R.string.group_number));
+		mGroupNumber.setSummary(mGroupNumber.getText());
+		mGroupNumber.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				preference.setSummary((String)newValue);
+				return true;
+			}
+		});
+		
+		mSubGroup = (ListPreference)findPreference(getString(R.string.preference_sub_group_list));
+		mSubGroup.setSummary(mSubGroup.getEntry());
+		mSubGroup.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				mSubGroup.setSummary(((ListPreference)preference).getEntryValues()[Integer.parseInt((String)newValue)]);
+				return true;
+			}
+		});
 	}
 	
 	@Override

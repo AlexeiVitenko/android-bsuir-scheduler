@@ -19,6 +19,15 @@
     <string name="semester_start_day">semester_start_day</string>
     <string name="semester_start">Начало семестра</string>
     <string name="weeks">" недель"</string>
+	<string name="group">Группа</string>
+	
+	<string name="subgroup">Подгруппа</string>
+	
+	<string-array name="preferences_sub_group_entries">
+	    <item>Вся группа</item>
+	    <item>Первая</item>
+	    <item>Вторая</item>
+	</string-array>
 	
     <string-array name="days_of_week">
         <item>Воскресенье</item>

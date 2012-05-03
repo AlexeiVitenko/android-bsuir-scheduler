@@ -45,9 +45,9 @@ public class DBAdapter implements Pushable, Closeable{
 	 * @param day
 	 */
 	public Day getDay(GregorianCalendar day){
-		
-	//	Cursor cursor = mDBHelper.getDay(day.get(GregorianCalendar.DAY_OF_WEEK));
-		return new Day(day, this);
+		//FIXEME Неделю поменять, пока сделал первую
+		Cursor cursor = mDBHelper.getDay(day.get(GregorianCalendar.DAY_OF_WEEK),1);
+		return new Day(day, cursor, this);
 	}
 	
 	/**
@@ -67,7 +67,7 @@ public class DBAdapter implements Pushable, Closeable{
 	}
 	
 	public Pair getPair(GregorianCalendar date)  {//, int scheduleId) { // убрал параметр int scheduleId, т.к. получаю его из курсора
-		Cursor cursor = mDBHelper.getDay(date.get(GregorianCalendar.DAY_OF_WEEK));
+	/*	Cursor cursor = mDBHelper.getDay(date.get(GregorianCalendar.DAY_OF_WEEK));
 		//TODO добавить проверку на номер подгруппы и номер недели
 		int[] times = new int[] {
 				cursor.getInt(cursor.getColumnIndex(DBColumns.START_HOUR)),
@@ -86,7 +86,7 @@ public class DBAdapter implements Pushable, Closeable{
 		String note = mDBHelper.getNote(schedule, date);
 		//Pair pair = new Pair(new Day(date, this), week, subGroup, lesson, type, sType, room, teacher, times, note, scheduleId); // не уверен по поводу правильности параметра container
 		//return pair; //(new Day(date, this).getPair(scheduleId));
-	
+	*/
 		return null;
 	}
 	
