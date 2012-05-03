@@ -59,7 +59,9 @@ public class DBAdapter implements Pushable, Closeable{
 	 */
 	public boolean isWorkDay(GregorianCalendar day){
 		Cursor cursor = getDay(day.get(GregorianCalendar.DAY_OF_WEEK),getWeekNumber(day));
-		return cursor.getCount()>0;
+		boolean is = cursor.getCount()>0;
+		cursor.close();
+		return is;
 	}
 	
 	private int getWeekNumber(GregorianCalendar day){
@@ -77,7 +79,45 @@ public class DBAdapter implements Pushable, Closeable{
 	}
 	
 	public Pair getPair(GregorianCalendar date)  {
-		return null;
+		Cursor data = mDBHelper.getReadableDatabase().query(DBHelper.SCHEDULE_VIEW_NAME, new String[]{
+				BaseColumns._ID,
+				DBColumns.DAY,
+				DBColumns.WEEK,
+				DBColumns.VIEW_SUBJECT,
+				DBColumns.SUBJECT_TYPE,
+				DBColumns.ROOM,
+				DBColumns.SUBGROUP,
+				DBColumns.VIEW_TEACHER,
+				DBColumns.START_HOUR,
+				DBColumns.START_MINUTES,
+				DBColumns.END_HOUR,
+				DBColumns.END_MINUTES
+		}
+		, DBColumns.DAY + " = ? AND " + DBColumns.START_HOUR + " = ? AND "+DBColumns.WEEK + " IN (?,0) " , new String[]{
+				""+date.get(Calendar.DAY_OF_WEEK),
+				""+date.get(Calendar.HOUR_OF_DAY),
+				""+getWeekNumber(date)
+		}, null, null, null);
+		int ID = data.getColumnIndex(BaseColumns._ID);
+		int DAY = data.getColumnIndex(DBColumns.DAY);
+		int WEEK = data.getColumnIndex(DBColumns.WEEK);
+		int SUBJECT = data.getColumnIndex(DBColumns.VIEW_SUBJECT);
+		int SUBJECT_TYPE = data.getColumnIndex(DBColumns.SUBJECT_TYPE);
+		int ROOM = data.getColumnIndex(DBColumns.ROOM);
+		int SUBGROUP = data.getColumnIndex(DBColumns.SUBGROUP);
+		int TEACHER = data.getColumnIndex(DBColumns.VIEW_TEACHER);
+		int START_HOUR = data.getColumnIndex(DBColumns.START_HOUR);
+		int START_MINUTES = data.getColumnIndex(DBColumns.START_MINUTES);
+		int END_HOUR = data.getColumnIndex(DBColumns.END_HOUR);
+		int END_MINUTES = data.getColumnIndex(DBColumns.END_MINUTES);
+		data.moveToFirst();
+		Pair p = (new Pair(this, date, data.getInt(WEEK), data.getInt(SUBGROUP),
+				data.getString(SUBJECT), data.getInt(SUBJECT_TYPE),
+				data.getString(ROOM), data.getString(TEACHER), new int[] {
+						data.getInt(START_HOUR), data.getInt(START_MINUTES),
+						data.getInt(END_HOUR), data.getInt(END_MINUTES) }, -1, data.getInt(ID)));
+		data.close();
+		return p;
 	}
 	
 	public Cursor getDay(int dayOfWeek,int week) {
@@ -101,8 +141,12 @@ public class DBAdapter implements Pushable, Closeable{
 		}, null, null, DBColumns.START_HOUR);
 	} 
 	
-	public void changeNote(GregorianCalendar day, int scheduleId, String note){
+	void changeNote(GregorianCalendar day, int scheduleId, String note){
 		mDBHelper.updateNote(scheduleId, note, day);
+	}
+	
+	String getNote(GregorianCalendar day, int scheduleId){
+		return mDBHelper.getNote(scheduleId, day);
 	}
 	
 	public void refreshSchedule(String group, int subGroup, ParserListiner listiner){
@@ -115,6 +159,13 @@ public class DBAdapter implements Pushable, Closeable{
 		Parser p = new Parser(group, subGroup, this, listiner);
 		p.parseSchedule();
 		Log.d("Parse time", ""+(System.currentTimeMillis()-startTime));
+	}
+	
+	public boolean isFilling(){
+		Cursor c = mDBHelper.getReadableDatabase().query(DBHelper.SCHEDULE_VIEW_NAME, null, null, null, null, null, null);
+		boolean is = c.getCount()>0;
+		c.close();
+		return is;
 	}
 	
 	@Override

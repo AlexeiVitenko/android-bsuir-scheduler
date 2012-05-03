@@ -13,7 +13,6 @@ public class Day {
 	private DBAdapter mDbAdapter;
 	private GregorianCalendar mDate;
 	private List<Pair> mPairs;
-	private Cursor mData;
 	private int mWeek;
 	public Pair getPair(int index){
 		return mPairs.get(index);
@@ -27,9 +26,9 @@ public class Day {
 		mDate = day;
 		mDbAdapter = dbAdapter;
 		mPairs = new ArrayList<Pair>();
-		mData = data;
-		generatePairs();
+		generatePairs(data);
 	}
+	
 	/**
 	 * Необходмо для отметки текущей пары, проученных, оставшихся.
 	 * @param time - время, в которое совершался запрос
@@ -55,44 +54,40 @@ public class Day {
 		mDbAdapter.changeNote(mDate,scheduleId, note);
 	}
 	
-	private void generatePairs(){
-		if (mData.getCount()<1) {
+	private void generatePairs(Cursor data){
+		if (data.getCount()<1) {
 			return;
 		}
-		int DAY = mData.getColumnIndex(DBColumns.DAY);
-		int WEEK = mData.getColumnIndex(DBColumns.WEEK);
-		int SUBJECT = mData.getColumnIndex(DBColumns.VIEW_SUBJECT);
-		int SUBJECT_TYPE = mData.getColumnIndex(DBColumns.SUBJECT_TYPE);
-		int ROOM = mData.getColumnIndex(DBColumns.ROOM);
-		int SUBGROUP = mData.getColumnIndex(DBColumns.SUBGROUP);
-		int TEACHER = mData.getColumnIndex(DBColumns.VIEW_TEACHER);
-		int START_HOUR = mData.getColumnIndex(DBColumns.START_HOUR);
-		int START_MINUTES = mData.getColumnIndex(DBColumns.START_MINUTES);
-		int END_HOUR = mData.getColumnIndex(DBColumns.END_HOUR);
-		int END_MINUTES = mData.getColumnIndex(DBColumns.END_MINUTES);
-		mData.moveToFirst();
+		int ID = data.getColumnIndex(BaseColumns._ID);
+		int DAY = data.getColumnIndex(DBColumns.DAY);
+		int WEEK = data.getColumnIndex(DBColumns.WEEK);
+		int SUBJECT = data.getColumnIndex(DBColumns.VIEW_SUBJECT);
+		int SUBJECT_TYPE = data.getColumnIndex(DBColumns.SUBJECT_TYPE);
+		int ROOM = data.getColumnIndex(DBColumns.ROOM);
+		int SUBGROUP = data.getColumnIndex(DBColumns.SUBGROUP);
+		int TEACHER = data.getColumnIndex(DBColumns.VIEW_TEACHER);
+		int START_HOUR = data.getColumnIndex(DBColumns.START_HOUR);
+		int START_MINUTES = data.getColumnIndex(DBColumns.START_MINUTES);
+		int END_HOUR = data.getColumnIndex(DBColumns.END_HOUR);
+		int END_MINUTES = data.getColumnIndex(DBColumns.END_MINUTES);
+		data.moveToFirst();
 		int i = 0;
 		do {
 			mPairs.add(new Pair(this, 
-					mData.getInt(WEEK),
-					mData.getInt(SUBGROUP),
-					mData.getString(SUBJECT),
-					mData.getInt(SUBJECT_TYPE), 
-					mData.getString(ROOM),
-					mData.getString(TEACHER),
+					data.getInt(WEEK),
+					data.getInt(SUBGROUP),
+					data.getString(SUBJECT),
+					data.getInt(SUBJECT_TYPE), 
+					data.getString(ROOM),
+					data.getString(TEACHER),
 					new int[]{
-					mData.getInt(START_HOUR),
-					mData.getInt(START_MINUTES),
-					mData.getInt(END_HOUR),
-					mData.getInt(END_MINUTES)
-				}, i));
+					data.getInt(START_HOUR),
+					data.getInt(START_MINUTES),
+					data.getInt(END_HOUR),
+					data.getInt(END_MINUTES)
+				}, i,data.getInt(ID)));
 			i++;
-		} while (mData.moveToNext());
-	}
-	
-	@Override
-	protected void finalize() throws Throwable {
-		mData.close();
-		super.finalize();
+		} while (data.moveToNext());
+		data.close();
 	}
 }

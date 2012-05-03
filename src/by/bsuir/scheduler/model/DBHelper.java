@@ -1,6 +1,7 @@
 package by.bsuir.scheduler.model;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import android.content.ContentValues;
@@ -15,7 +16,7 @@ class DBHelper extends SQLiteOpenHelper {
 	private long mTotalTime = 0;
 	
 	private static final String DATABASE_NAME = "scheduledb";
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 8;
 	private static final String SCHEDULE_TABLE_NAME = "schedule";
 	private static final String NOTE_TABLE_NAME = "note";
 	private static final String SUBJECT_TABLE_NAME = "subject";
@@ -310,13 +311,13 @@ class DBHelper extends SQLiteOpenHelper {
 
 		mTotalTime += (System.currentTimeMillis()-t);
 		Log.d("Total time", ""+mTotalTime);
-		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date);
+		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date.getTime());
 		
 		Cursor cursor = db.query(
 				NOTE_TABLE_NAME,
 				null,
-				DBColumns.SCHEDULE_ID + " =? AND" + DBColumns.DATE + " =? ",
-				new String[] {String.valueOf(scheduleId), qDate},
+				DBColumns.SCHEDULE_ID + " =? AND " + DBColumns.DATE + " = '"+qDate+"'",
+				new String[] {String.valueOf(scheduleId)},
 				null, null, null
 			);
 		
@@ -326,8 +327,8 @@ class DBHelper extends SQLiteOpenHelper {
 			return db.update(
 					NOTE_TABLE_NAME,
 					values,
-					DBColumns.SCHEDULE_ID + " =? AND" + DBColumns.DATE + " =? ",
-					new String[] {String.valueOf(scheduleId), qDate}
+					DBColumns.SCHEDULE_ID + " = ? AND " + DBColumns.DATE + " = '"+qDate+"'",
+					new String[] {String.valueOf(scheduleId)}
 				);
 		} else {
 			db.close();
@@ -336,7 +337,7 @@ class DBHelper extends SQLiteOpenHelper {
 	}
 	
 	private long addNoteItem(long scheduleId, String text, GregorianCalendar date) {
-		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date);
+		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date.getTime());
 
 		long t = System.currentTimeMillis();
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -357,23 +358,29 @@ class DBHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		mTotalTime += (System.currentTimeMillis()-t);
 		Log.d("Total time", ""+mTotalTime);
-		String qDate = date.get(
-							GregorianCalendar.DAY_OF_MONTH) + "."
-							+ date.get(GregorianCalendar.MONTH) + "."
-							+ date.get(GregorianCalendar.YEAR
-						);
-		Cursor cursor = db.query(
+		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date.getTime());
+	/*	Cursor cursor = db.query(
 							NOTE_TABLE_NAME,
-							new String[] { DBColumns.TEXT_NOTE },
-							DBColumns.SCHEDULE_ID + " =? AND " + DBColumns.DATE + " =? " ,
-							new String[] { String.valueOf(scheduleId), qDate },
+							new String[] {
+									BaseColumns._ID,
+									DBColumns.TEXT_NOTE,
+									DBColumns.SCHEDULE_ID,
+									DBColumns.DATE
+									},
+						null,//	DBColumns.SCHEDULE_ID + " = "+scheduleId,// AND " + DBColumns.DATE + " = '"+qDate+"' " ,
+							null,
 							null, null, null
-						);
+						);*/
+		Cursor cursor = db.query(    NOTE_TABLE_NAME, null, null, null, null, null, null);
+
 		db.close();
-		if(cursor.isNull(cursor.getColumnIndex(DBColumns.TEXT_NOTE)))
+		cursor.moveToFirst();
+		if(cursor.getCount()<=0)
 			return "";
-		else
+		else{
+			cursor.moveToFirst();
 			return cursor.getString((cursor.getColumnIndex(DBColumns.TEXT_NOTE)));
+		}
 	}
 	
 	public void addScheduleItem(String subjectName, int subjectType, int startHour, int startMinutes, int endHour, int endMinutes, int dayId, int week, String room, String teacherName, int subgroup) {

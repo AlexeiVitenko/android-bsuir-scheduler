@@ -2,6 +2,7 @@ package by.bsuir.scheduler;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,12 +20,13 @@ import android.widget.TextView;
 import by.bsuir.scheduler.activity.LessonActivity;
 import by.bsuir.scheduler.model.DBAdapter;
 import by.bsuir.scheduler.model.Day;
+import by.bsuir.scheduler.model.Pair;
 
 public class DayPagerAdapter extends PagerAdapter {
 	public static final int POSITION = 502;
 	private static final int LOOPS = 300;
-	private final GregorianCalendar mStartDay = new GregorianCalendar();
-	private final GregorianCalendar mEndDay = new GregorianCalendar();
+	private final GregorianCalendar mStartDay = new GregorianCalendar(Locale.getDefault());
+	private final GregorianCalendar mEndDay = new GregorianCalendar(Locale.getDefault());
 	
 	private Context mContext;
 	private LayoutInflater mInflater;
@@ -45,7 +47,7 @@ public class DayPagerAdapter extends PagerAdapter {
 		mInflater = LayoutInflater.from(mContext);
 		mAdapter = DBAdapter.getInstance(context.getApplicationContext());
 
-		mCurrentDay = new GregorianCalendar();
+		mCurrentDay = new GregorianCalendar(Locale.getDefault());
 		mCurrentDay.setTimeInMillis(currentDay);
 		mCurrentDay.add(GregorianCalendar.DAY_OF_YEAR, -1);
 		while (!mAdapter.isWorkDay(mCurrentDay)) {
@@ -53,10 +55,10 @@ public class DayPagerAdapter extends PagerAdapter {
 		}
 		////
 		mCurrentDayPosition--;
-		dayLeft = new GregorianCalendar();
+		dayLeft = new GregorianCalendar(Locale.getDefault());
 		dayLeft.setTimeInMillis(currentDay);
 
-		dayRight = new GregorianCalendar();
+		dayRight = new GregorianCalendar(Locale.getDefault());
 		dayRight.setTimeInMillis(currentDay);
 
 	}
@@ -95,7 +97,7 @@ public class DayPagerAdapter extends PagerAdapter {
 			needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
 		}
 		final long time = needed.getTimeInMillis();
-		Day day = mAdapter.getDay(needed);
+		final Day day = mAdapter.getDay(needed);
 		// ////////////////////////////////////////////////////////////////////////////
 		view = mInflater.inflate(R.layout.day_page, null);
 
@@ -122,7 +124,11 @@ public class DayPagerAdapter extends PagerAdapter {
 			public void onItemClick(AdapterView<?> adapterView, View view,
 					int position, long arg) {
 				Intent intent = new Intent(mContext, LessonActivity.class);
-				intent.putExtra(LessonActivity.DAY, time);
+				GregorianCalendar tm = new GregorianCalendar(Locale.getDefault());
+				tm.setTimeInMillis(time);
+				Pair p = day.getPair(position);
+				tm.set(Calendar.HOUR_OF_DAY, p.getTime()[0]);
+				intent.putExtra(LessonActivity.DAY, tm.getTimeInMillis());
 				intent.putExtra(LessonActivity.PAIR, position);
 				mContext.startActivity(intent);
 			}
