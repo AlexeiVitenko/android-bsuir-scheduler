@@ -23,7 +23,7 @@ class DBHelper extends SQLiteOpenHelper {
 	private static final String SUBJECT_TYPE_TABLE_NAME = "subject_type";
 	private static final String DAY_TABLE_NAME = "day";
 	private static final String TEACHER_TABLE_NAME = "teacher";
-	private static final String SCHEDULE_VIEW_NAME = "schedule_view";
+	static final String SCHEDULE_VIEW_NAME = "schedule_view";
 	private static final String TAG = "DBHelper";
 	private static final String DATE_FORMAT = "dd.MM.yyyy";
 	
@@ -392,26 +392,5 @@ class DBHelper extends SQLiteOpenHelper {
 		Log.d("Total time", ""+mTotalTime);
 		db.insert(SCHEDULE_TABLE_NAME, null, values);
 		db.close();
-	}
-	
-	public Cursor getDay(int dayOfWeek,int week) {
-		return getReadableDatabase().query(SCHEDULE_VIEW_NAME, new String[]{
-				BaseColumns._ID,
-				DBColumns.DAY,
-				DBColumns.WEEK,
-				DBColumns.VIEW_SUBJECT,
-				DBColumns.SUBJECT_TYPE,
-				DBColumns.ROOM,
-				DBColumns.SUBGROUP,
-				DBColumns.VIEW_TEACHER,
-				DBColumns.START_HOUR,
-				DBColumns.START_MINUTES,
-				DBColumns.END_HOUR,
-				DBColumns.END_MINUTES
-		}
-		, DBColumns.DAY + " = ? AND "+DBColumns.WEEK + " IN (?,0)" , new String[]{
-				""+dayOfWeek,
-				""+week
-		}, null, null, DBColumns.START_HOUR);
 	}
 }
