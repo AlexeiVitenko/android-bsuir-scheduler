@@ -66,5 +66,11 @@
         <item>ноября</item>
         <item>декабря</item>
     </string-array>
-
+    <string-array name="lesson_types">
+        <item></item>
+        <item>Лекция</item>
+        <item>Практическое занятие</item>
+        <item>Лабораторная работа</item>
+        <item>Курсовое проектирование</item>
+    </string-array>
 </resources>

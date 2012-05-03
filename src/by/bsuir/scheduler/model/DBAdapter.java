@@ -11,6 +11,8 @@ import android.provider.BaseColumns;
 import android.util.Log;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.parser.Lesson;
+import by.bsuir.scheduler.parser.Parser;
+import by.bsuir.scheduler.parser.ParserListiner;
 import by.bsuir.scheduler.parser.Pushable;
 
 /**
@@ -44,7 +46,7 @@ public class DBAdapter implements Pushable, Closeable{
 	 */
 	public Day getDay(GregorianCalendar day){
 		
-	//	Cursor cursor = mDBHelper.getDay(day.get(GregorianCalendar.DAY_OF_WEEK)+1);
+	//	Cursor cursor = mDBHelper.getDay(day.get(GregorianCalendar.DAY_OF_WEEK));
 		return new Day(day, this);
 	}
 	
@@ -92,12 +94,20 @@ public class DBAdapter implements Pushable, Closeable{
 		mDBHelper.updateNote(scheduleId, note, day);
 	}
 	
+	public void refreshSchedule(String group, int subGroup, ParserListiner listiner){
+		mDBHelper.dropTables(mDBHelper.getWritableDatabase());
+		long startTime = System.currentTimeMillis();
+		Parser p = new Parser(group, subGroup, this, listiner);
+		p.parseSchedule();
+		Log.d("Parse time", ""+(System.currentTimeMillis()-startTime));
+	}
+	
 	@Override
 	/**
 	 * Наш адаптер также будет принимать пары от парсера. В этом ему поможет наш метод
 	 */
 	public void push(Lesson lesson) { // для реализации метода необходимо наличие get/set у экземпляров класса Lesson
-		mDBHelper.addScheduleItem(lesson.getLesson(), DBHelper.SUBJECT_TYPES[lesson.getType()], lesson.getBeginningHours(), lesson.getBeginningMinutes(), lesson.getEndingHours(), lesson.getEndingMinutes(),lesson.getDay() , lesson.getWeek(), lesson.getRoom(), lesson.getTeacher(), lesson.getSubGroup());}
+		mDBHelper.addScheduleItem(lesson.getLesson(), lesson.getType(), lesson.getBeginningHours(), lesson.getBeginningMinutes(), lesson.getEndingHours(), lesson.getEndingMinutes(),lesson.getDay() , lesson.getWeek(), lesson.getRoom(), lesson.getTeacher(), lesson.getSubGroup());}
 
 	@Override
 	public void close() throws IOException {

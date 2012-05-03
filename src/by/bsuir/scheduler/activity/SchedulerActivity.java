@@ -68,8 +68,7 @@ public class SchedulerActivity extends Activity {
 			return true;
 
 		case R.id.menu_item_refresh:
-			long startTime = System.currentTimeMillis();
-			Parser p = new Parser("951005", 1, DBAdapter.getInstance(getApplicationContext()), new ParserListiner() {
+			DBAdapter.getInstance(getApplicationContext()).refreshSchedule("951005", 1, new ParserListiner() {
 				
 				@Override
 				public void onException(Exception e) {
@@ -83,8 +82,6 @@ public class SchedulerActivity extends Activity {
 					
 				}
 			});
-			p.parseSchedule();
-			Log.d("Parse time", ""+(System.currentTimeMillis()-startTime));
 			return true;
 
 		case R.id.menu_item_preferences:
