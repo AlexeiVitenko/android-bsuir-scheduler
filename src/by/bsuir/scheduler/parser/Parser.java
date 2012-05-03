@@ -141,14 +141,22 @@ public class Parser {
 				params[j-1]=d.getFirstChild().getNodeValue()==null?"":d.getFirstChild().getNodeValue();	
 			}
 			for (int k = 0; k < weeks.length; k++) {
-				if (params[2].equals(""+mSubGroup)||params[2].equals("")) {
+				if (mSubGroup == 0) {
 					int ii = 1;
 					Lesson l = new Lesson(day, weeks[k], params[ii++], params[ii++],
 							params[ii++], params[ii++], params[ii++], params[ii++]);					
 					lessons.add(l); //TODO delete this
-				}
+				} else {
+					if (params[2].equals(""+mSubGroup)||params[2].equals("")) {
+						int ii = 1;
+						Lesson l = new Lesson(day, weeks[k], params[ii++], params[ii++],
+								params[ii++], params[ii++], params[ii++], params[ii++]);					
+						lessons.add(l); //TODO delete this
+					}
+				}				
 			}
 		}
+		
 		for (Lesson lesson : lessons) { //TODO and this
 //			System.out.println(lesson);
 			mBridge.push(lesson);
