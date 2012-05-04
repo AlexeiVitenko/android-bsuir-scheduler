@@ -54,6 +54,10 @@ public class Day {
 		mDbAdapter.changeNote(mDate,scheduleId, note);
 	}
 	
+	protected GregorianCalendar getDate(){
+		return mDate;
+	}
+	
 	private void generatePairs(Cursor data){
 		if (data.getCount()<1) {
 			return;
