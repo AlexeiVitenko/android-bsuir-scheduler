@@ -83,6 +83,12 @@ public class Lesson {
 		}
 		if (type.equals("")) {
 			mType = PAIR_TYPE_NO_TYPE;
+			if (lesson.equals("ФК-ЗОЖ СПИДиН")) {
+				mType = PAIR_TYPE_PHYSICAL_CULTURE;
+			}
+			if (lesson.equals("Спецподготовка")) {
+				mType = PAIR_TYPE_ARMY;
+			}
 		} else {
 			if (type.equals("лк")) {
 				mType = PAIR_TYPE_LECTION; 
@@ -97,9 +103,7 @@ public class Lesson {
 				mType = PAIR_TYPE_COURSE_PROJECT;
 			}
 		}
-		if (lesson.equals("ФК-ЗОЖ СПИДиН")) {
-			mType = PAIR_TYPE_PHYSICAL_CULTURE;
-		}
+		
 		//0 - общая
 		if (subGroup.equals("")) {
 			mSubGroup = 0;
@@ -111,8 +115,7 @@ public class Lesson {
 			mBeginningHours = Integer.parseInt(times[0]);
 			mBeginningMinutes = Integer.parseInt(times[1]);
 			mEndingHours = Integer.parseInt(times[2]);
-			mEndingMinutes = Integer.parseInt(times[3]);	
-			mType = PAIR_TYPE_ARMY;
+			mEndingMinutes = Integer.parseInt(times[3]);
 		}
 		//0 - всегда
 		if (week.equals("")) {
