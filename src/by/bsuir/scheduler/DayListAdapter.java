@@ -7,10 +7,14 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.graphics.drawable.ShapeDrawable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,8 +102,9 @@ public class DayListAdapter extends BaseAdapter {
 				float pct = ((float) status.progress)
 						/ status.pair_length;
 				/*holder.statusBar
-						.setBackgroundColor(gradientColor(gray, green, pct));*/
-				holder.statusBar.setBackgroundDrawable(getGradient(gray, green, pct));
+						.setBackgroundColor(gradientColor(gray, green, pct));
+				/*holder.statusBar.setBackgroundDrawable(getGradient(gray, green, pct));*/
+				holder.statusBar.setBackgroundDrawable(getProgress(green, pct));
 				break;
 			default:
 				break;
@@ -131,6 +136,14 @@ public class DayListAdapter extends BaseAdapter {
 		holder.subject.setText(lesson.getLesson());
 		holder.room.setText(lesson.getRoom());
 		holder.teacher.setText(lesson.getTeacher());
+	}
+	
+	private ClipDrawable getProgress(int color, float percent) {
+		Drawable progress = new ColorDrawable(color);
+		ClipDrawable clipProgress = new ClipDrawable(progress, Gravity.TOP,
+				ClipDrawable.VERTICAL);
+		clipProgress.setLevel((int) (10000 * percent));
+		return clipProgress;
 	}
 
 	private GradientDrawable getGradient(int startColor, int endColor ,float percent){
