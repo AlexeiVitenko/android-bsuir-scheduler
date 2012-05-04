@@ -21,7 +21,8 @@ public class DayListAdapter extends BaseAdapter {
 	private List<Pair> mPairs;
 	private GregorianCalendar currentDay;
 
-	public DayListAdapter(Context context, GregorianCalendar day, List<Pair> pairs) {
+	public DayListAdapter(Context context, GregorianCalendar day,
+			List<Pair> pairs) {
 		inflater = LayoutInflater.from(context);
 		mPairs = pairs;
 		currentDay = day;
@@ -78,56 +79,25 @@ public class DayListAdapter extends BaseAdapter {
 		Pair lesson = mPairs.get(position);
 
 		int[] times = lesson.getTime();
-		holder.timeStart.setText(String.format("%2d:%02d",times[0] ,times[1]));
-		holder.timeEnd.setText(String.format("%2d:%02d",times[2] ,times[3]));
-/*
-		Calendar time = GregorianCalendar.getInstance();
-		int nHour = time.get(GregorianCalendar.HOUR_OF_DAY);
-		int nMinute = time.get(GregorianCalendar.MINUTE);
-		int nDay = time.get(GregorianCalendar.DAY_OF_MONTH);
-		int nMonth = time.get(GregorianCalendar.MONTH);
-		int cDay = currentDay.get(GregorianCalendar.DAY_OF_MONTH);
-		int cMomth = currentDay.get(GregorianCalendar.MONTH);*/
-		int green = Color.rgb(0, 178, 0);
+		holder.timeStart.setText(String.format("%2d:%02d", times[0], times[1]));
+		holder.timeEnd.setText(String.format("%2d:%02d", times[2], times[3]));
+
+		int green = Color.rgb(0, 190, 0);
+		int gray = Color.rgb(100, 100, 100);
+
 		switch (lesson.getStatus().status) {
-		case Pair.PAIR_STATUS_CURRENT_DAY_PAST:
-		case Pair.PAIR_STATUS_PAST:
-			holder.statusBar.setBackgroundColor(Color.GRAY);
-			break;
-		case Pair.PAIR_STATUS_CURRENT_DAY_FUTURE:
-		case Pair.PAIR_STATUS_FUTURE:
-			holder.statusBar.setBackgroundColor(Color.RED);
-			break;
-		case Pair.PAIR_STATUS_CURRENT:
-			holder.statusBar.setBackgroundColor(Color.GREEN);
-			break;
-		default:
-			break;
+			case Pair.PAIR_STATUS_CURRENT_DAY_PAST:
+				holder.statusBar.setBackgroundColor(green);
+				break;
+			case Pair.PAIR_STATUS_CURRENT:
+				double pct = (double) lesson.getStatus().progress
+						/ lesson.getStatus().pair_length;
+				holder.statusBar
+						.setBackgroundColor(gradientColor(gray, green, pct));
+				break;
+			default:
+				break;
 		}
-/*
-		if (nDay == cDay && nMonth == cMomth) {
-			if (nHour > times[0] || (nHour == times[0] && nMinute > times[1])) {
-				if (nHour < times[2]
-						|| (nHour == times[2] && nMinute < times[3])) {
-					double pct = (double) (60 * (nHour - times[0]) + (nMinute - times[1])) / 90;
-					double sR = Color.red(Color.GRAY);
-					double sG = Color.green(Color.GRAY);
-					double sB = Color.blue(Color.GRAY);
-					double gR = Color.red(green) - sR;
-					double gG = Color.green(green) - sG;
-					double gB = Color.blue(green) - sB;
-					holder.statusBar.setBackgroundColor(Color.rgb(
-							(int) (sR + gR * pct), (int) (sG + gG * pct),
-							(int) (sB + gB * pct)));
-				} else {
-					/////////////////
-					holder.statusBar.setBackgroundColor(green);
-				}
-			} else {
-				holder.statusBar.setBackgroundColor(Color.GRAY);
-			}
-		}*/
-		
 
 		switch (lesson.getType()) {
 		case 1:
@@ -155,6 +125,17 @@ public class DayListAdapter extends BaseAdapter {
 		holder.subject.setText(lesson.getLesson());
 		holder.room.setText(lesson.getRoom());
 		holder.teacher.setText(lesson.getTeacher());
+	}
+
+	private int gradientColor(int startColor, int endColor, double percent) {
+		double sR = Color.red(startColor);
+		double sG = Color.green(startColor);
+		double sB = Color.blue(startColor);
+		double gR = Color.red(endColor) - sR;
+		double gG = Color.green(endColor) - sG;
+		double gB = Color.blue(endColor) - sB;
+		return Color.rgb((int) (sR + gR * percent), (int) (sG + gG * percent),
+				(int) (sB + gB * percent));
 	}
 
 	class ViewHolder {
