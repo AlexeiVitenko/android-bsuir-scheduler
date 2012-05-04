@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import by.bsuir.scheduler.R;
+import by.bsuir.scheduler.model.DBAdapter;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
@@ -30,12 +31,14 @@ public class SettingsActivity extends PreferenceActivity {
 	private EditTextPreference mGroupNumber;
 	private ListPreference mSubGroup;
 	private SharedPreferences mPref;
-	
+	private DBAdapter mAdapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
+		
+		mAdapter = DBAdapter.getInstance(getApplicationContext());
 		mPref = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		mSemesterLength = findPreference(getString(R.string.semester_length_weeks));
@@ -44,6 +47,7 @@ public class SettingsActivity extends PreferenceActivity {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				mSemesterLength.setSummary(""+mPref.getString(getString(R.string.semester_length_weeks),""+(-1))+getString(R.string.weeks));
+				mAdapter.recalculateSomeThings();
 				return false;
 			}
 		});
@@ -98,6 +102,7 @@ public class SettingsActivity extends PreferenceActivity {
 					Editor edit = mPref.edit();
 					edit.putLong(getString(R.string.semester_start_day), gcc.getTimeInMillis());
 					edit.commit();
+					mAdapter.recalculateSomeThings();
 				}
 			}, gc.get(GregorianCalendar.YEAR), gc.get(GregorianCalendar.MONTH), gc.get(GregorianCalendar.DAY_OF_MONTH));
 			return dpd;
