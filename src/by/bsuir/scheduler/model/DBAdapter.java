@@ -144,7 +144,7 @@ public class DBAdapter implements Pushable, Closeable{
 		mLastDay = new GregorianCalendar(Locale.getDefault());
 		mLastDay.setTimeInMillis(startTime);
 		mLastDay.add(Calendar.WEEK_OF_YEAR, weeks);
-	//	mLastDay.add(Calendar.DAY_OF_YEAR, -1);
+		mLastDay.add(Calendar.DAY_OF_YEAR, -1);
 		
 		if (mStartDay.get(Calendar.MONTH)<8) {
 			septFirst = new GregorianCalendar(mStartDay.get(Calendar.YEAR)-1, 9, 1);
@@ -181,10 +181,20 @@ public class DBAdapter implements Pushable, Closeable{
 	 * @return состояние @see {@link DayMatcherConditions}
 	 */
 	public DayMatcherConditions dayMatcher(GregorianCalendar day){
+		if ((day.getTimeInMillis()-mStartDay.getTimeInMillis())>0
+				&&
+				(day.getTimeInMillis()-mStartDay.getTimeInMillis())<86400000) {
+			return DayMatcherConditions.FIRST_DAY;
+		}
+		if ((day.getTimeInMillis()-mLastDay.getTimeInMillis())>0
+				&&
+				(day.getTimeInMillis()-mLastDay.getTimeInMillis())<86400000) {
+			return DayMatcherConditions.LAST_DAY;
+		}
 		if (day.getTimeInMillis()<mStartDay.getTimeInMillis()) {
 			return DayMatcherConditions.OVERFLOW_LEFT;
 		}
-		if (day.getTimeInMillis()>=mLastDay.getTimeInMillis()) {
+		if (day.getTimeInMillis()>mLastDay.getTimeInMillis()) {
 			return DayMatcherConditions.OVERFLOW_RIGTH;
 		}
 		if (!isWorkDay(day)) {

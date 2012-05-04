@@ -32,20 +32,26 @@ public class SchedulerActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		mAdapter = DBAdapter.getInstance(getApplicationContext());
-		if (mAdapter.isFilling()) {
-			dayPagerAdapter = new DayPagerAdapter(this, System.currentTimeMillis());
-			viewPager = new ViewPager(this);
-			viewPager.setAdapter(dayPagerAdapter);
-			viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
-			setContentView(viewPager);
+		if (!mChooseMode) {
+			mAdapter = DBAdapter.getInstance(getApplicationContext());
+			if (mAdapter.isFilling()) {
+				dayPagerAdapter = new DayPagerAdapter(this, System.currentTimeMillis());
+				viewPager = new ViewPager(this);
+				viewPager.setAdapter(dayPagerAdapter);
+				viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
+				setContentView(viewPager);
+			}
+		}else{
+			mChooseMode = false;
 		}
 	}
 	
+	private boolean mChooseMode = false;
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.i("SchedulerActivity", "onActivityResult");
 		if (resultCode == RESULT_DAY) {
+			mChooseMode = true;
 			dayPagerAdapter = new DayPagerAdapter(this, data.getLongExtra(GridCellAdapter.DAY, System.currentTimeMillis()));
 			viewPager = new ViewPager(this);
 			viewPager.setAdapter(dayPagerAdapter);

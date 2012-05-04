@@ -28,6 +28,7 @@ public class Day {
 		mDate.setTimeInMillis(day.getTimeInMillis());
 		mDbAdapter = dbAdapter;
 		mPairs = new ArrayList<Pair>();
+		mWeek = week;
 		generatePairs(data);
 	}
 	
