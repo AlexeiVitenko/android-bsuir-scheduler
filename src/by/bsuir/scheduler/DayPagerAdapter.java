@@ -12,11 +12,14 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import by.bsuir.scheduler.activity.AlarmActivity;
 import by.bsuir.scheduler.activity.LessonActivity;
 import by.bsuir.scheduler.model.DBAdapter;
 import by.bsuir.scheduler.model.Day;
@@ -135,10 +138,16 @@ public class DayPagerAdapter extends PagerAdapter {
 		});
 		listView.setAdapter(adapter);
 
-		/*
-		 * LinearLayout alarmLayout = (LinearLayout)
-		 * page.findViewById(R.id.alarm_layout); alarmLayout.setEnabled(true);
-		 */
+	
+		LinearLayout alarmLayout = (LinearLayout) view.findViewById(R.id.alarm_layout); 
+		alarmLayout.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(mContext, AlarmActivity.class);
+				mContext.startActivity(intent);
+			}
+		});
+		
 		TextView alarm = (TextView) view.findViewById(R.id.alarm_time);
 		// ЗАГЛУШКА
 		alarm.setText(position % 24 + ":00");
