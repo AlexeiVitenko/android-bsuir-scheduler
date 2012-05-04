@@ -16,13 +16,15 @@ public class Pair{
 			this.status = status;
 		}
 		
-		PairStatus(int status, int progres){
+		PairStatus(int status, int progres, int length){
 			this(status);
 			this.progress = progres;
+			pair_length = length;
 		}
 		
 		public int status;
 		public int progress;
+		public int pair_length;
 	}
 	public static final int PAIR_STATUS_PAST = 1;
 	public static final int PAIR_STATUS_FUTURE = 2;
@@ -165,7 +167,7 @@ public class Pair{
 							if (current>end) {
 								return new PairStatus(PAIR_STATUS_CURRENT_DAY_PAST);
 							} else {
-								return new PairStatus(PAIR_STATUS_CURRENT, current-start);
+								return new PairStatus(PAIR_STATUS_CURRENT, current-start, end - start);
 							}
 						}
 					}
