@@ -117,7 +117,7 @@ public class DayListAdapter extends BaseAdapter {
 		} else {
 			holder.statusBar.setBackgroundColor(Color.GRAY);
 		}
-		}
+		
 
 		switch (lesson.getType()) {
 		case 1:
