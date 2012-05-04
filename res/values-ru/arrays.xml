@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="preferences_sub_group_entries">
+        <item>Вся группа</item>
+        <item>Первая</item>
+        <item>Вторая</item>
+    </string-array>
+    <string-array name="days_of_week">
+        <item>Воскресенье</item>
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+    </string-array>
+    <string-array name="days_of_week_abb">
+        <item>ПН</item>
+        <item>ВТ</item>
+        <item>СР</item>
+        <item>ЧТ</item>
+        <item>ПТ</item>
+        <item>СБ</item>
+        <item>ВС</item>
+    </string-array>
+    <string-array name="months">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </string-array>
+    <string-array name="months_genitive">
+        <item>января</item>
+        <item>февраля</item>
+        <item>марта</item>
+        <item>апреля</item>
+        <item>мая</item>
+        <item>июня</item>
+        <item>июля</item>
+        <item>августа</item>
+        <item>сентября</item>
+        <item>октября</item>
+        <item>ноября</item>
+        <item>декабря</item>
+    </string-array>
+    <string-array name="alarm_types">
+        <item>В заданное время</item>
+        <item>До пары за заданное время</item>
+    </string-array>
+    <string-array name="alarm_summary_values">
+        <item>до первой пары</item>
+        <item>до второй пары</item>
+        <item>до третьей пары</item>
+        <item>до четвертой пары</item>
+        <item>до пятой пары</item>
+    </string-array>
+    <string-array name="lesson_types">
+        <item></item>
+        <item>Лекция</item>
+        <item>Практическое занятие</item>
+        <item>Лабораторная работа</item>
+        <item>Курсовое проектирование</item>
+        <item>Физкультура</item>
+        <item>Спецподготовка</item>
+    </string-array>
+
+</resources>
