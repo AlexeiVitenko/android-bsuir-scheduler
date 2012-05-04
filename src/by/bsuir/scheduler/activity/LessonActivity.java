@@ -53,7 +53,7 @@ public class LessonActivity extends Activity {
 		teacher.setText(mLesson.getTeacher());
 		((TextView)findViewById(R.id.lesson_type)).setText(lessonType[mLesson.getType()]);
 		TextView time = (TextView) findViewById(R.id.lesson_time);
-		time.setText(String.format("%d:%d-%d:%d", mLesson.getTime()[0],mLesson.getTime()[1],mLesson.getTime()[2],mLesson.getTime()[3]));
+		time.setText(String.format("%2d:%02d-%2d:%02d", mLesson.getTime()[0],mLesson.getTime()[1],mLesson.getTime()[2],mLesson.getTime()[3]));
 		TextView room = (TextView) findViewById(R.id.lesson_room);
 		room.setText("ауд. " + mLesson.getRoom());
 		mNoteText = (TextView) findViewById(R.id.lesson_note);

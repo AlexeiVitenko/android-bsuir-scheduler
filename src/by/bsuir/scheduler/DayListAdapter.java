@@ -78,8 +78,8 @@ public class DayListAdapter extends BaseAdapter {
 		Pair lesson = mPairs.get(position);
 
 		int[] times = lesson.getTime();
-		holder.timeStart.setText("" + times[0] + ":" + times[1]);
-		holder.timeEnd.setText("- " + times[2] + ":" + times[3]);
+		holder.timeStart.setText(String.format("%2d:%02d",times[0] ,times[1]));
+		holder.timeEnd.setText(String.format("%2d:%02d",times[2] ,times[3]));
 
 		Calendar time = GregorianCalendar.getInstance();
 		int nHour = time.get(GregorianCalendar.HOUR_OF_DAY);
@@ -145,12 +145,12 @@ public class DayListAdapter extends BaseAdapter {
 	}
 
 	class ViewHolder {
-		public ImageView statusBar;
-		public TextView timeStart;
-		public TextView timeEnd;
-		public ImageView classType;
-		public TextView subject;
-		public TextView room;
-		public TextView teacher;
+		ImageView statusBar;
+		TextView timeStart;
+		TextView timeEnd;
+		ImageView classType;
+		TextView subject;
+		TextView room;
+		TextView teacher;
 	}
 }

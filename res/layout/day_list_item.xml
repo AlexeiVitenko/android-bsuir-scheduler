@@ -48,7 +48,7 @@
             android:id="@+id/subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="5dp"
             android:text="Предмет"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/black"
