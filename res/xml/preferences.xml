@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory 
+        android:title="@string/semester">
+        <EditTextPreference
+           	android:title="@string/semester_length"
+           	android:defaultValue="18"
+           	android:inputType="number"
+           	android:key="@string/semester_length_weeks"
+            />
+        <Preference 
+            android:key="@string/semester_start_day"
+            android:title="@string/semester_start"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/group">
+        <EditTextPreference 
+            android:key="@string/group_number"
+            android:inputType="number"
+            android:maxLength="6"
+            android:title="@string/group"
+            android:defaultValue="-1"
+            />
+        <ListPreference 
+            android:key="@string/preference_sub_group_list"
+            android:title="@string/subgroup"
+            android:entries="@array/preferences_sub_group_entries"
+            android:entryValues="@array/preferences_sub_group_entriesValues"
+            android:defaultValue="0"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>
