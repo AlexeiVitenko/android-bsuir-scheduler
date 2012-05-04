@@ -10,6 +10,20 @@ import java.util.Locale;
  * //TODO добавить геттеров
  */
 public class Pair{
+	public static class PairStatus{
+		
+		PairStatus(int status){
+			this.status = status;
+		}
+		
+		PairStatus(int status, int progres){
+			this(status);
+			this.progress = progres;
+		}
+		
+		int status;
+		int progress;
+	}
 	public static final int PAIR_STATUS_PAST = 1;
 	public static final int PAIR_STATUS_CURRENT = 2;
 	public static final int PAIR_STATUS_FUTURE = 4;
@@ -123,20 +137,20 @@ public class Pair{
 		return mScheduleId;
 	}
 	
-	public int getStatus() {
+	public PairStatus getStatus() {
 		GregorianCalendar time = new GregorianCalendar(Locale.getDefault());
 		time.setTimeInMillis(System.currentTimeMillis());
 		if (mDate.get(Calendar.YEAR)<time.get(Calendar.YEAR)) {
-			return PAIR_STATUS_PAST;
+			return new PairStatus(PAIR_STATUS_PAST);
 		} else {
 			if (mDate.get(Calendar.YEAR)>time.get(Calendar.YEAR)) {
-				return PAIR_STATUS_FUTURE;
+				return new PairStatus(PAIR_STATUS_FUTURE);
 			} else {
 				if (mDate.get(Calendar.DAY_OF_YEAR)<time.get(Calendar.DAY_OF_YEAR)) {
-					return PAIR_STATUS_PAST;
+					return new PairStatus(PAIR_STATUS_PAST);
 				} else {
 					if (mDate.get(Calendar.DAY_OF_YEAR)>time.get(Calendar.DAY_OF_YEAR)) {
-						return PAIR_STATUS_FUTURE;
+						return new PairStatus(PAIR_STATUS_FUTURE);
 					} else {
 						int hours = time.get(Calendar.HOUR_OF_DAY);
 						int minutes = time.get(Calendar.MINUTE);
@@ -144,12 +158,12 @@ public class Pair{
 						int end = mEndingHours*60+mEndingMinutes-1;
 						int current = hours*60 + minutes-1;
 						if (current<start) {
-							return PAIR_STATUS_PAST;
+							return new PairStatus(PAIR_STATUS_PAST);
 						} else {
 							if (current>end) {
-								return PAIR_STATUS_FUTURE;
+								return new PairStatus(PAIR_STATUS_FUTURE);
 							} else {
-								return PAIR_STATUS_CURRENT;
+								return new PairStatus(PAIR_STATUS_CURRENT, current-start);
 							}
 						}
 					}
