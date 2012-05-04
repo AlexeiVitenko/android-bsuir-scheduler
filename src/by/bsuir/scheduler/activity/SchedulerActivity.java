@@ -27,6 +27,11 @@ public class SchedulerActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
 		mAdapter = DBAdapter.getInstance(getApplicationContext());
 		if (mAdapter.isFilling()) {
 			dayPagerAdapter = new DayPagerAdapter(this, System.currentTimeMillis());
@@ -35,10 +40,8 @@ public class SchedulerActivity extends Activity {
 			viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
 			setContentView(viewPager);
 		}
-		
-
 	}
-
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.i("SchedulerActivity", "onActivityResult");

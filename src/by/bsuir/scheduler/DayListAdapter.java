@@ -6,6 +6,10 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
+import android.graphics.drawable.ShapeDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,16 +88,18 @@ public class DayListAdapter extends BaseAdapter {
 
 		int green = Color.rgb(0, 190, 0);
 		int gray = Color.rgb(100, 100, 100);
-
-		switch (lesson.getStatus().status) {
+		Pair.PairStatus status = lesson.getStatus(); 
+		switch (status.status) {
+			case Pair.PAIR_STATUS_PAST:
 			case Pair.PAIR_STATUS_CURRENT_DAY_PAST:
 				holder.statusBar.setBackgroundColor(green);
 				break;
 			case Pair.PAIR_STATUS_CURRENT:
-				double pct = (double) lesson.getStatus().progress
-						/ lesson.getStatus().pair_length;
-				holder.statusBar
-						.setBackgroundColor(gradientColor(gray, green, pct));
+				float pct = ((float) status.progress)
+						/ status.pair_length;
+				/*holder.statusBar
+						.setBackgroundColor(gradientColor(gray, green, pct));*/
+				holder.statusBar.setBackgroundDrawable(getGradient(gray, green, pct));
 				break;
 			default:
 				break;
@@ -127,6 +133,16 @@ public class DayListAdapter extends BaseAdapter {
 		holder.teacher.setText(lesson.getTeacher());
 	}
 
+	private GradientDrawable getGradient(int startColor, int endColor ,float percent){
+		GradientDrawable gradient = new GradientDrawable(Orientation.TOP_BOTTOM, new int[]{
+			startColor,
+			endColor
+		});
+		gradient.setGradientType(GradientDrawable.LINE);
+		gradient.setGradientCenter(1f, percent);
+		return gradient;
+	}
+	
 	private int gradientColor(int startColor, int endColor, double percent) {
 		double sR = Color.red(startColor);
 		double sG = Color.green(startColor);
