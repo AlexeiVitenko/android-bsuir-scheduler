@@ -100,7 +100,9 @@ public class DayPagerAdapter extends PagerAdapter {
 			needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
 		}
 		final long time = needed.getTimeInMillis();
-		final Day day = mAdapter.getDay(needed);
+		GregorianCalendar pushedDay = new GregorianCalendar(Locale.getDefault());
+		pushedDay.setTimeInMillis(needed.getTimeInMillis());
+		final Day day = mAdapter.getDay(pushedDay);
 		// ////////////////////////////////////////////////////////////////////////////
 		view = mInflater.inflate(R.layout.day_page, null);
 
@@ -111,8 +113,7 @@ public class DayPagerAdapter extends PagerAdapter {
 		((TextView) view.findViewById(R.id.day_of_week))
 				.setText(daysOfWeek[needed.get(GregorianCalendar.DAY_OF_WEEK) - 1]
 						+ ", ");
-		//
-		// ЗАГЛУШКА
+		
 		((TextView) view.findViewById(R.id.day_date)).setText(needed
 				.get(GregorianCalendar.DAY_OF_MONTH) + " ");
 		((TextView) view.findViewById(R.id.month_genitive))

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import android.database.Cursor;
 import android.provider.BaseColumns;
@@ -23,7 +24,8 @@ public class Day {
 	}
 	
 	protected Day(GregorianCalendar day, Cursor data, DBAdapter dbAdapter, int week){
-		mDate = day;
+		mDate = new GregorianCalendar(Locale.getDefault());
+		mDate.setTimeInMillis(day.getTimeInMillis());
 		mDbAdapter = dbAdapter;
 		mPairs = new ArrayList<Pair>();
 		generatePairs(data);
@@ -55,6 +57,8 @@ public class Day {
 	}
 	
 	protected GregorianCalendar getDate(){
+		GregorianCalendar date = new GregorianCalendar(Locale.getDefault());
+		date.setTimeInMillis(mDate.getTimeInMillis());
 		return mDate;
 	}
 	
