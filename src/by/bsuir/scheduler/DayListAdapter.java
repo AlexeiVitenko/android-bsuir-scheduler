@@ -105,7 +105,6 @@ public class DayListAdapter extends BaseAdapter {
 							(int) (sR + gR * pct), (int) (sG + gG * pct),
 							(int) (sB + gB * pct)));
 				} else {
-					/////////////////
 					holder.statusBar.setBackgroundColor(green);
 				}
 			} else {
