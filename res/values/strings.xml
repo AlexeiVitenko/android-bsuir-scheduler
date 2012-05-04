@@ -88,5 +88,16 @@
         <item>Laboratory work</item>
         <item>Project ???? I can\'t translate it.</item>
     </string-array>
+    <string name="alarm_type">Type of alarm</string>
+    <string name="alarm_before_lesson">Before lesson</string>
+    <string name="alarm_time">Time</string>
+    <string name="alarm_ringtone">Ringtone</string>
+    <string name="alarm_volume">Volume</string>
+    <string name="alarm_vibration">Vibration</string>
+    
+    <string-array name="alarm_types">
+        <item>At given time</item>
+        <item>At given time before the lesson</item>
+    </string-array>
         <string name="weeks">" weeks"</string>
 </resources>
