@@ -68,6 +68,8 @@ public class AlarmActivity extends PreferenceActivity {
 	@Override
 	protected void onStop() {
 		super.onStop();
+		
+		//длждлж
 		Editor editor = sharedPref.edit();
 		editor.putInt(ALARM_TYPE, Integer.parseInt(alarmType.getValue()));
 		editor.commit();
