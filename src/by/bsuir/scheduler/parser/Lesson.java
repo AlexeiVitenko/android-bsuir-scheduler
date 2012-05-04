@@ -1,6 +1,13 @@
 package by.bsuir.scheduler.parser;
 
 public class Lesson {
+	public static final int PAIR_TYPE_NO_TYPE = 0;
+	public static final int PAIR_TYPE_LECTION = 1;
+	public static final int PAIR_TYPE_PRACTICE = 2;
+	public static final int PAIR_TYPE_LABORATORY = 3;
+	public static final int PAIR_TYPE_COURSE_PROJECT = 4;
+	public static final int PAIR_TYPE_PHYSICAL_CULTURE = 5;
+	public static final int PAIR_TYPE_ARMY = 6;
 	private int mWeek;
 	private int mDay;
 	private String mLesson;
@@ -74,7 +81,25 @@ public class Lesson {
 		if (day.equals("сб")) {
 			mDay = 7;
 		}
-		
+		if (type.equals("")) {
+			mType = PAIR_TYPE_NO_TYPE;
+		} else {
+			if (type.equals("лк")) {
+				mType = PAIR_TYPE_LECTION; 
+			}
+			if (type.equals("пз")) {
+				mType = PAIR_TYPE_PRACTICE;
+			}
+			if (type.equals("лр")) {
+				mType = PAIR_TYPE_LABORATORY;
+			}
+			if (type.equals("кп")) {
+				mType = PAIR_TYPE_COURSE_PROJECT;
+			}
+		}
+		if (lesson.equals("ФК-ЗОЖ СПИДиН")) {
+			mType = PAIR_TYPE_PHYSICAL_CULTURE;
+		}
 		//0 - общая
 		if (subGroup.equals("")) {
 			mSubGroup = 0;
@@ -87,6 +112,7 @@ public class Lesson {
 			mBeginningMinutes = Integer.parseInt(times[1]);
 			mEndingHours = Integer.parseInt(times[2]);
 			mEndingMinutes = Integer.parseInt(times[3]);	
+			mType = PAIR_TYPE_ARMY;
 		}
 		//0 - всегда
 		if (week.equals("")) {
@@ -95,22 +121,7 @@ public class Lesson {
 			mWeek = Integer.parseInt(week);
 		}
 		
-		if (type.equals("")) {
-			mType = 0;
-		} else {
-			if (type.equals("лк")) {
-				mType = 1; 
-			}
-			if (type.equals("пз")) {
-				mType = 2;
-			}
-			if (type.equals("лр")) {
-				mType = 3;
-			}
-			if (type.equals("кп")) {
-				mType = 4;
-			}
-		}
+		
 
 		mLesson = lesson;
 		mPrepod = prepod;
