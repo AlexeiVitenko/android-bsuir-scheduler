@@ -4,9 +4,12 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.util.Log;
 import android.widget.Toast;
@@ -22,6 +25,14 @@ import by.bsuir.scheduler.parser.Pushable;
  *
  */
 public class DBAdapter implements Pushable, Closeable{
+	public enum DayMatcherConditions{
+		OVERFLOW_LEFT,
+		OVERFLOW_RIGTH,
+		FIRST_DAY,
+		LAST_DAY,
+		HOLYDAY,
+		WORK_DAY
+	}
 	protected static DBAdapter mInstance;
 	public static DBAdapter getInstance(Context context){
 		if (mInstance == null) {
@@ -30,7 +41,9 @@ public class DBAdapter implements Pushable, Closeable{
 		return mInstance;
 	}
 	//FIXEME доделать нормально
-	private GregorianCalendar septFirst = new GregorianCalendar(2011, 9, 1);
+	private GregorianCalendar septFirst;// = new GregorianCalendar(2011, 9, 1);
+	private GregorianCalendar mStartDay;
+	private GregorianCalendar mLastDay;
 	private Context mContext;
 	private DBHelper mDBHelper;
 	private String[] daysOfWeek;
@@ -40,6 +53,7 @@ public class DBAdapter implements Pushable, Closeable{
 		mDBHelper = new DBHelper(context);
 		daysOfWeek = mContext.getResources().getStringArray(
 				R.array.days_of_week);
+		recalculateSomeThings();
 	}
 	
 	/**
@@ -120,6 +134,26 @@ public class DBAdapter implements Pushable, Closeable{
 		return p;
 	}
 	
+	public void recalculateSomeThings(){
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+		int weeks = Integer.parseInt(pref.getString(mContext.getString(R.string.semester_length_weeks),""+ 18));
+		long startTime = pref.getLong(mContext.getString(R.string.semester_start_day), -1);
+		mStartDay = new GregorianCalendar(Locale.getDefault());
+		mStartDay.setTimeInMillis(startTime);
+		
+		mLastDay = new GregorianCalendar(Locale.getDefault());
+		mLastDay.setTimeInMillis(startTime);
+		mLastDay.add(Calendar.WEEK_OF_YEAR, weeks);
+	//	mLastDay.add(Calendar.DAY_OF_YEAR, -1);
+		
+		if (mStartDay.get(Calendar.MONTH)<8) {
+			septFirst = new GregorianCalendar(mStartDay.get(Calendar.YEAR)-1, 9, 1);
+		} else {
+			septFirst = new GregorianCalendar(mStartDay.get(Calendar.YEAR), 9, 1);
+		}
+	}
+
+	
 	public Cursor getDay(int dayOfWeek,int week) {
 		return mDBHelper.getReadableDatabase().query(DBHelper.SCHEDULE_VIEW_NAME, new String[]{
 				BaseColumns._ID,
@@ -140,6 +174,25 @@ public class DBAdapter implements Pushable, Closeable{
 				""+week
 		}, null, null, DBColumns.START_HOUR);
 	} 
+	
+	/**
+	 * Проверяет, входит ли день в учебный промежуток. Необходимо для недопущения перехода на те дни, когда и учёбы то нету 
+	 * @param day
+	 * @return состояние @see {@link DayMatcherConditions}
+	 */
+	public DayMatcherConditions dayMatcher(GregorianCalendar day){
+		if (day.getTimeInMillis()<mStartDay.getTimeInMillis()) {
+			return DayMatcherConditions.OVERFLOW_LEFT;
+		}
+		if (day.getTimeInMillis()>=mLastDay.getTimeInMillis()) {
+			return DayMatcherConditions.OVERFLOW_RIGTH;
+		}
+		if (!isWorkDay(day)) {
+			return DayMatcherConditions.HOLYDAY;
+		}else{
+			return DayMatcherConditions.WORK_DAY;
+		}
+	}
 	
 	void changeNote(GregorianCalendar day, int scheduleId, String note){
 		mDBHelper.updateNote(scheduleId, note, day);
