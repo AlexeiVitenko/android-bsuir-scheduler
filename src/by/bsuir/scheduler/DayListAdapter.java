@@ -101,21 +101,16 @@ public class DayListAdapter extends BaseAdapter {
 					double gR = Color.red(green) - sR;
 					double gG = Color.green(green) - sG;
 					double gB = Color.blue(green) - sB;
-					Log.i("DayListAdapter", "" + pct);
-					Log.i("DayListAdapter", "" + (int) (sR + gR * pct) + " "
-							+ (int) (sG + gG * pct) + " "
-							+ (int) (sB + gB * pct));
 					holder.statusBar.setBackgroundColor(Color.rgb(
 							(int) (sR + gR * pct), (int) (sG + gG * pct),
 							(int) (sB + gB * pct)));
 				} else {
+					/////////////////
 					holder.statusBar.setBackgroundColor(green);
 				}
 			} else {
-				holder.statusBar.setBackgroundColor(Color.GREEN);
+				holder.statusBar.setBackgroundColor(Color.GRAY);
 			}
-		} else {
-			holder.statusBar.setBackgroundColor(Color.GRAY);
 		}
 		
 
@@ -132,8 +127,11 @@ public class DayListAdapter extends BaseAdapter {
 		case 4:
 			holder.classType.setImageResource(R.drawable.ic_course);
 			break;
-		case -1:
+		case 5:
 			holder.classType.setImageResource(R.drawable.ic_physical_culture);
+			break;
+		case 6:
+			holder.classType.setImageResource(R.drawable.ic_star);
 			break;
 		default:
 			break;
