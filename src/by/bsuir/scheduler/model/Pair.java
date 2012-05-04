@@ -25,8 +25,10 @@ public class Pair{
 		int progress;
 	}
 	public static final int PAIR_STATUS_PAST = 1;
-	public static final int PAIR_STATUS_CURRENT = 2;
-	public static final int PAIR_STATUS_FUTURE = 4;
+	public static final int PAIR_STATUS_FUTURE = 2;
+	public static final int PAIR_STATUS_CURRENT = 4;
+	public static final int PAIR_STATUS_CURRENT_DAY_PAST = 8;
+	public static final int PAIR_STATUS_CURRENT_DAY_FUTURE = 16;
 	
 	private int mPairIndex;
 	private int mWeek;
@@ -158,10 +160,10 @@ public class Pair{
 						int end = mEndingHours*60+mEndingMinutes-1;
 						int current = hours*60 + minutes-1;
 						if (current<start) {
-							return new PairStatus(PAIR_STATUS_PAST);
+							return new PairStatus(PAIR_STATUS_CURRENT_DAY_PAST);
 						} else {
 							if (current>end) {
-								return new PairStatus(PAIR_STATUS_FUTURE);
+								return new PairStatus(PAIR_STATUS_CURRENT_DAY_FUTURE);
 							} else {
 								return new PairStatus(PAIR_STATUS_CURRENT, current-start);
 							}
