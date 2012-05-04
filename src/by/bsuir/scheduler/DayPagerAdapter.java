@@ -22,6 +22,7 @@ import android.widget.TextView;
 import by.bsuir.scheduler.activity.AlarmActivity;
 import by.bsuir.scheduler.activity.LessonActivity;
 import by.bsuir.scheduler.model.DBAdapter;
+import by.bsuir.scheduler.model.DBAdapter.DayMatcherConditions;
 import by.bsuir.scheduler.model.Day;
 import by.bsuir.scheduler.model.Pair;
 
@@ -31,6 +32,7 @@ public class DayPagerAdapter extends PagerAdapter {
 	private final GregorianCalendar mStartDay = new GregorianCalendar(Locale.getDefault());
 	private final GregorianCalendar mEndDay = new GregorianCalendar(Locale.getDefault());
 	
+	private int mSize;
 	private Context mContext;
 	private LayoutInflater mInflater;
 	// private List<View> mPages;
@@ -41,6 +43,7 @@ public class DayPagerAdapter extends PagerAdapter {
 	private DBAdapter mAdapter;
 
 	public DayPagerAdapter(Context context, long currentDay) {
+		mSize = 3 * LOOPS;
 		mContext = context;
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 		mStartDay.setTimeInMillis(pref.getLong(mContext.getString(R.string.semester_start_day), -1));
@@ -63,12 +66,12 @@ public class DayPagerAdapter extends PagerAdapter {
 
 		dayRight = new GregorianCalendar(Locale.getDefault());
 		dayRight.setTimeInMillis(currentDay);
-
+		
 	}
 
 	@Override
 	public int getCount() {
-		return 3 * LOOPS;
+		return mSize;
 	}
 
 	@Override
@@ -99,26 +102,30 @@ public class DayPagerAdapter extends PagerAdapter {
 		while (!mAdapter.isWorkDay(needed)) {
 			needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
 		}
+		if (mAdapter.dayMatcher(needed)== DayMatcherConditions.LAST_DAY) {
+			mSize = position;
+		}
 		final long time = needed.getTimeInMillis();
 		GregorianCalendar pushedDay = new GregorianCalendar(Locale.getDefault());
 		pushedDay.setTimeInMillis(needed.getTimeInMillis());
 		final Day day = mAdapter.getDay(pushedDay);
-		// ////////////////////////////////////////////////////////////////////////////
+		
+		//Заполняем дату и неделю
 		view = mInflater.inflate(R.layout.day_page, null);
-
 		String[] daysOfWeek = mContext.getResources().getStringArray(
 				R.array.days_of_week);
 		String[] months = mContext.getResources().getStringArray(
 				R.array.months_genitive);
 		((TextView) view.findViewById(R.id.day_of_week))
 				.setText(daysOfWeek[needed.get(GregorianCalendar.DAY_OF_WEEK) - 1]
-						+ ", ");
-		
+						+ ", ");		
 		((TextView) view.findViewById(R.id.day_date)).setText(needed
 				.get(GregorianCalendar.DAY_OF_MONTH) + " ");
 		((TextView) view.findViewById(R.id.month_genitive))
 				.setText(months[needed.get(GregorianCalendar.MONTH)]);
-		//
+		((TextView)view.findViewById(R.id.day_page_week)).setText(mContext.getResources()
+				.getStringArray(R.array.weeks)[day.getWeek()-1]);
+		/******************************************************************/
 
 		final DayListAdapter adapter = new DayListAdapter(mContext,needed,
 				day.getPairs());

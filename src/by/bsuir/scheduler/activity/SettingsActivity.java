@@ -42,11 +42,12 @@ public class SettingsActivity extends PreferenceActivity {
 		mPref = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		mSemesterLength = findPreference(getString(R.string.semester_length_weeks));
+		mSemesterLength.setSummary(""+mPref.getString(getString(R.string.semester_length_weeks),""+(-1))+getString(R.string.weeks));
 		mSemesterLength.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				mSemesterLength.setSummary(""+mPref.getString(getString(R.string.semester_length_weeks),""+(-1))+getString(R.string.weeks));
+				mSemesterLength.setSummary(""+(String)newValue+getString(R.string.weeks));
 				mAdapter.recalculateSomeThings();
 				return false;
 			}
