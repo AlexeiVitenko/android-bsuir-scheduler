@@ -1,6 +1,8 @@
 package by.bsuir.scheduler.model;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * 
@@ -8,6 +10,10 @@ import java.util.GregorianCalendar;
  * //TODO добавить геттеров
  */
 public class Pair{
+	public static final int PAIR_STATUS_PAST = 1;
+	public static final int PAIR_STATUS_CURRENT = 2;
+	public static final int PAIR_STATUS_FUTURE = 4;
+	
 	private int mPairIndex;
 	private int mWeek;
 	private String mLesson;
@@ -35,7 +41,7 @@ public class Pair{
 //		mStringType = sType;
 		mWeek = week;
 		mType = type;
-
+		mDate = container.getDate();
 		mLesson = lesson;
 		mTeacher = teacher;
 		mRoom = room;
@@ -115,5 +121,40 @@ public class Pair{
 	
 	public int getId(){
 		return mScheduleId;
+	}
+	
+	public int getStatus() {
+		GregorianCalendar time = new GregorianCalendar(Locale.getDefault());
+		time.setTimeInMillis(System.currentTimeMillis());
+		if (mDate.get(Calendar.YEAR)<time.get(Calendar.YEAR)) {
+			return PAIR_STATUS_PAST;
+		} else {
+			if (mDate.get(Calendar.YEAR)>time.get(Calendar.YEAR)) {
+				return PAIR_STATUS_FUTURE;
+			} else {
+				if (mDate.get(Calendar.DAY_OF_YEAR)<time.get(Calendar.DAY_OF_YEAR)) {
+					return PAIR_STATUS_PAST;
+				} else {
+					if (mDate.get(Calendar.DAY_OF_YEAR)>time.get(Calendar.DAY_OF_YEAR)) {
+						return PAIR_STATUS_FUTURE;
+					} else {
+						int hours = time.get(Calendar.HOUR_OF_DAY);
+						int minutes = time.get(Calendar.MINUTE);
+						int start = mBeginningHours*60+mBeginningMinutes-1;
+						int end = mEndingHours*60+mEndingMinutes-1;
+						int current = hours*60 + minutes-1;
+						if (current<start) {
+							return PAIR_STATUS_PAST;
+						} else {
+							if (current>end) {
+								return PAIR_STATUS_FUTURE;
+							} else {
+								return PAIR_STATUS_CURRENT;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
