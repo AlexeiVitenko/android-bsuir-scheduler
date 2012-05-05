@@ -243,4 +243,13 @@ public class DBAdapter implements Pushable, Closeable{
 		// TODO Auto-generated method stub
 		mDBHelper.close();
 	}
+	
+	// Беру первый и послдений месяцы. Слава
+	public int getFirstMonth() {
+		return mStartDay.get(GregorianCalendar.MONTH);
+	}
+	
+	public int getLastMonth() {
+		return mLastDay.get(GregorianCalendar.MONTH);
+	}
 }
