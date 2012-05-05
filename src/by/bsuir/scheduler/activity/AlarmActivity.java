@@ -60,7 +60,7 @@ public class AlarmActivity extends PreferenceActivity {
 						alarmType.setSummary(alarmTypes[value]);
 
 						alarmBeforeLesson.setEnabled(value == 1);
-						return false;
+						return true;
 					}
 				});
 
@@ -87,7 +87,7 @@ public class AlarmActivity extends PreferenceActivity {
 						int value = Integer.parseInt((String) newValue);
 						alarmBeforeLesson.setValue((String) newValue);
 						alarmBeforeLesson.setSummary(entries[value]);
-						return false;
+						return true;
 					}
 				});
 	}

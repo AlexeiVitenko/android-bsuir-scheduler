@@ -29,9 +29,11 @@ import by.bsuir.scheduler.model.Pair;
 public class DayPagerAdapter extends PagerAdapter {
 	public static final int POSITION = 502;
 	private static final int LOOPS = 300;
-	private final GregorianCalendar mStartDay = new GregorianCalendar(Locale.getDefault());
-	private final GregorianCalendar mEndDay = new GregorianCalendar(Locale.getDefault());
-	
+	private final GregorianCalendar mStartDay = new GregorianCalendar(
+			Locale.getDefault());
+	private final GregorianCalendar mEndDay = new GregorianCalendar(
+			Locale.getDefault());
+
 	private int mSize;
 	private Context mContext;
 	private LayoutInflater mInflater;
@@ -45,10 +47,14 @@ public class DayPagerAdapter extends PagerAdapter {
 	public DayPagerAdapter(Context context, long currentDay) {
 		mSize = 3 * LOOPS;
 		mContext = context;
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-		mStartDay.setTimeInMillis(pref.getLong(mContext.getString(R.string.semester_start_day), -1));
+		SharedPreferences pref = PreferenceManager
+				.getDefaultSharedPreferences(mContext);
+		mStartDay.setTimeInMillis(pref.getLong(
+				mContext.getString(R.string.semester_start_day), -1));
 		mEndDay.setTimeInMillis(mStartDay.getTimeInMillis());
-		mEndDay.add(GregorianCalendar.WEEK_OF_YEAR, Integer.parseInt(pref.getString(mContext.getString(R.string.semester_length_weeks),""+ 18)));
+		mEndDay.add(GregorianCalendar.WEEK_OF_YEAR, Integer.parseInt(pref
+				.getString(mContext.getString(R.string.semester_length_weeks),
+						"" + 18)));
 		mEndDay.add(Calendar.DAY_OF_YEAR, -1);
 		mInflater = LayoutInflater.from(mContext);
 		mAdapter = DBAdapter.getInstance(context.getApplicationContext());
@@ -59,14 +65,14 @@ public class DayPagerAdapter extends PagerAdapter {
 		while (!mAdapter.isWorkDay(mCurrentDay)) {
 			mCurrentDay.add(GregorianCalendar.DAY_OF_YEAR, -1);
 		}
-		////
+		// //
 		mCurrentDayPosition--;
 		dayLeft = new GregorianCalendar(Locale.getDefault());
 		dayLeft.setTimeInMillis(currentDay);
 
 		dayRight = new GregorianCalendar(Locale.getDefault());
 		dayRight.setTimeInMillis(currentDay);
-		
+
 	}
 
 	@Override
@@ -102,15 +108,15 @@ public class DayPagerAdapter extends PagerAdapter {
 		while (!mAdapter.isWorkDay(needed)) {
 			needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
 		}
-		if (mAdapter.dayMatcher(needed)== DayMatcherConditions.LAST_DAY) {
+		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.LAST_DAY) {
 			mSize = position;
 		}
 		final long time = needed.getTimeInMillis();
 		GregorianCalendar pushedDay = new GregorianCalendar(Locale.getDefault());
 		pushedDay.setTimeInMillis(needed.getTimeInMillis());
 		final Day day = mAdapter.getDay(pushedDay);
-		
-		//Заполняем дату и неделю
+
+		// Заполняем дату и неделю
 		view = mInflater.inflate(R.layout.day_page, null);
 		String[] daysOfWeek = mContext.getResources().getStringArray(
 				R.array.days_of_week);
@@ -118,16 +124,39 @@ public class DayPagerAdapter extends PagerAdapter {
 				R.array.months_genitive);
 		((TextView) view.findViewById(R.id.day_of_week))
 				.setText(daysOfWeek[needed.get(GregorianCalendar.DAY_OF_WEEK) - 1]
-						+ ", ");		
+						+ ", ");
 		((TextView) view.findViewById(R.id.day_date)).setText(needed
 				.get(GregorianCalendar.DAY_OF_MONTH) + " ");
 		((TextView) view.findViewById(R.id.month_genitive))
 				.setText(months[needed.get(GregorianCalendar.MONTH)]);
-		((TextView)view.findViewById(R.id.day_page_week)).setText(mContext.getResources()
-				.getStringArray(R.array.weeks)[day.getWeek()-1]);
+		((TextView) view.findViewById(R.id.day_page_week_of_month))
+				.setText(mContext.getResources().getStringArray(R.array.weeks)[day
+						.getWeek() - 1]);
+		
+		// неделя "(00/00)"
+		SharedPreferences mPref = PreferenceManager
+				.getDefaultSharedPreferences(mContext);
+		GregorianCalendar startDay = new GregorianCalendar();
+		startDay.setTimeInMillis(mPref.getLong(
+				mContext.getString(R.string.semester_start_day), 0));
+		long diff = needed.getTimeInMillis() - startDay.getTimeInMillis();
+		int weeks = (int) Math.ceil(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
+		int current = needed.get(GregorianCalendar.DAY_OF_WEEK);
+		int start = startDay.get(GregorianCalendar.DAY_OF_WEEK);
+		if (current < start) {
+			weeks++;
+		}
+		((TextView) view.findViewById(R.id.day_page_week_of_semester))
+				.setText("("
+						+ weeks
+						+ "/"
+						+ mPref.getString(mContext
+								.getString(R.string.semester_length_weeks), ""
+								+ 17) + ")");
+
 		/******************************************************************/
 
-		final DayListAdapter adapter = new DayListAdapter(mContext,needed,
+		final DayListAdapter adapter = new DayListAdapter(mContext, needed,
 				day.getPairs());
 
 		ListView listView = (ListView) view.findViewById(R.id.listView1);
@@ -135,7 +164,8 @@ public class DayPagerAdapter extends PagerAdapter {
 			public void onItemClick(AdapterView<?> adapterView, View view,
 					int position, long arg) {
 				Intent intent = new Intent(mContext, LessonActivity.class);
-				GregorianCalendar tm = new GregorianCalendar(Locale.getDefault());
+				GregorianCalendar tm = new GregorianCalendar(Locale
+						.getDefault());
 				tm.setTimeInMillis(time);
 				Pair p = day.getPair(position);
 				tm.set(Calendar.HOUR_OF_DAY, p.getTime()[0]);
@@ -146,8 +176,8 @@ public class DayPagerAdapter extends PagerAdapter {
 		});
 		listView.setAdapter(adapter);
 
-	
-		LinearLayout alarmLayout = (LinearLayout) view.findViewById(R.id.alarm_layout); 
+		LinearLayout alarmLayout = (LinearLayout) view
+				.findViewById(R.id.alarm_layout);
 		alarmLayout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -155,8 +185,10 @@ public class DayPagerAdapter extends PagerAdapter {
 				mContext.startActivity(intent);
 			}
 		});
-		
+
 		TextView alarm = (TextView) view.findViewById(R.id.alarm_time);
+		
+		
 		// ЗАГЛУШКА
 		alarm.setText(position % 24 + ":00");
 		//

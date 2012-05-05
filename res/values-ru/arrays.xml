@@ -72,11 +72,11 @@
         <item>Физкультура</item>
         <item>Спецподготовка</item>
     </string-array>
-	<string-array name="weeks"
-	    >
-	    <item>1-я неделя</item>
-	    <item>2-я неделя</item>
-	    <item>3-я неделя</item>
-	    <item>4-я неделя</item>
-	</string-array>
+    <string-array name="weeks">
+        <item>1-я неделя</item>
+        <item>2-я неделя</item>
+        <item>3-я неделя</item>
+        <item>4-я неделя</item>
+    </string-array>
+
 </resources>
