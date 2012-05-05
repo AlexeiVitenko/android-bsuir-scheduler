@@ -252,4 +252,8 @@ public class DBAdapter implements Pushable, Closeable{
 	public int getLastMonth() {
 		return mLastDay.get(GregorianCalendar.MONTH);
 	}
+	
+	public int getYear() {
+		return mLastDay.get(GregorianCalendar.YEAR);
+	}
 }
