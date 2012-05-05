@@ -2,12 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory 
         android:title="@string/semester">
-        <EditTextPreference
-           	android:title="@string/semester_length"
-           	android:inputType="number"
-           	android:key="@string/semester_length_weeks"
-           	android:maxLength="2"
-            />
+        <EditTextPreference 
+            android:key="@string/semester_length_weeks"
+            android:inputType="number"
+            android:maxLength="2"
+            android:title="@string/semester_length"
+            android:defaultValue="-1"
+            />        
         <Preference 
             android:key="@string/semester_start_day"
             android:title="@string/semester_start"

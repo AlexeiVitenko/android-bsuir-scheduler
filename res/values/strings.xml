@@ -15,7 +15,7 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="semester">Семестр</string>
     <string name="semester_length">Semester length</string>
-    <string name="semester_length_weeks">semester_length_weeks</string>
+    <string name="semester_length_weeks">semesterlengthweeks</string>
     <string name="semester_start_day">semester_start_day</string>
     <string name="semester_start">First day</string>
     <string name="group_number">group_number</string>
