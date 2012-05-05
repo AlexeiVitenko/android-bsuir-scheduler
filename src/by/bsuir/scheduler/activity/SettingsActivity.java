@@ -49,7 +49,7 @@ public class SettingsActivity extends PreferenceActivity {
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				mSemesterLength.setSummary(""+(String)newValue+getString(R.string.weeks));
 				mAdapter.recalculateSomeThings();
-				return false;
+				return true;
 			}
 		});
 		
