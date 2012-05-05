@@ -7,6 +7,7 @@ import java.util.List;
 
 import by.bsuir.scheduler.activity.SchedulerActivity;
 import by.bsuir.scheduler.model.DBAdapter;
+import by.bsuir.scheduler.model.DBAdapter.DayMatcherConditions;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -80,7 +81,7 @@ public class GridCellAdapter extends BaseAdapter implements OnClickListener {
 			gridcell.setTextScaleX((float) 1.2);
 		}
 
-		if ((position + 1) % 7 != 0 && mAdapter.isWorkDay(data.getDate())) {
+		if ((position + 1) % 7 != 0 && mAdapter.dayMatcher(data.getDate()) == DayMatcherConditions.WORK_DAY) {
 			gridcell.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
