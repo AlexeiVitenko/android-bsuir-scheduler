@@ -1,6 +1,9 @@
 package by.bsuir.scheduler.activity;
 
+import java.util.GregorianCalendar;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -35,11 +38,7 @@ public class SchedulerActivity extends Activity {
 		if (!mChooseMode) {
 			mAdapter = DBAdapter.getInstance(getApplicationContext());
 			if (mAdapter.isFilling()) {
-				dayPagerAdapter = new DayPagerAdapter(this, System.currentTimeMillis());
-				viewPager = new ViewPager(this);
-				viewPager.setAdapter(dayPagerAdapter);
-				viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
-				setContentView(viewPager);
+				init(this, System.currentTimeMillis());
 			}
 		}else{
 			mChooseMode = false;
@@ -49,16 +48,18 @@ public class SchedulerActivity extends Activity {
 	private boolean mChooseMode = false;
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.i("SchedulerActivity", "onActivityResult");
 		if (resultCode == RESULT_DAY) {
-			mChooseMode = true;
-			dayPagerAdapter = new DayPagerAdapter(this, data.getLongExtra(GridCellAdapter.DAY, System.currentTimeMillis()));
-			viewPager = new ViewPager(this);
-			viewPager.setAdapter(dayPagerAdapter);
-			viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
-			setContentView(viewPager);
+			mChooseMode = true;			
+			init(this, data.getLongExtra(GridCellAdapter.DAY, System.currentTimeMillis()));
 		} else super.onActivityResult(requestCode, resultCode, data);
 	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+			mChooseMode = true;			
+			init(this, System.currentTimeMillis());
+		}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,6 +73,9 @@ public class SchedulerActivity extends Activity {
 		Intent intent;
 		switch (item.getItemId()) {
 		case R.id.menu_item_day:
+			intent = new Intent(this, SchedulerActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 			return true;
 
 		case R.id.menu_item_week:
@@ -101,11 +105,7 @@ public class SchedulerActivity extends Activity {
 				}
 			});
 			//FIXEME всё это в onComplete + возвращаться в тот день, который был текущим 
-			dayPagerAdapter = new DayPagerAdapter(this, System.currentTimeMillis());
-			viewPager = new ViewPager(this);
-			viewPager.setAdapter(dayPagerAdapter);
-			viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
-			setContentView(viewPager);
+			init(this, System.currentTimeMillis());
 			return true;
 
 		case R.id.menu_item_preferences:
@@ -121,5 +121,13 @@ public class SchedulerActivity extends Activity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	
+	private void init(Context context, long time) {
+		dayPagerAdapter = new DayPagerAdapter(context, time);
+		viewPager = new ViewPager(context);
+		viewPager.setAdapter(dayPagerAdapter);
+		viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
+		setContentView(viewPager);
 	}
 }

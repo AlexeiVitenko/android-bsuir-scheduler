@@ -81,11 +81,11 @@
         <item>Physical culture</item>
         <item>Special training</item>
     </string-array>
-	<string-array name="weeks"
-	    >
-	    <item>1st week</item>
-	    <item>2nd week</item>
-	    <item>3rd week</item>
-	    <item>4th week</item>
-	</string-array>
+    <string-array name="weeks">
+        <item>1st week</item>
+        <item>2nd week</item>
+        <item>3rd week</item>
+        <item>4th week</item>
+    </string-array>
+
 </resources>
