@@ -94,7 +94,6 @@ public class DayListAdapter extends BaseAdapter {
 		int gray = Color.rgb(100, 100, 100);
 		Pair.PairStatus status = lesson.getStatus(); 
 		switch (status.status) {
-			case Pair.PAIR_STATUS_PAST:
 			case Pair.PAIR_STATUS_CURRENT_DAY_PAST:
 				holder.statusBar.setBackgroundColor(green);
 				break;
