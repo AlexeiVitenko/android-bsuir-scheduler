@@ -15,13 +15,12 @@ import android.view.MenuItem;
 
 public class MonthActivity extends Activity {
 	public static final int GET_DAY = 1;
-
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// вводим кол-во недель текущего сема и дату 2ого сема.
-		MonthPagerAdapter monthPagerAdapter = new MonthPagerAdapter(17, 6,
-				GregorianCalendar.FEBRUARY, this);
+		MonthPagerAdapter monthPagerAdapter = new MonthPagerAdapter(this);
 		ViewPager viewPager = new ViewPager(this);
 		viewPager.setAdapter(monthPagerAdapter);
 		viewPager.setCurrentItem(monthPagerAdapter.getCurrentItem());

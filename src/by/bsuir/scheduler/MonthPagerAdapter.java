@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import by.bsuir.scheduler.R;
+import by.bsuir.scheduler.model.DBAdapter;
 
 import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
@@ -22,15 +23,20 @@ public class MonthPagerAdapter extends PagerAdapter {
 	private LayoutInflater inflater;
 	private List<View> pages;
 	private GregorianCalendar calendar;
-	private int numberOfWeeks;
-	private int dayOfStart2sem;
-	private int monthOfStart2sem;
+//	private int numberOfWeeks;
+//	private int monthOfStart2sem;
+	private int firstMonth;
+	private int lastMonth;
+	private int year;
 
-	public MonthPagerAdapter(int numberOfWeeks, int dayOfStart2sem,
-			int monthOfStart2sem, Activity context) {
-		this.numberOfWeeks = numberOfWeeks;
-		this.dayOfStart2sem = dayOfStart2sem;
-		this.monthOfStart2sem = monthOfStart2sem;
+	public MonthPagerAdapter(Activity context) {
+		DBAdapter dbAdapter = DBAdapter.getInstance(context.getApplicationContext());
+		firstMonth = dbAdapter.getFirstMonth();
+		lastMonth = dbAdapter.getLastMonth();
+		year = dbAdapter.getYear();
+//		this.numberOfWeeks = numberOfWeeks;
+//		this.dayOfStart2sem = dayOfStart2sem;
+//		this.monthOfStart2sem = monthOfStart2sem;
 		this.context = context;
 		inflater = LayoutInflater.from(context);
 		calendar = new GregorianCalendar(Locale.getDefault());
@@ -38,20 +44,22 @@ public class MonthPagerAdapter extends PagerAdapter {
 
 	@Override
 	public int getCount() {
-		if (numberOfWeeks > 17) {
+		/*if (numberOfWeeks > 17) {
 			return 5;
 		} else {
 			return 4;
-		}
+		}*/
+		return lastMonth - firstMonth;
 	}
 
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 
 		if (pages == null) {
-			pages = generatePages(container,
-					calendar.get(GregorianCalendar.MONTH),
-					calendar.get(GregorianCalendar.YEAR));
+//			pages = generatePages(container,
+//					calendar.get(GregorianCalendar.MONTH),
+//					calendar.get(GregorianCalendar.YEAR));
+			pages = generatePages(container);
 		}
 
 		View view = pages.get(position);
@@ -73,40 +81,41 @@ public class MonthPagerAdapter extends PagerAdapter {
 
 	public int getCurrentItem() {
 		int currentItem = 0;
-		int sep = GregorianCalendar.SEPTEMBER;
-		int dec = GregorianCalendar.DECEMBER;
-		int may = GregorianCalendar.MAY;
-		int month = calendar.get(GregorianCalendar.MONTH);
-		if (sep <= month && dec >= month) {
-			currentItem = month - sep;
-
-		} else if (monthOfStart2sem <= month && may >= month) {
-			currentItem = month - monthOfStart2sem;
-		}
+//		int sep = GregorianCalendar.SEPTEMBER;
+//		int dec = GregorianCalendar.DECEMBER;
+//		int may = GregorianCalendar.MAY;
+		int currentMonth = calendar.get(GregorianCalendar.MONTH);
+		currentItem = currentMonth - firstMonth;
+//		if (sep <= month && dec >= month) {
+//			currentItem = month - sep;
+//
+//		} else if (monthOfStart2sem <= month && may >= month) {
+//			currentItem = month - monthOfStart2sem;
+//		}
 		return currentItem;
 	}
 
-	private List<View> generatePages(ViewGroup container, int month, int year) {
+	private List<View> generatePages(ViewGroup container) {
 		List<View> list = new ArrayList<View>();
-		int sep = GregorianCalendar.SEPTEMBER;
-		int dec = GregorianCalendar.DECEMBER;
-		int may = GregorianCalendar.MAY;
-		int startMonth = 0;
-		int endMonth = 0;
-		if (sep <= month && dec >= month) {
-			startMonth = sep;
-			endMonth = dec;
+//		int sep = GregorianCalendar.SEPTEMBER;
+//		int dec = GregorianCalendar.DECEMBER;
+//		int may = GregorianCalendar.MAY;
+//		int startMonth = 0;
+//		int endMonth = 0;
+//		if (sep <= month && dec >= month) {
+//			startMonth = sep;
+//			endMonth = dec;
+//
+//		} else if (monthOfStart2sem <= month && may >= month) {
+//			startMonth = monthOfStart2sem;
+//			endMonth = may;
+//		}
 
-		} else if (monthOfStart2sem <= month && may >= month) {
-			startMonth = monthOfStart2sem;
-			endMonth = may;
-		}
-
-		if ((endMonth - startMonth) > 0) {
+		if ((lastMonth - firstMonth) > 0) {
 
 			String[] months = context.getResources().getStringArray(
 					R.array.months);
-			for (int i = startMonth; i <= endMonth; i++) {
+			for (int i = firstMonth; i <= lastMonth; i++) {
 				GridCellAdapter gridCellAdapter = new GridCellAdapter(context,
 						R.layout.day_of_month, i, year);
 				gridCellAdapter.notifyDataSetChanged();
