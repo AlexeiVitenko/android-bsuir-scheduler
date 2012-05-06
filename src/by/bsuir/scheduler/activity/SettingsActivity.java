@@ -43,11 +43,15 @@ public class SettingsActivity extends PreferenceActivity {
 
 		mAdapter = DBAdapter.getInstance(getApplicationContext());
 		mPref = PreferenceManager.getDefaultSharedPreferences(this);
-
+		/*
+		Editor editor = mPref.edit();
+		editor.clear();
+		editor.commit();
+		*/
 		mSemesterLength = findPreference(getString(R.string.semester_length_weeks));
 		mSemesterLength.setSummary(""
 				+ mPref.getString(getString(R.string.semester_length_weeks), ""
-						+ (-1)) + getString(R.string.weeks));
+						+ DefaultValuesSettings.getWeeks()) + getString(R.string.weeks));
 		mSemesterLength
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
@@ -62,8 +66,8 @@ public class SettingsActivity extends PreferenceActivity {
 				});
 
 		mStartDate = findPreference(getString(R.string.semester_start_day));
-		mStartDate.setSummary(formatDate(mPref.getLong(
-				getString(R.string.semester_start_day), getDefStartDay())));
+		mStartDate.setSummary(DefaultValuesSettings.getFormatDate(mPref.getLong(
+				getString(R.string.semester_start_day), DefaultValuesSettings.getStartDay())));
 		mStartDate
 				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
@@ -103,32 +107,13 @@ public class SettingsActivity extends PreferenceActivity {
 				});
 	}
 
-	private long getDefStartDay() {
-		// пару дефолтов. думаю правильнее будет для приложения. 
-		// если не согласен - обсудим с Денисом, как поступают обычно.
-		GregorianCalendar today = new GregorianCalendar(Locale.getDefault());
-		int year = today.get(GregorianCalendar.YEAR);
-		long defFirstSem = new GregorianCalendar(year,
-				GregorianCalendar.SEPTEMBER, 1).getTimeInMillis();
-		long defSecondSem = new GregorianCalendar(year,
-				GregorianCalendar.FEBRUARY, 6).getTimeInMillis();
-		long defValue = today.getTimeInMillis();
-		if (defValue < defFirstSem) {
-			defValue = defSecondSem;
-		} else {
-			defValue = defFirstSem;
-		}
-		//
-		return defValue;
-	}
-
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DATE_DIALOG:
 			GregorianCalendar gc = new GregorianCalendar(Locale.getDefault());
 			gc.setTimeInMillis(mPref.getLong(
-					getString(R.string.semester_start_day), getDefStartDay()));
+					getString(R.string.semester_start_day), DefaultValuesSettings.getStartDay()));
 			DatePickerDialog dpd = new DatePickerDialog(this,
 					new OnDateSetListener() {
 
@@ -137,7 +122,7 @@ public class SettingsActivity extends PreferenceActivity {
 								int monthOfYear, int dayOfMonth) {
 							GregorianCalendar gcc = new GregorianCalendar(year,
 									monthOfYear, dayOfMonth);
-							mStartDate.setSummary(formatDate(gcc
+							mStartDate.setSummary(DefaultValuesSettings.getFormatDate(gcc
 									.getTimeInMillis()));
 							Editor edit = mPref.edit();
 							edit.putLong(
@@ -161,7 +146,26 @@ public class SettingsActivity extends PreferenceActivity {
 	 * (id) { case DATE_DIALOG: ((DatePickerDialog)dialog).set break; default:
 	 * super.onPrepareDialog(id, dialog); break; } }
 	 */
-	private static String formatDate(long date) {
-		return dateFormat.format(new Date(date));
+	
+	public static class DefaultValuesSettings {
+		
+		public static int getWeeks() {
+			return 17;
+		}
+		
+		public static long getStartDay() {
+			GregorianCalendar today = new GregorianCalendar(Locale.getDefault());
+			int year = today.get(GregorianCalendar.YEAR);
+			GregorianCalendar defFirstSem = new GregorianCalendar(year,
+					GregorianCalendar.SEPTEMBER, 1);
+			if (today.getTimeInMillis() < defFirstSem.getTimeInMillis()) {
+				defFirstSem.add(GregorianCalendar.WEEK_OF_YEAR, 23);
+			}
+			return defFirstSem.getTimeInMillis();
+		}
+		
+		public static String getFormatDate(long date) {
+			return dateFormat.format(new Date(date));
+		}
 	}
 }

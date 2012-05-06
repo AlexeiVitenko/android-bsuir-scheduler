@@ -7,7 +7,7 @@
             android:inputType="number"
             android:maxLength="2"
             android:title="@string/semester_length"
-            android:defaultValue="-1"
+            android:defaultValue="17"
             />        
         <Preference 
             android:key="@string/semester_start_day"
