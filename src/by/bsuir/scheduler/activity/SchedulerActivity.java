@@ -3,10 +3,15 @@ package by.bsuir.scheduler.activity;
 import java.util.GregorianCalendar;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -30,15 +35,18 @@ public class SchedulerActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mAdapter = DBAdapter.getInstance(getApplicationContext());
+		if (!mAdapter.isFilling()) {
+			startActivityForResult(new Intent(this, ConfiguratorActivity.class),this.getClass().hashCode());
+		}
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
 		if (!mChooseMode) {
-			mAdapter = DBAdapter.getInstance(getApplicationContext());
 			if (mAdapter.isFilling()) {
-				init(this, System.currentTimeMillis());
+				init(System.currentTimeMillis());
 			}
 		}else{
 			mChooseMode = false;
@@ -48,9 +56,19 @@ public class SchedulerActivity extends Activity {
 	private boolean mChooseMode = false;
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == RESULT_DAY) {
-			mChooseMode = true;			
-			init(this, data.getLongExtra(GridCellAdapter.DAY, System.currentTimeMillis()));
+		if (requestCode == this.getClass().hashCode()) {	
+		switch (resultCode) {
+			case RESULT_DAY:
+				mChooseMode = true;			
+				init(data.getLongExtra(GridCellAdapter.DAY, System.currentTimeMillis()));
+				break;
+			case ConfiguratorActivity.RESULT_PREFERENCES_CHANGES:
+				mAdapter.recalculateSomeThings();
+				parse();
+				break;
+			default:
+				break;
+			}
 		} else super.onActivityResult(requestCode, resultCode, data);
 	}
 	
@@ -58,7 +76,7 @@ public class SchedulerActivity extends Activity {
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 			mChooseMode = true;			
-			init(this, System.currentTimeMillis());
+			init(System.currentTimeMillis());
 		}
 
 	@Override
@@ -85,27 +103,11 @@ public class SchedulerActivity extends Activity {
 		case R.id.menu_item_month:
 			if (mAdapter.isFilling()) {
 				intent = new Intent(this, MonthActivity.class);
-				startActivityForResult(intent, RESULT_DAY);
+				startActivityForResult(intent, this.getClass().hashCode());
 			}
 			return true;
 		case R.id.menu_item_refresh:
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			DBAdapter.getInstance(getApplicationContext()).refreshSchedule(prefs.getString(getString(R.string.group_number), ""+(-1)
-					), Integer.parseInt(prefs.getString(getString(R.string.preference_sub_group_list),""+ 0)), new ParserListiner() {
-				
-				@Override
-				public void onException(Exception e) {
-					Toast.makeText(getApplicationContext(), "Очевидно, что-то пошло не так :(", Toast.LENGTH_SHORT).show();
-				}
-				
-				@Override
-				public void onComplete() {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-			//FIXEME всё это в onComplete + возвращаться в тот день, который был текущим 
-			init(this, System.currentTimeMillis());
+			parse();
 			return true;
 
 		case R.id.menu_item_preferences:
@@ -123,11 +125,57 @@ public class SchedulerActivity extends Activity {
 		}
 	}
 	
-	private void init(Context context, long time) {
-		dayPagerAdapter = new DayPagerAdapter(context, time);
-		viewPager = new ViewPager(context);
+	private void init(long time) {
+		dayPagerAdapter = new DayPagerAdapter(this, time);
+		viewPager = new ViewPager(this);
 		viewPager.setAdapter(dayPagerAdapter);
 		viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
 		setContentView(viewPager);
+	}
+	
+	private void parse(){
+		final ProgressDialog pd = new ProgressDialog(this);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		AsyncTask<String, String, Boolean> asc = new AsyncTask<String, String, Boolean>(){
+			private boolean succesfull = false;
+			@Override
+			protected Boolean doInBackground(String... params) {
+				
+				DBAdapter.getInstance(getApplicationContext()).refreshSchedule(prefs.getString(getString(R.string.group_number), ""+(-1)
+						), Integer.parseInt(prefs.getString(getString(R.string.preference_sub_group_list),""+ 0)), new ParserListiner() {
+					
+					@Override
+					public void onException(Exception e) {
+						pd.cancel();
+						Looper.prepare();
+						Toast.makeText(getApplicationContext(), "Очевидно, что-то пошло не так :("+System.getProperty("LINE_SEPARATOR")+e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+						succesfull = false;
+					}
+					
+					@Override
+					public void onComplete() {
+						pd.cancel();	
+						init(System.currentTimeMillis());
+						succesfull = true;
+					}
+				});
+				return succesfull;
+			}
+			
+			@Override
+			protected void onProgressUpdate(String... values) {
+				pd.setTitle(values[0]);
+				super.onProgressUpdate(values);
+			}
+			
+			@Override
+			protected void onPostExecute(Boolean result) {
+				pd.cancel();
+				super.onPostExecute(result);
+			}
+		};
+		asc.execute(null);
+		pd.show();
+		//FIXEME всё это в onComplete + возвращаться в тот день, который был текущим 
 	}
 }
