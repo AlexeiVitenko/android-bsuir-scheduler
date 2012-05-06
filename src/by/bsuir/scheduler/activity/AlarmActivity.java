@@ -9,18 +9,18 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 
 public class AlarmActivity extends PreferenceActivity {
 
+	private static final int TIME_DIALOG = 10;
 	public static final String ALARM_PREF = "alarm_pref";
-	private String ALARM_TYPE = "pref_alarm_type";
-	private String ALARM_LESSON = "pref_alarm_before_lesson";
-	private String ALARM_TIME = "pref_alarm_time";
-	private String ALARM_RINGTONE = "pref_alarm_ringtone";
-	private String ALARM_VOLUME = "pref_alarm_volume";
-	private String ALARM_VIBRATION = "pref_alarm_vibration";
+	public static final String ALARM_TYPE = "pref_alarm_type";
+	public static final String ALARM_LESSON = "pref_alarm_before_lesson";
+	public static final String ALARM_TIME = "pref_alarm_time";
+	public static final String ALARM_RINGTONE = "pref_alarm_ringtone";
+	public static final String ALARM_VOLUME = "pref_alarm_volume";
+	public static final String ALARM_VIBRATION = "pref_alarm_vibration";
 
 	private ListPreference alarmType;
 	private ListPreference alarmBeforeLesson;
@@ -90,6 +90,8 @@ public class AlarmActivity extends PreferenceActivity {
 						return true;
 					}
 				});
+		
+		
 	}
 
 	@Override
