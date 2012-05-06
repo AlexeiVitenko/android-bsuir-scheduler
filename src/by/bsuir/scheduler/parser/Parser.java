@@ -106,7 +106,7 @@ public class Parser {
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(body)));
 			NodeList list = doc.getElementsByTagName("table");
 			parseTable(list.item(0));
-			if (mListiner!=null) mListiner.onComplete();
+			if (mListiner!=null) mListiner.onComplete();/*
 		} catch (SAXException e) {
 			if (mListiner!=null) mListiner.onException(e);
 			return;
@@ -115,7 +115,7 @@ public class Parser {
 			return;
 		} catch (ParserConfigurationException e) {
 			if (mListiner!=null) mListiner.onException(e);
-			return;
+			return;*/
 		}catch (Exception e) {
 			if (mListiner!=null) mListiner.onException(e);
 			return;
