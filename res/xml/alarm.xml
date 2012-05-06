@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/alarm_types"
+        android:entryValues="@array/alarm_type_values"
+        android:key="@string/key_alarm_type"
+        android:title="@string/alarm_type" />
+    <ListPreference
+        android:defaultValue="0"
+        android:enabled="false"
+        android:key="@string/key_alarm_before_lesson"
+        android:title="@string/alarm_before_lesson" />
+
+    <Preference
+        android:key="@string/key_alarm_time"
+        android:title="@string/alarm_time" />
+
+    <RingtonePreference
+        android:key="@string/key_alarm_ringtone"
+        android:title="@string/alarm_ringtone" />
+
+    <Preference
+        android:key="@string/key_alarm_volume"
+        android:title="@string/alarm_volume" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/key_alarm_vibration"
+        android:title="@string/alarm_vibration" />
+
+</PreferenceScreen>
