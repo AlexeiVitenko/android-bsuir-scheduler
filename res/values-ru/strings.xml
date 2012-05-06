@@ -35,5 +35,5 @@
 	<string name="next">Далее</string>
 	<string name="sorry">Эти данные ни откуда автоматически взять нельзя.\nПоэтому вводите.</string>
 	<string name="start_work">Для начала работы нажмите "Далее".</string>
-	
+	<string name="start_parsing">Загрузка расписания</string>
 </resources>

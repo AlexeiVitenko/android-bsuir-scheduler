@@ -109,12 +109,16 @@ public class Parser {
 			if (mListiner!=null) mListiner.onComplete();
 		} catch (SAXException e) {
 			if (mListiner!=null) mListiner.onException(e);
+			return;
 		} catch (IOException e) {
 			if (mListiner!=null) mListiner.onException(e);
+			return;
 		} catch (ParserConfigurationException e) {
 			if (mListiner!=null) mListiner.onException(e);
+			return;
 		}catch (Exception e) {
 			if (mListiner!=null) mListiner.onException(e);
+			return;
 		}
 		Log.d("Counter",""+counter);
 	}
