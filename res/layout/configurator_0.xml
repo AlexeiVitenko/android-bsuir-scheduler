@@ -13,7 +13,8 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="@string/welcome"
-	        />
+	        android:focusable="true"
+	        ><requestFocus /></TextView>
 		<LinearLayout
 		    android:layout_marginTop="10dp" 
 		    android:layout_width="fill_parent"

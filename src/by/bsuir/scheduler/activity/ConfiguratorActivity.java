@@ -71,6 +71,10 @@ public class ConfiguratorActivity extends Activity {
 		}
 	}
 	
+	@Override
+	public void onBackPressed() {
+	}
+	
 	public void setResult(String group, int subGroup, String semesterLength, long date){
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 		Editor editor = pref.edit();
