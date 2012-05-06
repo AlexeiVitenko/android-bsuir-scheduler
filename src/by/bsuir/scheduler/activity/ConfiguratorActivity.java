@@ -1,6 +1,7 @@
 package by.bsuir.scheduler.activity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.prefs.Preferences;
 
@@ -14,6 +15,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Spinner;
 
 public class ConfiguratorActivity extends Activity {
 	private final ConfiguratorActivity mActivity = this;
@@ -24,11 +30,21 @@ public class ConfiguratorActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.configurator);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		mPager = (NonScrollableViewPager)findViewById(R.id.nonScrollableViewPager1);
 		LayoutInflater inflater = LayoutInflater.from(this);
 		List<View> views = new ArrayList<View>();
-		views.add(inflater.inflate(R.layout.configurator_0, null));
-		views.add(inflater.inflate(R.layout.configurator_1, null));
+		ScrollView l = (ScrollView)inflater.inflate(R.layout.configurator_0, null);
+		((EditText)l.findViewById(R.id.config_0_group)).setText(preferences.getString(getString(R.string.group_number), ""));
+		((Spinner)l.findViewById(R.id.config_0_spinner)).setSelection(Integer.parseInt(preferences.getString(getString(R.string.preference_sub_group_list),""+ 0)));
+		views.add(l);
+		l = (ScrollView)inflater.inflate(R.layout.configurator_1, null);
+		((EditText)l.findViewById(R.id.config_1_weeks)).setText(preferences.getString(getString(R.string.semester_length_weeks), ""+17));
+		DatePicker dp = (DatePicker)l.findViewById(R.id.config_1_date);
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(preferences.getLong(getString(R.string.semester_start_day), System.currentTimeMillis()));
+		dp.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), null);
+		views.add(l);
 		final NonScrollableAdapter adapter = new NonScrollableAdapter(views);
 		mPager.setOnInputCompleteListiner(new OnInputCompleteListiner() {
 			

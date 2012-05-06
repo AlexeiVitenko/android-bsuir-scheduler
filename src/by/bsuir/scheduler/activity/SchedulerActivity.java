@@ -135,6 +135,7 @@ public class SchedulerActivity extends Activity {
 	
 	private void parse(){
 		final ProgressDialog pd = new ProgressDialog(this);
+		pd.setTitle(R.string.start_parsing);
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		AsyncTask<String, String, Boolean> asc = new AsyncTask<String, String, Boolean>(){
 			private boolean succesfull = false;
@@ -145,10 +146,17 @@ public class SchedulerActivity extends Activity {
 						), Integer.parseInt(prefs.getString(getString(R.string.preference_sub_group_list),""+ 0)), new ParserListiner() {
 					
 					@Override
-					public void onException(Exception e) {
+					public void onException(final Exception e) {
 						pd.cancel();
-						Looper.prepare();
-						Toast.makeText(getApplicationContext(), "Очевидно, что-то пошло не так :("+System.getProperty("LINE_SEPARATOR")+e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+						//Looper.prepare();
+						runOnUiThread(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								Toast.makeText(getApplicationContext(), "Очевидно, что-то пошло не так :("+System.getProperty("LINE_SEPARATOR")+e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+							}
+						});
 						succesfull = false;
 					}
 					
