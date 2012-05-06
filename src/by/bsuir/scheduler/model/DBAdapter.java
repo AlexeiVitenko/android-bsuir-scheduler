@@ -53,7 +53,9 @@ public class DBAdapter implements Pushable, Closeable{
 		mDBHelper = new DBHelper(context);
 		daysOfWeek = mContext.getResources().getStringArray(
 				R.array.days_of_week);
-		recalculateSomeThings();
+		if (isFilling()) {
+			recalculateSomeThings();
+		}
 	}
 	
 	/**
@@ -135,22 +137,22 @@ public class DBAdapter implements Pushable, Closeable{
 	}
 	
 	public void recalculateSomeThings(){
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-		int weeks = Integer.parseInt(pref.getString(mContext.getString(R.string.semester_length_weeks),""+ 18));
-		long startTime = pref.getLong(mContext.getString(R.string.semester_start_day), -1);
-		mStartDay = new GregorianCalendar(Locale.getDefault());
-		mStartDay.setTimeInMillis(startTime);
-		
-		mLastDay = new GregorianCalendar(Locale.getDefault());
-		mLastDay.setTimeInMillis(startTime);
-		mLastDay.add(Calendar.WEEK_OF_YEAR, weeks);
-		mLastDay.add(Calendar.DAY_OF_YEAR, -1);
-		
-		if (mStartDay.get(Calendar.MONTH)<8) {
-			septFirst = new GregorianCalendar(mStartDay.get(Calendar.YEAR)-1, 9, 1);
-		} else {
-			septFirst = new GregorianCalendar(mStartDay.get(Calendar.YEAR), 9, 1);
-		}
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+			int weeks = Integer.parseInt(pref.getString(mContext.getString(R.string.semester_length_weeks),""+ 18));
+			long startTime = pref.getLong(mContext.getString(R.string.semester_start_day), -1);
+			mStartDay = new GregorianCalendar(Locale.getDefault());
+			mStartDay.setTimeInMillis(startTime);
+			
+			mLastDay = new GregorianCalendar(Locale.getDefault());
+			mLastDay.setTimeInMillis(startTime);
+			mLastDay.add(Calendar.WEEK_OF_YEAR, weeks);
+			mLastDay.add(Calendar.DAY_OF_YEAR, -1);
+			
+			if (mStartDay.get(Calendar.MONTH)<8) {
+				septFirst = new GregorianCalendar(mStartDay.get(Calendar.YEAR)-1, 9, 1);
+			} else {
+				septFirst = new GregorianCalendar(mStartDay.get(Calendar.YEAR), 9, 1);
+			}
 	}
 
 	

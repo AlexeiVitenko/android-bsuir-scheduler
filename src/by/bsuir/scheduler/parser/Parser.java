@@ -113,6 +113,8 @@ public class Parser {
 			if (mListiner!=null) mListiner.onException(e);
 		} catch (ParserConfigurationException e) {
 			if (mListiner!=null) mListiner.onException(e);
+		}catch (Exception e) {
+			if (mListiner!=null) mListiner.onException(e);
 		}
 		Log.d("Counter",""+counter);
 	}
