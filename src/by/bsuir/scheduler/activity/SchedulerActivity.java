@@ -164,7 +164,11 @@ public class SchedulerActivity extends Activity {
 					@Override
 					public void onComplete() {
 						pd.cancel();	
-						init(System.currentTimeMillis());
+						runOnUiThread(new Runnable() {
+							public void run() {
+								init(System.currentTimeMillis());
+							}
+						});
 						succesfull = true;
 					}
 				});
