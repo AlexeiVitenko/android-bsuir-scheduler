@@ -136,16 +136,16 @@ public class DayPagerAdapter extends PagerAdapter {
 		// неделя "(00/00)"
 		SharedPreferences mPref = PreferenceManager
 				.getDefaultSharedPreferences(mContext);
-		GregorianCalendar startDay = new GregorianCalendar();
+		GregorianCalendar startDay = new GregorianCalendar(Locale.getDefault());
 		startDay.setTimeInMillis(mPref.getLong(
 				mContext.getString(R.string.semester_start_day), 0));
 		long diff = needed.getTimeInMillis() - startDay.getTimeInMillis();
-		int weeks = (int) Math.ceil(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
-		int current = needed.get(GregorianCalendar.DAY_OF_WEEK);
+		int weeks = (int) (diff / (7 * 24 * 60 * 60 * 1000)) + 1;
+		/*int current = needed.get(GregorianCalendar.DAY_OF_WEEK);
 		int start = startDay.get(GregorianCalendar.DAY_OF_WEEK);
 		if (current < start) {
 			weeks++;
-		}
+		}*/
 		((TextView) view.findViewById(R.id.day_page_week_of_semester))
 				.setText("("
 						+ weeks
