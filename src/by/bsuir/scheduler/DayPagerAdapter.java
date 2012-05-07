@@ -1,15 +1,23 @@
 package by.bsuir.scheduler;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.prefs.Preferences;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
+import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -185,13 +193,8 @@ public class DayPagerAdapter extends PagerAdapter {
 				mContext.startActivity(intent);
 			}
 		});
-
 		TextView alarm = (TextView) view.findViewById(R.id.alarm_time);
-		
-		
-		// ЗАГЛУШКА
-		alarm.setText(position % 24 + ":00");
-		//
+		alarm.setText(AlarmActivity.getAlarmTime(mContext ,adapter));
 
 		((ViewPager) container).addView(view, position % 3);
 		return view;

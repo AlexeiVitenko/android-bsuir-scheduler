@@ -19,6 +19,9 @@
 
     <RingtonePreference
         android:key="@string/key_alarm_ringtone"
+        android:ringtoneType="ringtone|notification|alarm|all"
+        android:showDefault="true"
+        android:showSilent="true"
         android:title="@string/alarm_ringtone" />
 
     <Preference
