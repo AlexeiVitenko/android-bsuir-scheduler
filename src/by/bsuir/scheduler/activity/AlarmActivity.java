@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import by.bsuir.scheduler.DayListAdapter;
 import by.bsuir.scheduler.R;
+import by.bsuir.scheduler.model.Day;
 import by.bsuir.scheduler.model.Pair;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -169,17 +170,17 @@ public class AlarmActivity extends PreferenceActivity {
 		editor.commit();
 	}
 
-	public static String getAlarmTime(Context context, DayListAdapter adapter) {
+	public static String getAlarmTime(Context context, Day day) {
 		GregorianCalendar alarm = new GregorianCalendar(Locale.getDefault());
 		SharedPreferences sharedPref = context.getSharedPreferences(ALARM_PREF, MODE_PRIVATE);
 		alarm.setTimeInMillis(sharedPref.getLong(ALARM_TIME, System.currentTimeMillis()));
 		if (sharedPref.getInt(AlarmActivity.ALARM_TYPE, 0) == 1) {
 			int index = sharedPref.getInt(AlarmActivity.ALARM_LESSON, 0);
-			int maxIndex = adapter.getCount() - 1;
+			int maxIndex = day.getCount() - 1;
 			if (index > maxIndex) {
 				index = maxIndex;
 			}
-			int[] temptime = ((Pair) adapter.getItem(index)).getTime(); 
+			int[] temptime = day.getPair(index).getTime(); 
 			temptime[2] = alarm.get(GregorianCalendar.HOUR_OF_DAY);
 			temptime[3] = alarm.get(GregorianCalendar.MINUTE);
 			alarm.set(GregorianCalendar.HOUR_OF_DAY, (temptime[0] - temptime[2]));

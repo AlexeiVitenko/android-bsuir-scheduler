@@ -91,7 +91,6 @@ public class DayListAdapter extends BaseAdapter {
 		holder.timeEnd.setText(String.format("%2d:%02d", times[2], times[3]));
 
 		int green = Color.rgb(0, 190, 0);
-		int gray = Color.rgb(100, 100, 100);
 		Pair.PairStatus status = lesson.getStatus(); 
 		switch (status.status) {
 			case Pair.PAIR_STATUS_CURRENT_DAY_PAST:
@@ -104,6 +103,9 @@ public class DayListAdapter extends BaseAdapter {
 						.setBackgroundColor(gradientColor(gray, green, pct));
 				/*holder.statusBar.setBackgroundDrawable(getGradient(gray, green, pct));*/
 				holder.statusBar.setBackgroundDrawable(getProgress(green, pct));
+				break;
+			case Pair.PAIR_STATUS_CURRENT_DAY_FUTURE:
+				holder.statusBar.setBackgroundDrawable(null);
 				break;
 			default:
 				break;

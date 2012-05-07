@@ -8,7 +8,8 @@
     <item android:id="@+id/menu_item_week"
         android:icon="@drawable/ic_menu_week"
         android:title="@string/menu_item_week"
-        android:enabled="false" />
+        android:enabled="false"
+        android:visible="false" />
     
     <item android:id="@+id/menu_item_month"
         android:icon="@drawable/ic_menu_month"

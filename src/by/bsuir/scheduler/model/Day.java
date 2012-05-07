@@ -32,6 +32,10 @@ public class Day {
 		generatePairs(data);
 	}
 	
+	public int getCount() {
+		return mPairs.size();
+	}
+	
 	/**
 	 * Необходмо для отметки текущей пары, проученных, оставшихся.
 	 * @param time - время, в которое совершался запрос
