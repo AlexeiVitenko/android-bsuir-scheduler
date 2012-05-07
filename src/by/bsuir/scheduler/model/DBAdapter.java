@@ -9,6 +9,7 @@ import java.util.Locale;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.util.Log;
@@ -217,6 +218,12 @@ public class DBAdapter implements Pushable, Closeable{
 	public void refreshSchedule(String group, int subGroup, ParserListiner listiner){
 		if (group.equals("-1")) {
 			Toast.makeText(mContext, "Введите группу в настройках.", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (((ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo()==null
+				||
+				!((ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()) {
+			listiner.onException(new Exception("Отсутсвует подключение к интеренту"));
 			return;
 		}
 		mDBHelper.dropTables(mDBHelper.getWritableDatabase());

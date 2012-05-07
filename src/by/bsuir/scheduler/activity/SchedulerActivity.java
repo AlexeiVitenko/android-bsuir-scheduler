@@ -158,7 +158,9 @@ public class SchedulerActivity extends Activity {
 							}
 						});
 						succesfull = false;
-						finish();
+						if (!mAdapter.isFilling()) {
+							finish();
+						}
 					}
 					
 					@Override
