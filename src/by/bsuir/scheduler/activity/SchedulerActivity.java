@@ -135,7 +135,7 @@ public class SchedulerActivity extends Activity {
 	
 	private void parse(){
 		final ProgressDialog pd = new ProgressDialog(this);
-		pd.setTitle(R.string.start_parsing);
+		pd.setMessage(getString(R.string.start_parsing));
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		AsyncTask<String, String, Boolean> asc = new AsyncTask<String, String, Boolean>(){
 			private boolean succesfull = false;
@@ -158,12 +158,17 @@ public class SchedulerActivity extends Activity {
 							}
 						});
 						succesfull = false;
+						finish();
 					}
 					
 					@Override
 					public void onComplete() {
 						pd.cancel();	
-						init(System.currentTimeMillis());
+						runOnUiThread(new Runnable() {
+							public void run() {
+								init(System.currentTimeMillis());
+							}
+						});
 						succesfull = true;
 					}
 				});
@@ -183,6 +188,10 @@ public class SchedulerActivity extends Activity {
 			}
 		};
 		asc.execute(null);
+		pd.setCancelable(false);
+		pd.setCanceledOnTouchOutside(false);
+		pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		
 		pd.show();
 		//FIXEME всё это в onComplete + возвращаться в тот день, который был текущим 
 	}
