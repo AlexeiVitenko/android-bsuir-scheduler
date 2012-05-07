@@ -3,10 +3,10 @@
   <item>
     <shape>
         <gradient android:startColor="#777777" android:endColor="#AAAAAA"  android:angle="-90.0"/>
-        <corners android:topLeftRadius="2dip"
-            android:bottomLeftRadius="5dip"
-            android:topRightRadius="5dip"
-            android:bottomRightRadius="2dip" />
+        <corners android:topLeftRadius="3dip"
+            android:bottomLeftRadius="3dip"
+            android:topRightRadius="3dip"
+            android:bottomRightRadius="3dip" />
     </shape>
   </item>
 </layer-list>

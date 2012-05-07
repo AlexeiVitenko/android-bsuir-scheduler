@@ -187,12 +187,12 @@ public class DBAdapter implements Pushable, Closeable{
 		if ((day.getTimeInMillis()-mStartDay.getTimeInMillis())>0
 				&&
 				(day.getTimeInMillis()-mStartDay.getTimeInMillis())<86400000) {
-			return DayMatcherConditions.FIRST_DAY;
+			return DayMatcherConditions.WORK_DAY; //FIRST_DAY;
 		}
 		if ((day.getTimeInMillis()-mLastDay.getTimeInMillis())>0
 				&&
 				(day.getTimeInMillis()-mLastDay.getTimeInMillis())<86400000) {
-			return DayMatcherConditions.LAST_DAY;
+			return DayMatcherConditions.WORK_DAY; //LAST_DAY;
 		}
 		if (day.getTimeInMillis()<mStartDay.getTimeInMillis()) {
 			return DayMatcherConditions.OVERFLOW_LEFT;
