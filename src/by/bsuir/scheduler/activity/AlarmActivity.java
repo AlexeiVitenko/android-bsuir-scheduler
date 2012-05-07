@@ -57,7 +57,7 @@ public class AlarmActivity extends PreferenceActivity {
 		alarmType = (ListPreference) findPreference(ALARM_TYPE);
 		alarmBeforeLesson = (ListPreference) findPreference(ALARM_LESSON);
 		alarmTime = findPreference(ALARM_TIME);
-		alarmRingtone = (RingtonePreference) findPreference(ALARM_RINGTONE);
+		alarmRingtone =  (RingtonePreference) findPreference(ALARM_RINGTONE);
 		alarmVolume = findPreference(ALARM_VOLUME);
 		alarmVibration = (CheckBoxPreference) findPreference(ALARM_VIBRATION);
 
@@ -120,7 +120,6 @@ public class AlarmActivity extends PreferenceActivity {
 	
 		
 		alarmRingtone.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				Log.i("AlarmActivity", newValue.toString());
