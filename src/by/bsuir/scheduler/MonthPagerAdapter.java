@@ -63,16 +63,17 @@ public class MonthPagerAdapter extends PagerAdapter {
 			pages = generatePages(container);
 		}
 
-		View view = pages.get(position);
-		((ViewPager) container).addView(view, ((ViewPager) container)
+		//View view = pages.get(position);
+		/*((ViewPager) container).addView(view, ((ViewPager) container)
 				.getChildCount() > position ? position
-				: ((ViewPager) container).getChildCount());
-		return view;
+				: ((ViewPager) container).getChildCount());*/
+		//((ViewPager) container).addView(view, position);
+		return pages.get(position);
 	}
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
-		((ViewPager) container).removeView((View) object);
+	//	((ViewPager) container).removeView((View) object);
 	}
 
 	@Override
@@ -139,6 +140,7 @@ public class MonthPagerAdapter extends PagerAdapter {
 				}
 
 				list.add(view);
+				((ViewPager) container).addView(view, i - firstMonth);
 			}
 		}
 
