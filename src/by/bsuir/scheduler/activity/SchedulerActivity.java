@@ -38,7 +38,9 @@ public class SchedulerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		mAdapter = DBAdapter.getInstance(getApplicationContext());
 		if (!mAdapter.isFilling()) {
-			startActivityForResult(new Intent(this, ConfiguratorActivity.class),this.getClass().hashCode());
+			startActivityForResult(
+					new Intent(this, ConfiguratorActivity.class), this
+							.getClass().hashCode());
 		}
 	}
 	
@@ -49,19 +51,21 @@ public class SchedulerActivity extends Activity {
 			if (mAdapter.isFilling()) {
 				init(System.currentTimeMillis());
 			}
-		}else{
+		} else {
 			mChooseMode = false;
 		}
 	}
 	
 	private boolean mChooseMode = false;
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == this.getClass().hashCode()) {	
-		switch (resultCode) {
+		if (requestCode == this.getClass().hashCode()) {
+			switch (resultCode) {
 			case RESULT_DAY:
-				mChooseMode = true;			
-				init(data.getLongExtra(GridCellAdapter.DAY, System.currentTimeMillis()));
+				mChooseMode = true;
+				init(data.getLongExtra(GridCellAdapter.DAY,
+						System.currentTimeMillis()));
 				break;
 			case ConfiguratorActivity.RESULT_PREFERENCES_CHANGES:
 				mAdapter.recalculateSomeThings();
@@ -70,15 +74,16 @@ public class SchedulerActivity extends Activity {
 			default:
 				break;
 			}
-		} else super.onActivityResult(requestCode, resultCode, data);
+		} else
+			super.onActivityResult(requestCode, resultCode, data);
 	}
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-			mChooseMode = true;			
-			init(System.currentTimeMillis());
-		}
+		mChooseMode = true;
+		init(System.currentTimeMillis());
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -94,6 +99,8 @@ public class SchedulerActivity extends Activity {
 		case R.id.menu_item_day:
 			intent = new Intent(this, SchedulerActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.putExtra(MonthActivity.EXTRA_MONTH,
+					dayPagerAdapter.getCurrentMonth());
 			startActivity(intent);
 			return true;
 
@@ -104,6 +111,8 @@ public class SchedulerActivity extends Activity {
 		case R.id.menu_item_month:
 			if (mAdapter.isFilling()) {
 				intent = new Intent(this, MonthActivity.class);
+				intent.putExtra(MonthActivity.EXTRA_MONTH,
+						dayPagerAdapter.getCurrentMonth());
 				startActivityForResult(intent, this.getClass().hashCode());
 			}
 			return true;
@@ -133,12 +142,13 @@ public class SchedulerActivity extends Activity {
 		viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
 		setContentView(viewPager);
 	}
-	
-	private void parse(){
+
+	private void parse() {
 		final ProgressDialog pd = new ProgressDialog(this);
 		pd.setMessage(getString(R.string.start_parsing));
-		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		AsyncTask<String, String, Boolean> asc = new AsyncTask<String, String, Boolean>(){
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		AsyncTask<String, String, Boolean> asc = new AsyncTask<String, String, Boolean>() {
 			private boolean succesfull = false;
 			@Override
 			protected Boolean doInBackground(String... params) {

@@ -11,6 +11,7 @@ import by.bsuir.scheduler.model.DBAdapter;
 import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +49,8 @@ public class MonthPagerAdapter extends PagerAdapter {
 			return 5;
 		} else {
 			return 4;
-		}*/
-		return lastMonth - firstMonth;
+		}*/	
+		return lastMonth - firstMonth + 1  ;
 	}
 
 	@Override
@@ -79,12 +80,12 @@ public class MonthPagerAdapter extends PagerAdapter {
 		return view.equals(object);
 	}
 
-	public int getCurrentItem() {
+	public int getCurrentItem(int currentMonth) {
 		int currentItem = 0;
 //		int sep = GregorianCalendar.SEPTEMBER;
 //		int dec = GregorianCalendar.DECEMBER;
 //		int may = GregorianCalendar.MAY;
-		int currentMonth = calendar.get(GregorianCalendar.MONTH);
+//		int currentMonth = calendar.get(GregorianCalendar.MONTH);
 		currentItem = currentMonth - firstMonth;
 //		if (sep <= month && dec >= month) {
 //			currentItem = month - sep;

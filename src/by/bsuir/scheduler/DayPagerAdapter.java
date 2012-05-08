@@ -82,6 +82,10 @@ public class DayPagerAdapter extends PagerAdapter {
 		dayRight.setTimeInMillis(currentDay);
 
 	}
+	
+	public int getCurrentMonth() {
+		return mCurrentDay.get(GregorianCalendar.MONTH);
+	}
 
 	@Override
 	public int getCount() {
@@ -92,7 +96,7 @@ public class DayPagerAdapter extends PagerAdapter {
 	public boolean isViewFromObject(View view, Object object) {
 		return view.equals(object);
 	}
-	private int hackCounter = 0;
+
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 		View view = null;

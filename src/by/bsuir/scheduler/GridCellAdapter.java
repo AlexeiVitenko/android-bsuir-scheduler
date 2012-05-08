@@ -81,7 +81,10 @@ public class GridCellAdapter extends BaseAdapter implements OnClickListener {
 			gridcell.setTextScaleX((float) 1.2);
 		}
 
-		if ((position + 1) % 7 != 0 && mAdapter.dayMatcher(data.getDate()) == DayMatcherConditions.WORK_DAY) {
+		if ((position + 1) % 7 != 0
+				&& (mAdapter.dayMatcher(data.getDate()) == DayMatcherConditions.WORK_DAY
+						|| mAdapter.dayMatcher(data.getDate()) == DayMatcherConditions.FIRST_DAY || mAdapter
+						.dayMatcher(data.getDate()) == DayMatcherConditions.LAST_DAY)) {
 			gridcell.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {

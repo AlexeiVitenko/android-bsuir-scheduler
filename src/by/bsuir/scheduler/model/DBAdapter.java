@@ -253,7 +253,15 @@ public class DBAdapter implements Pushable, Closeable{
 		mDBHelper.close();
 	}
 	
-	// Беру первый и послдений месяцы. Слава
+	// Беру первый и послдений месяцы и дни. Слава
+	public GregorianCalendar getFirstDay() {
+		return mStartDay;
+	}
+	
+	public GregorianCalendar getLastDay() {
+		return mLastDay;
+	}
+	
 	public int getFirstMonth() {
 		return mStartDay.get(GregorianCalendar.MONTH);
 	}
