@@ -143,9 +143,9 @@ public class DBAdapter implements Pushable, Closeable{
 			long startTime = pref.getLong(mContext.getString(R.string.semester_start_day), -1);
 			mStartDay = new GregorianCalendar(Locale.getDefault());
 			mStartDay.setTimeInMillis(startTime);
-			
+			mStartDay = new GregorianCalendar(mStartDay.get(Calendar.YEAR), mStartDay.get(Calendar.MONTH), mStartDay.get(Calendar.DAY_OF_MONTH));
 			mLastDay = new GregorianCalendar(Locale.getDefault());
-			mLastDay.setTimeInMillis(startTime);
+			mLastDay.setTimeInMillis(mStartDay.getTimeInMillis());
 			mLastDay.add(Calendar.WEEK_OF_YEAR, weeks);
 			mLastDay.add(Calendar.DAY_OF_YEAR, -1);
 			
@@ -184,15 +184,15 @@ public class DBAdapter implements Pushable, Closeable{
 	 * @return состояние @see {@link DayMatcherConditions}
 	 */
 	public DayMatcherConditions dayMatcher(GregorianCalendar day){
-		if ((day.getTimeInMillis()-mStartDay.getTimeInMillis())>0
+		if ((day.getTimeInMillis()-mStartDay.getTimeInMillis())>=0
 				&&
 				(day.getTimeInMillis()-mStartDay.getTimeInMillis())<86400000) {
-			return DayMatcherConditions.WORK_DAY; //FIRST_DAY;
+			return DayMatcherConditions.FIRST_DAY;
 		}
-		if ((day.getTimeInMillis()-mLastDay.getTimeInMillis())>0
+		if ((day.getTimeInMillis()-mLastDay.getTimeInMillis())>=0
 				&&
 				(day.getTimeInMillis()-mLastDay.getTimeInMillis())<86400000) {
-			return DayMatcherConditions.WORK_DAY; //LAST_DAY;
+			return DayMatcherConditions.LAST_DAY;
 		}
 		if (day.getTimeInMillis()<mStartDay.getTimeInMillis()) {
 			return DayMatcherConditions.OVERFLOW_LEFT;

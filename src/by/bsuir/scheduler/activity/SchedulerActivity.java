@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.v4.view.LimitedViewPager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
@@ -29,7 +30,7 @@ import by.bsuir.scheduler.parser.ParserListiner;
 public class SchedulerActivity extends Activity {
 	public static final int RESULT_DAY = 2;
 	private DayPagerAdapter dayPagerAdapter;
-	private ViewPager viewPager;
+	private LimitedViewPager viewPager;
 	private DBAdapter mAdapter;
 
 	@Override
@@ -127,7 +128,7 @@ public class SchedulerActivity extends Activity {
 	
 	private void init(long time) {
 		dayPagerAdapter = new DayPagerAdapter(this, time);
-		viewPager = new ViewPager(this);
+		viewPager = new LimitedViewPager(this);
 		viewPager.setAdapter(dayPagerAdapter);
 		viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
 		setContentView(viewPager);

@@ -15,8 +15,8 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
+import android.support.v4.view.LimitedViewPager;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,7 +92,7 @@ public class DayPagerAdapter extends PagerAdapter {
 	public boolean isViewFromObject(View view, Object object) {
 		return view.equals(object);
 	}
-
+	private int hackCounter = 0;
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 		View view = null;
@@ -117,7 +117,16 @@ public class DayPagerAdapter extends PagerAdapter {
 			needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
 		}
 		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.LAST_DAY) {
-			mSize = position;
+			mSize = position+2;
+		}
+		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.FIRST_DAY) {
+			((LimitedViewPager)container).setLeftBorder(mCurrentDayPosition-1);
+		//	return new View(mContext);
+		}
+		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_LEFT || mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_RIGTH) {
+			view = new  View(mContext);
+			((LimitedViewPager) container).addView(view, position % 3);
+			return view;
 		}
 		final long time = needed.getTimeInMillis();
 		GregorianCalendar pushedDay = new GregorianCalendar(Locale.getDefault());
@@ -196,13 +205,13 @@ public class DayPagerAdapter extends PagerAdapter {
 		TextView alarm = (TextView) view.findViewById(R.id.alarm_time);
 		alarm.setText(AlarmActivity.getAlarmTime(mContext, day));
 
-		((ViewPager) container).addView(view, position % 3);
+		((LimitedViewPager) container).addView(view, position % 3);
 		return view;
 	}
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
-		((ViewPager) container).removeView((View) object);
+		((LimitedViewPager) container).removeView((View) object);
 	}
 
 	@Override
