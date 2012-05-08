@@ -82,6 +82,10 @@ public class DayPagerAdapter extends PagerAdapter {
 		dayRight.setTimeInMillis(currentDay);
 
 	}
+	
+	public int getCurrentMonth() {
+		return mCurrentDay.get(GregorianCalendar.MONTH);
+	}
 
 	@Override
 	public int getCount() {
@@ -111,7 +115,7 @@ public class DayPagerAdapter extends PagerAdapter {
 			dayRight.setTimeInMillis(mCurrentDay.getTimeInMillis());
 			mCurrentDay.setTimeInMillis(dayLeft.getTimeInMillis());
 		}
-
+		
 		needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
 		while (!mAdapter.isWorkDay(needed)) {
 			needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
