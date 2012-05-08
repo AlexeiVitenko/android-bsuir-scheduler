@@ -187,12 +187,12 @@ public class DBAdapter implements Pushable, Closeable{
 		if ((day.getTimeInMillis()-mStartDay.getTimeInMillis())>0
 				&&
 				(day.getTimeInMillis()-mStartDay.getTimeInMillis())<86400000) {
-			return DayMatcherConditions.WORK_DAY; //FIRST_DAY;
+			return DayMatcherConditions.FIRST_DAY;
 		}
 		if ((day.getTimeInMillis()-mLastDay.getTimeInMillis())>0
 				&&
 				(day.getTimeInMillis()-mLastDay.getTimeInMillis())<86400000) {
-			return DayMatcherConditions.WORK_DAY; //LAST_DAY;
+			return DayMatcherConditions.LAST_DAY;
 		}
 		if (day.getTimeInMillis()<mStartDay.getTimeInMillis()) {
 			return DayMatcherConditions.OVERFLOW_LEFT;
@@ -253,7 +253,15 @@ public class DBAdapter implements Pushable, Closeable{
 		mDBHelper.close();
 	}
 	
-	// Беру первый и послдений месяцы. Слава
+	// Беру первый и послдений месяцы и дни. Слава
+	public GregorianCalendar getFirstDay() {
+		return mStartDay;
+	}
+	
+	public GregorianCalendar getLastDay() {
+		return mLastDay;
+	}
+	
 	public int getFirstMonth() {
 		return mStartDay.get(GregorianCalendar.MONTH);
 	}
