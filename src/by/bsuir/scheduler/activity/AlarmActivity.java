@@ -5,16 +5,19 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import by.bsuir.scheduler.DayListAdapter;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.model.Day;
-import by.bsuir.scheduler.model.Pair;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -23,13 +26,13 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.RingtonePreference;
-import android.util.Log;
 import android.widget.TimePicker;
 
 public class AlarmActivity extends PreferenceActivity {
 
 	public static final String TIME_FIRST_LESSON = "time_first_lesson";
 	private static final int TIME_DIALOG = 10;
+	private static final int VOLUME_DIALOG = 11;
 	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat(
 			"HH:mm");
 	public static final String ALARM_PREF = "alarm_pref";
@@ -119,11 +122,21 @@ public class AlarmActivity extends PreferenceActivity {
 			}
 		});
 	
-		
+		String ringtoneURI = sharedPref.getString(ALARM_RINGTONE, android.provider.Settings.System.DEFAULT_RINGTONE_URI.toString());
+		updateRingtonePref(alarmRingtone, ringtoneURI);
 		alarmRingtone.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				Log.i("AlarmActivity", newValue.toString());
+				updateRingtonePref((RingtonePreference) preference, (String) newValue);
+				return false;
+			}
+		});
+		
+		alarmVolume.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				startActivityForResult(new Intent(android.provider.Settings.ACTION_SOUND_SETTINGS), 0);
 				return false;
 			}
 		});
@@ -145,12 +158,12 @@ public class AlarmActivity extends PreferenceActivity {
 							Editor editor = sharedPref.edit();
 							editor.putLong(ALARM_TIME, cal.getTimeInMillis());
 							editor.commit();
-							
-							//////////////////////////////////
 							alarmTime.setSummary(formatTime(sharedPref.getLong(ALARM_TIME, System.currentTimeMillis())));
 						}
 					}, cal.get(GregorianCalendar.HOUR_OF_DAY), cal.get(GregorianCalendar.MINUTE), true);
 			return dialog;
+		case VOLUME_DIALOG:
+			startActivityForResult(new Intent(android.provider.Settings.ACTION_SOUND_SETTINGS), 0);
 		default:
 			return super.onCreateDialog(id);
 		}
@@ -163,10 +176,7 @@ public class AlarmActivity extends PreferenceActivity {
 		editor.putInt(ALARM_TYPE, Integer.parseInt(alarmType.getValue()));
 		editor.putInt(ALARM_LESSON,
 				Integer.parseInt(alarmBeforeLesson.getValue()));
-		editor.putString(ALARM_RINGTONE, alarmRingtone.toString());
-		
-		Log.i("AlarmActivity", alarmRingtone.getKey());
-		
+		editor.putBoolean(ALARM_VIBRATION, alarmVibration.isChecked());
 		editor.commit();
 	}
 
@@ -187,6 +197,19 @@ public class AlarmActivity extends PreferenceActivity {
 			alarm.set(GregorianCalendar.MINUTE, (temptime[1] - temptime[3]));
 		}
 		return formatTime(alarm.getTimeInMillis());
+	}
+	
+	private void updateRingtonePref(RingtonePreference preference, String newValue) {
+		Ringtone ringtone = RingtoneManager.getRingtone(this, Uri.parse((String) newValue));
+		if (ringtone != null) {
+			alarmRingtone.setSummary(ringtone.getTitle(this));
+			Editor editor = sharedPref.edit();
+			editor.putString(ALARM_RINGTONE, newValue);
+			editor.commit();
+			
+		} else {
+			alarmRingtone.setSummary("");
+		}
 	}
 	
 	public static String formatTime(long date) {
