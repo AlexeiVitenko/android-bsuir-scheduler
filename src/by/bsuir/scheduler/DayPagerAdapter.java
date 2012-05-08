@@ -73,7 +73,7 @@ public class DayPagerAdapter extends PagerAdapter {
 		while (!mAdapter.isWorkDay(mCurrentDay)) {
 			mCurrentDay.add(GregorianCalendar.DAY_OF_YEAR, -1);
 		}
-		// //
+		// //	
 		mCurrentDayPosition--;
 		dayLeft = new GregorianCalendar(Locale.getDefault());
 		dayLeft.setTimeInMillis(currentDay);
@@ -101,7 +101,17 @@ public class DayPagerAdapter extends PagerAdapter {
 	public Object instantiateItem(ViewGroup container, int position) {
 		View view = null;
 		GregorianCalendar needed;
-		int shift;
+		int shift;/*
+		switch (mAdapter.dayMatcher(mCurrentDay)) {
+		case FIRST_DAY:
+			((LimitedViewPager)container).setLeftBorder(mCurrentDayPosition);
+			break;
+		case LAST_DAY:
+			mSize = position+2;
+			break;
+		default:
+			break;
+		}*/
 		if (position - mCurrentDayPosition > 0) {
 			shift = 1;
 			needed = dayRight;
@@ -124,7 +134,7 @@ public class DayPagerAdapter extends PagerAdapter {
 			mSize = position+2;
 		}
 		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.FIRST_DAY) {
-			((LimitedViewPager)container).setLeftBorder(mCurrentDayPosition-1);
+			((LimitedViewPager)container).setLeftBorder(position);//mCurrentDayPosition-1);
 		//	return new View(mContext);
 		}
 		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_LEFT || mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_RIGTH) {
