@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#808080"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Month, "
+                android:textColor="@android:color/black"
+                android:textSize="9pt" />
+
+            <TextView
+                android:id="@+id/year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="year"
+                android:textColor="@android:color/black"
+                android:textSize="8pt" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="#616161"
+        android:horizontalSpacing="-1px"
+        android:numColumns="7"
+        android:verticalSpacing="-1px" >
+
+        <TextView
+            android:id="@+id/Mo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="0.15"
+            android:text="ПН" />
+
+        <TextView
+            android:id="@+id/Tu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14"
+            android:text="ВТ" />
+
+        <TextView
+            android:id="@+id/We"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14"
+            android:text="СР" />
+
+        <TextView
+            android:id="@+id/Th"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14"
+            android:text="ЧТ" />
+
+        <TextView
+            android:id="@+id/Fr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14"
+            android:text="ПТ" />
+
+        <TextView
+            android:id="@+id/Sa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14"
+            android:text="СБ" />
+
+        <TextView
+            android:id="@+id/Su"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:text="ВС" />
+    </TableRow>
+
+    <GridView
+        android:id="@+id/calendar"
+        android:layout_width="fill_parent"
+        android:layout_height="265dp"
+        android:background="#616161"
+        android:horizontalSpacing="-1px"
+        android:numColumns="7"
+        android:verticalSpacing="-1px" >
+    </GridView>
+
+</LinearLayout>
