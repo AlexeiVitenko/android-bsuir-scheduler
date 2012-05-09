@@ -128,9 +128,13 @@ public class DBAdapter implements Pushable, Closeable{
 		int END_HOUR = data.getColumnIndex(DBColumns.END_HOUR);
 		int END_MINUTES = data.getColumnIndex(DBColumns.END_MINUTES);
 		data.moveToFirst();
-		Pair p = (new Pair(this, date, data.getInt(WEEK), data.getInt(SUBGROUP),
-				data.getString(SUBJECT), data.getInt(SUBJECT_TYPE),
-				data.getString(ROOM), data.getString(TEACHER), new int[] {
+		Pair p = (new Pair(this, date, 
+				data.getInt(WEEK), 
+				data.getInt(SUBGROUP),
+				data.getString(SUBJECT), 
+				data.getInt(SUBJECT_TYPE),
+				data.getString(ROOM), 
+				data.getString(TEACHER), new int[] {
 						data.getInt(START_HOUR), data.getInt(START_MINUTES),
 						data.getInt(END_HOUR), data.getInt(END_MINUTES) }, -1, data.getInt(ID)));
 		data.close();

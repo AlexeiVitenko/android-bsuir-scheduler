@@ -83,8 +83,12 @@ public class DayPagerAdapter extends PagerAdapter {
 
 	}
 	
-	public int getCurrentMonth() {
-		return mCurrentDay.get(GregorianCalendar.MONTH);
+//	public int getCurrentMonth() {
+//		return mCurrentDay.get(GregorianCalendar.MONTH);
+//	}
+//	
+	public GregorianCalendar getCurrentDay() {
+		return mCurrentDay;
 	}
 
 	@Override

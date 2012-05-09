@@ -70,7 +70,7 @@
         <item>Лабораторная работа</item>
         <item>Курсовое проектирование</item>
         <item>Физкультура</item>
-        <item>Спецподготовка</item>
+        <item></item>
     </string-array>
     <string-array name="weeks">
         <item>1-я неделя</item>
