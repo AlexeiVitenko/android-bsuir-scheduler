@@ -11,7 +11,6 @@ import by.bsuir.scheduler.model.DBAdapter;
 import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,6 @@ public class MonthPagerAdapter extends PagerAdapter {
 	private LayoutInflater inflater;
 	private List<View> pages;
 	private GregorianCalendar calendar;
-//	private int numberOfWeeks;
-//	private int monthOfStart2sem;
 	private int firstMonth;
 	private int lastMonth;
 	private int year;
@@ -35,9 +32,6 @@ public class MonthPagerAdapter extends PagerAdapter {
 		firstMonth = dbAdapter.getFirstMonth();
 		lastMonth = dbAdapter.getLastMonth();
 		year = dbAdapter.getYear();
-//		this.numberOfWeeks = numberOfWeeks;
-//		this.dayOfStart2sem = dayOfStart2sem;
-//		this.monthOfStart2sem = monthOfStart2sem;
 		this.context = context;
 		inflater = LayoutInflater.from(context);
 		calendar = new GregorianCalendar(Locale.getDefault());
@@ -45,11 +39,6 @@ public class MonthPagerAdapter extends PagerAdapter {
 
 	@Override
 	public int getCount() {
-		/*if (numberOfWeeks > 17) {
-			return 5;
-		} else {
-			return 4;
-		}*/	
 		return lastMonth - firstMonth + 1  ;
 	}
 
@@ -57,9 +46,6 @@ public class MonthPagerAdapter extends PagerAdapter {
 	public Object instantiateItem(ViewGroup container, int position) {
 
 		if (pages == null) {
-//			pages = generatePages(container,
-//					calendar.get(GregorianCalendar.MONTH),
-//					calendar.get(GregorianCalendar.YEAR));
 			pages = generatePages(container);
 		}
 
@@ -83,35 +69,12 @@ public class MonthPagerAdapter extends PagerAdapter {
 
 	public int getCurrentItem(int currentMonth) {
 		int currentItem = 0;
-//		int sep = GregorianCalendar.SEPTEMBER;
-//		int dec = GregorianCalendar.DECEMBER;
-//		int may = GregorianCalendar.MAY;
-//		int currentMonth = calendar.get(GregorianCalendar.MONTH);
 		currentItem = currentMonth - firstMonth;
-//		if (sep <= month && dec >= month) {
-//			currentItem = month - sep;
-//
-//		} else if (monthOfStart2sem <= month && may >= month) {
-//			currentItem = month - monthOfStart2sem;
-//		}
 		return currentItem;
 	}
 
 	private List<View> generatePages(ViewGroup container) {
 		List<View> list = new ArrayList<View>();
-//		int sep = GregorianCalendar.SEPTEMBER;
-//		int dec = GregorianCalendar.DECEMBER;
-//		int may = GregorianCalendar.MAY;
-//		int startMonth = 0;
-//		int endMonth = 0;
-//		if (sep <= month && dec >= month) {
-//			startMonth = sep;
-//			endMonth = dec;
-//
-//		} else if (monthOfStart2sem <= month && may >= month) {
-//			startMonth = monthOfStart2sem;
-//			endMonth = may;
-//		}
 
 		if ((lastMonth - firstMonth) > 0) {
 

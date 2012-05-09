@@ -1,6 +1,7 @@
 package by.bsuir.scheduler.activity;
 
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -32,10 +33,15 @@ public class SchedulerActivity extends Activity {
 	private DayPagerAdapter dayPagerAdapter;
 	private LimitedViewPager viewPager;
 	private DBAdapter mAdapter;
+	private boolean mChooseMode = false;
+	private GregorianCalendar day;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		day = new GregorianCalendar(Locale.getDefault());
+		
 		mAdapter = DBAdapter.getInstance(getApplicationContext());
 		if (!mAdapter.isFilling()) {
 			startActivityForResult(
@@ -49,15 +55,19 @@ public class SchedulerActivity extends Activity {
 		super.onStart();
 		if (!mChooseMode) {
 			if (mAdapter.isFilling()) {
-				init(System.currentTimeMillis());
+				init(day.getTimeInMillis());
 			}
 		} else {
 			mChooseMode = false;
 		}
 	}
-	
-	private boolean mChooseMode = false;
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		day = dayPagerAdapter.getCurrentDay();
+		super.onSaveInstanceState(outState);
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == this.getClass().hashCode()) {
@@ -82,7 +92,7 @@ public class SchedulerActivity extends Activity {
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		mChooseMode = true;
-		init(System.currentTimeMillis());
+		init(intent.getLongExtra(GridCellAdapter.DAY, System.currentTimeMillis()));
 	}
 
 	@Override
@@ -100,7 +110,7 @@ public class SchedulerActivity extends Activity {
 			intent = new Intent(this, SchedulerActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra(MonthActivity.EXTRA_MONTH,
-					dayPagerAdapter.getCurrentMonth());
+					dayPagerAdapter.getCurrentDay().getTimeInMillis());
 			startActivity(intent);
 			return true;
 
@@ -112,7 +122,7 @@ public class SchedulerActivity extends Activity {
 			if (mAdapter.isFilling()) {
 				intent = new Intent(this, MonthActivity.class);
 				intent.putExtra(MonthActivity.EXTRA_MONTH,
-						dayPagerAdapter.getCurrentMonth());
+						dayPagerAdapter.getCurrentDay().getTimeInMillis());
 				startActivityForResult(intent, this.getClass().hashCode());
 			}
 			return true;

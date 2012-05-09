@@ -4,6 +4,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import by.bsuir.scheduler.DayPagerAdapter;
+import by.bsuir.scheduler.GridCellAdapter;
 import by.bsuir.scheduler.MonthPagerAdapter;
 import by.bsuir.scheduler.R;
 
@@ -19,6 +20,8 @@ public class MonthActivity extends Activity {
 	public static final int GET_DAY = 1;
 	public static final String EXTRA_MONTH = "month";
 
+	private GregorianCalendar prevDay;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,13 +35,14 @@ public class MonthActivity extends Activity {
 	}
 
 	private void init(Intent intent) {
+		prevDay = new GregorianCalendar(Locale.getDefault());
 		MonthPagerAdapter monthPagerAdapter = new MonthPagerAdapter(this);
 		ViewPager viewPager = new ViewPager(this);
 		viewPager.setAdapter(monthPagerAdapter);
-		viewPager.setCurrentItem(monthPagerAdapter.getCurrentItem(intent
-				.getIntExtra(EXTRA_MONTH,
-						(new GregorianCalendar(Locale.getDefault()))
-								.get(GregorianCalendar.MONTH))));
+		prevDay.setTimeInMillis(intent.getLongExtra(EXTRA_MONTH,
+				new GregorianCalendar(Locale.getDefault()).getTimeInMillis()));
+		viewPager.setCurrentItem(monthPagerAdapter.getCurrentItem(prevDay
+				.get(GregorianCalendar.MONTH)));
 		setContentView(viewPager);
 	}
 
