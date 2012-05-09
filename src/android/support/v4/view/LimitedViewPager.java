@@ -102,7 +102,7 @@ public class LimitedViewPager extends ViewGroup {
     };
 
     private final ArrayList<ItemInfo> mItems = new ArrayList<ItemInfo>();
-    public int mLeftBorder = DayPagerAdapter.POSITION - 10;
+    public int mLeftBorder = 0;
     public void setLeftBorder(int border){
     	mLeftBorder = border;
     }

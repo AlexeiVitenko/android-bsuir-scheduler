@@ -64,6 +64,7 @@ public class SchedulerActivity extends Activity {
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
+		Log.d("saving", "save");
 		day = dayPagerAdapter.getCurrentDay();
 		super.onSaveInstanceState(outState);
 	}
