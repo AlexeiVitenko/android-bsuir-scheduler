@@ -309,7 +309,6 @@ public class DBAdapter implements Pushable, Closeable{
 			p1 = d.getPair(0);
 			p0 = p1.getPreviuosBreak();
 		}
-		//TODO Если не подобрали пару, то тогда надо искать будильники
 		return new Pair[]{p0,p1};
 	}
 }

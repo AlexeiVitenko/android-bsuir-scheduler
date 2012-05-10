@@ -1,5 +1,6 @@
 package by.bsuir.scheduler;
 
+import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -66,7 +67,7 @@ public class PairReceiver extends BroadcastReceiver {
 		Intent notifyIntent = new Intent(mContext.getApplicationContext(), SchedulerActivity.class);
 		notifyIntent.setAction(Intent.ACTION_VIEW);
 		notifyIntent.putExtra(GridCellAdapter.DAY, mPairs[0].getDate().getTimeInMillis());
-		PendingIntent nPendingIntent = PendingIntent.getActivity(mContext.getApplicationContext(), NOTIFICATION_ID, notifyIntent, 0);
+		PendingIntent nPendingIntent = PendingIntent.getActivity(mContext.getApplicationContext(), NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		notification.setLatestEventInfo(mContext.getApplicationContext(), mPairs[0].getLesson() + " до "+mPairs[0].endingTimeS(), mPairs[1].getLesson()+" c "+mPairs[1].beginningTime(), nPendingIntent);
 		nm.notify(NOTIFICATION_ID, notification);
 	}

@@ -18,6 +18,9 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -43,7 +46,9 @@ public class Parser {
 	 * @param listiner - слушатель на 2 события: успешное завершение и исключительная ситуация.
 	 */
 	public Parser(String group, int subGroup, Pushable bridge, ParserListiner listiner){
-		mClient = new DefaultHttpClient();
+		HttpParams params = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(params, 30000);
+		mClient = new DefaultHttpClient(params);
 		mUrl = URL + group;
 		mSubGroup = subGroup;
 		mBridge = bridge;
@@ -56,6 +61,7 @@ public class Parser {
 	 */
 	public String getBody(){
 		HttpGet getMethod = new HttpGet(mUrl);
+		
 		String body = null;
 		ResponseHandler<String> respHandler = new BasicResponseHandler();
 		try {

@@ -368,11 +368,15 @@ class DBHelper extends SQLiteOpenHelper {
 							null, null, null
 
 						);
-		if(cursor.getCount()<=0)
+		if(cursor.getCount()<=0){
+			cursor.close();
 			return "";
+		}
 		else{
 			cursor.moveToFirst();
-			return cursor.getString((cursor.getColumnIndex(DBColumns.TEXT_NOTE)));
+			String s = cursor.getString((cursor.getColumnIndex(DBColumns.TEXT_NOTE)));
+			cursor.close();
+			return s;
 		}
 	}
 	
