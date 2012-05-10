@@ -28,6 +28,7 @@ public class PairReceiver extends BroadcastReceiver {
 	private Context mContext;
 	private DBAdapter mAdapter;
 	private Pair[] mPairs;
+	private GregorianCalendar mDay;
 	@Override
 	/**
 	 * Схема такая, AlarmManager кидает бродкаст. Мы его ловим. Отключаем уведомление, весящее в статусбаре (а оно нас отправляет на активити дня)
@@ -39,12 +40,6 @@ public class PairReceiver extends BroadcastReceiver {
 		if (pi!=null) {
 			pi.cancel();
 		}
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		getNextAction();
 		setNextNotification();
 		setNextAlarm();
@@ -55,7 +50,8 @@ public class PairReceiver extends BroadcastReceiver {
 	 * В паре можно добавить метод, который будет возвращать время в миллисекундах начала и конца (клонируем day и выставляем часы и минуты)
 	 */
 	private void getNextAction(){
-		mPairs = mAdapter.getNextPairs();
+		mDay = (GregorianCalendar)Calendar.getInstance();
+		mPairs = mAdapter.getNextPairs(mDay);
 	}
 	
 	/**
@@ -63,14 +59,15 @@ public class PairReceiver extends BroadcastReceiver {
 	 */
 	private void setNextNotification(){
 		NotificationManager nm = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-		Notification notification = new Notification(R.drawable.ic_course, "nextPair", System.currentTimeMillis());
+		Notification notification = new Notification(R.drawable.ic_course, mPairs[0].getLesson()+" "+mPairs[0].getRoom(), System.currentTimeMillis());
 		notification.flags = Notification.FLAG_NO_CLEAR;
 		notification.defaults = Notification.DEFAULT_ALL;
-		//тут надо заполнить уведомление
 		//Notification.FLAG_NO_CLEAR - использовать его
 		Intent notifyIntent = new Intent(mContext.getApplicationContext(), SchedulerActivity.class);
+		notifyIntent.setAction(Intent.ACTION_VIEW);
+		notifyIntent.putExtra(GridCellAdapter.DAY, mPairs[0].getDate().getTimeInMillis());
 		PendingIntent nPendingIntent = PendingIntent.getActivity(mContext.getApplicationContext(), NOTIFICATION_ID, notifyIntent, 0);
-		notification.setLatestEventInfo(mContext.getApplicationContext(), mPairs[0].getLesson(), mPairs[1].getLesson(), nPendingIntent);
+		notification.setLatestEventInfo(mContext.getApplicationContext(), mPairs[0].getLesson() + " до "+mPairs[0].endingTimeS(), mPairs[1].getLesson()+" c "+mPairs[1].beginningTime(), nPendingIntent);
 		nm.notify(NOTIFICATION_ID, notification);
 	}
 	
@@ -91,7 +88,7 @@ public class PairReceiver extends BroadcastReceiver {
 	public static PendingIntent existAlarm(Context context, int id) {
 		Intent intent = new Intent(context.getApplicationContext(), SchedulerActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);
-		PendingIntent test = PendingIntent.getActivity(context,NOTIFICATION_ID , intent, PendingIntent.FLAG_NO_CREATE);
+		PendingIntent test = PendingIntent.getActivity(context,id , intent, PendingIntent.FLAG_NO_CREATE);
 		return test;
 	}
 }

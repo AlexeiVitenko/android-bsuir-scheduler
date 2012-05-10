@@ -154,6 +154,7 @@ public class SchedulerActivity extends Activity {
 	}
 
 	private void init(long time) {
+		System.gc();
 		if (day == null) {
 			day = new GregorianCalendar(Locale.getDefault());
 		}

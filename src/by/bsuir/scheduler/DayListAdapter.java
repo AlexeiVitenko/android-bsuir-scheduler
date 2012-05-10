@@ -143,15 +143,16 @@ public class DayListAdapter extends BaseAdapter {
 		} else {
 			holder.subgroup.setText("");
 		}
-		
-//		DBAdapter adapter = DBAdapter.getInstance(inflater.getContext().getApplicationContext());
-//		GregorianCalendar noteTime = new GregorianCalendar(Locale.getDefault());
-//		noteTime.setTimeInMillis(currentDay.getTimeInMillis());
-//		noteTime.set(GregorianCalendar.HOUR_OF_DAY, lesson.getTime()[0]);
-//		Pair tempLesson = adapter.getPair(noteTime);
-//		if (tempLesson.getNote().length() > 0) {
-//			holder.note.setImageResource(R.drawable.ic_note);
-//		}
+
+		DBAdapter adapter = DBAdapter.getInstance(inflater.getContext()
+				.getApplicationContext());
+		GregorianCalendar noteTime = new GregorianCalendar(Locale.getDefault());
+		noteTime.setTimeInMillis(currentDay.getTimeInMillis());
+		noteTime.set(GregorianCalendar.HOUR_OF_DAY, lesson.getTime()[0]);
+		Pair tempLesson = adapter.getPair(noteTime);
+		if (tempLesson.getNote().length() > 0) {
+			holder.note.setImageResource(R.drawable.ic_note);
+		}
 	}
 
 	private ClipDrawable getProgress(int color, float percent) {
@@ -162,25 +163,25 @@ public class DayListAdapter extends BaseAdapter {
 		return clipProgress;
 	}
 
-//	private GradientDrawable getGradient(int startColor, int endColor,
-//			float percent) {
-//		GradientDrawable gradient = new GradientDrawable(
-//				Orientation.TOP_BOTTOM, new int[] { startColor, endColor });
-//		gradient.setGradientType(GradientDrawable.LINE);
-//		gradient.setGradientCenter(1f, percent);
-//		return gradient;
-//	}
-//
-//	private int gradientColor(int startColor, int endColor, double percent) {
-//		double sR = Color.red(startColor);
-//		double sG = Color.green(startColor);
-//		double sB = Color.blue(startColor);
-//		double gR = Color.red(endColor) - sR;
-//		double gG = Color.green(endColor) - sG;
-//		double gB = Color.blue(endColor) - sB;
-//		return Color.rgb((int) (sR + gR * percent), (int) (sG + gG * percent),
-//				(int) (sB + gB * percent));
-//	}
+	// private GradientDrawable getGradient(int startColor, int endColor,
+	// float percent) {
+	// GradientDrawable gradient = new GradientDrawable(
+	// Orientation.TOP_BOTTOM, new int[] { startColor, endColor });
+	// gradient.setGradientType(GradientDrawable.LINE);
+	// gradient.setGradientCenter(1f, percent);
+	// return gradient;
+	// }
+	//
+	// private int gradientColor(int startColor, int endColor, double percent) {
+	// double sR = Color.red(startColor);
+	// double sG = Color.green(startColor);
+	// double sB = Color.blue(startColor);
+	// double gR = Color.red(endColor) - sR;
+	// double gG = Color.green(endColor) - sG;
+	// double gB = Color.blue(endColor) - sB;
+	// return Color.rgb((int) (sR + gR * percent), (int) (sG + gG * percent),
+	// (int) (sB + gB * percent));
+	// }
 
 	class ViewHolder {
 		ImageView statusBar;
