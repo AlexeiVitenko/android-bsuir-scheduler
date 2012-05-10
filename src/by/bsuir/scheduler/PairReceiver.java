@@ -15,6 +15,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 
 public class PairReceiver extends BroadcastReceiver {
 	public static final String DAY="day";
@@ -36,6 +39,7 @@ public class PairReceiver extends BroadcastReceiver {
 	 */
 	public void onReceive(Context context, Intent intent) {
 		mContext = context;
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 		mAdapter = DBAdapter.getInstance(mContext.getApplicationContext());
 		PendingIntent pi = existAlarm(mContext, NOTIFICATION_ID);
 		if (pi!=null) {
@@ -68,7 +72,7 @@ public class PairReceiver extends BroadcastReceiver {
 		notifyIntent.setAction(Intent.ACTION_VIEW);
 		notifyIntent.putExtra(GridCellAdapter.DAY, mPairs[0].getDate().getTimeInMillis());
 		PendingIntent nPendingIntent = PendingIntent.getActivity(mContext.getApplicationContext(), NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		notification.setLatestEventInfo(mContext.getApplicationContext(), mPairs[0].getLesson() + " до "+mPairs[0].endingTimeS(), mPairs[1].getLesson()+" c "+mPairs[1].beginningTime(), nPendingIntent);
+		notification.setLatestEventInfo(mContext.getApplicationContext(), mPairs[0].getLesson() + " до "+mPairs[0].endingTimeS()+" "+mPairs[0].getRoom(), mPairs[1].getLesson()+" c "+mPairs[1].beginningTime()+" "+mPairs[1].getRoom(), nPendingIntent);
 		nm.notify(NOTIFICATION_ID, notification);
 	}
 	
