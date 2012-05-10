@@ -11,6 +11,7 @@ import by.bsuir.scheduler.model.DBAdapter;
 import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class MonthPagerAdapter extends PagerAdapter {
 	public Object instantiateItem(ViewGroup container, int position) {
 
 		if (pages == null) {
+			Log.i("MonthPagerAdapter", "instantiateItem " + getCount());
 			pages = generatePages(container);
 		}
 
@@ -101,7 +103,7 @@ public class MonthPagerAdapter extends PagerAdapter {
 					((TextView) view.findViewById(daysOfWeekID[j]))
 							.setText(daysOfWeek[j]);
 				}
-
+				
 				list.add(view);
 				((ViewPager) container).addView(view, i - firstMonth);
 			}

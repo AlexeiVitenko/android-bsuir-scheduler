@@ -35,15 +35,19 @@ public class MonthActivity extends Activity {
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {			
+		super.onConfigurationChanged(newConfig);
+		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {		
+				
 			int currentItem = viewPager.getCurrentItem();
+			
+			Log.i("MonthActivity", "LANDSCAPE " + currentItem);
+			
 			monthPagerAdapter = new MonthPagerAdapter(this);
 			viewPager = new ViewPager(this);
 			viewPager.setAdapter(monthPagerAdapter);
 			viewPager.setCurrentItem(currentItem);
 			setContentView(viewPager);
 		}
-		super.onConfigurationChanged(newConfig);
 	}
 
 	@Override
@@ -55,10 +59,10 @@ public class MonthActivity extends Activity {
 
 	private void init(long time) {
 		prevDay = new GregorianCalendar(Locale.getDefault());
+		prevDay.setTimeInMillis(time);
 		monthPagerAdapter = new MonthPagerAdapter(this);
 		viewPager = new ViewPager(this);
 		viewPager.setAdapter(monthPagerAdapter);
-		prevDay.setTimeInMillis(time);
 		viewPager.setCurrentItem(monthPagerAdapter.getCurrentItem(prevDay
 				.get(GregorianCalendar.MONTH)));
 		setContentView(viewPager);
