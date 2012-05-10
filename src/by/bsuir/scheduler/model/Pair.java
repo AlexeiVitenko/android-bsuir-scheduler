@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import android.util.Log;
+
 /**
  * 
  * @author alexei
@@ -158,9 +160,13 @@ public class Pair{
 					} else {
 						int hours = time.get(Calendar.HOUR_OF_DAY);
 						int minutes = time.get(Calendar.MINUTE);
+						Log.d("minutes", ""+minutes);
+						Log.d("endMinutes", ""+mEndingMinutes);
 						int start = mBeginningHours*60+mBeginningMinutes-1;
 						int end = mEndingHours*60+mEndingMinutes-1;
-						int current = hours*60 + minutes-1;
+						int current = hours*60 + minutes;
+						Log.d("current", ""+current);
+						Log.d("cEnd", ""+end);
 						if (current<start) {
 							return new PairStatus(PAIR_STATUS_CURRENT_DAY_FUTURE);
 						} else {
@@ -174,5 +180,25 @@ public class Pair{
 				}
 			}
 		}
+	}
+	
+	private Pair(int endHour, int endMinute, GregorianCalendar date){
+		mLesson = "Перерыв";
+		mEndingHours = endHour;
+		mEndingMinutes = endMinute;
+		mDate = date;
+	}
+	public static Pair getPreviuosBreak(Pair p){
+		return new Pair(p.mBeginningHours, p.mBeginningMinutes, p.mDate);
+	}
+	
+	public long getEndTimeMillis(){
+		mDate.set(mDate.get(Calendar.YEAR), mDate.get(Calendar.MONTH), mDate.get(Calendar.DAY_OF_MONTH), mEndingHours, mEndingMinutes, 0);
+		return mDate.getTimeInMillis();
+	}
+	
+	public long getStartTimeMillis(){
+		mDate.set(mDate.get(Calendar.YEAR), mDate.get(Calendar.MONTH), mDate.get(Calendar.DAY_OF_MONTH), mBeginningHours, mBeginningMinutes, 0);
+		return mDate.getTimeInMillis();
 	}
 }

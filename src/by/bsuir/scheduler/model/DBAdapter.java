@@ -238,7 +238,7 @@ public class DBAdapter implements Pushable, Closeable{
 	}
 	
 	public boolean isFilling(){
-		Cursor c = mDBHelper.getReadableDatabase().query(DBHelper.SCHEDULE_VIEW_NAME, null, null, null, null, null, null);
+		Cursor c = mDBHelper.getWritableDatabase().query(DBHelper.SCHEDULE_VIEW_NAME, null, null, null, null, null, null);
 		boolean is = c.getCount()>0;
 		c.close();
 		return is;
@@ -276,5 +276,31 @@ public class DBAdapter implements Pushable, Closeable{
 	
 	public int getYear() {
 		return mLastDay.get(GregorianCalendar.YEAR);
+	}
+	
+	public Pair[] getNextPairs() {
+		Pair p0 = null;
+		Pair p1 = null;
+		Day d = getDay((GregorianCalendar)Calendar.getInstance());
+		int i;
+		for (Pair pair : d.getPairs()) {
+			int status = pair.getStatus().status;
+			if (status == Pair.PAIR_STATUS_CURRENT) {
+				p0 = pair;
+			}
+			if (status == Pair.PAIR_STATUS_CURRENT_DAY_FUTURE) {
+				if (p0 == null) {
+					p0 = Pair.getPreviuosBreak(pair);
+					p1 = pair;
+					break;
+				} else {
+					p1 = Pair.getPreviuosBreak(pair);
+					break;
+				}
+			}
+		}
+		
+		//TODO Если не подобрали пару, то тогда надо искать будильники
+		return new Pair[]{p0,p1};
 	}
 }

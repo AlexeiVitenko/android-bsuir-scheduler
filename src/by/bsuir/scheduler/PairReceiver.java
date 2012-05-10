@@ -1,7 +1,13 @@
 package by.bsuir.scheduler;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import by.bsuir.scheduler.activity.SchedulerActivity;
 import by.bsuir.scheduler.model.DBAdapter;
+import by.bsuir.scheduler.model.Day;
+import by.bsuir.scheduler.model.Pair;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -18,10 +24,10 @@ public class PairReceiver extends BroadcastReceiver {
 	 * Сделано для облегчения доступа к базе
 	 */
 	public static final String PAIR_STATUS = "pair_status";
-	private static final int NOTIFICATION_ID = 1927;
+	public static final int NOTIFICATION_ID = 1927;
 	private Context mContext;
 	private DBAdapter mAdapter;
-	
+	private Pair[] mPairs;
 	@Override
 	/**
 	 * Схема такая, AlarmManager кидает бродкаст. Мы его ловим. Отключаем уведомление, весящее в статусбаре (а оно нас отправляет на активити дня)
@@ -29,10 +35,19 @@ public class PairReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		mContext = context;
 		mAdapter = DBAdapter.getInstance(mContext.getApplicationContext());
-		PendingIntent pi = existAlarm(NOTIFICATION_ID);
+		PendingIntent pi = existAlarm(mContext, NOTIFICATION_ID);
 		if (pi!=null) {
 			pi.cancel();
 		}
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		getNextAction();
+		setNextNotification();
+		setNextAlarm();
 	}
 	
 	/**
@@ -40,7 +55,7 @@ public class PairReceiver extends BroadcastReceiver {
 	 * В паре можно добавить метод, который будет возвращать время в миллисекундах начала и конца (клонируем day и выставляем часы и минуты)
 	 */
 	private void getNextAction(){
-		//обращаемся в базу за след событием
+		mPairs = mAdapter.getNextPairs();
 	}
 	
 	/**
@@ -48,15 +63,24 @@ public class PairReceiver extends BroadcastReceiver {
 	 */
 	private void setNextNotification(){
 		NotificationManager nm = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+		Notification notification = new Notification(R.drawable.ic_course, "nextPair", System.currentTimeMillis());
+		notification.flags = Notification.FLAG_NO_CLEAR;
+		notification.defaults = Notification.DEFAULT_ALL;
 		//тут надо заполнить уведомление
 		//Notification.FLAG_NO_CLEAR - использовать его
+		Intent notifyIntent = new Intent(mContext.getApplicationContext(), SchedulerActivity.class);
+		PendingIntent nPendingIntent = PendingIntent.getActivity(mContext.getApplicationContext(), NOTIFICATION_ID, notifyIntent, 0);
+		notification.setLatestEventInfo(mContext.getApplicationContext(), mPairs[0].getLesson(), mPairs[1].getLesson(), nPendingIntent);
+		nm.notify(NOTIFICATION_ID, notification);
 	}
 	
 	/**
 	 * Выставляем следующий аларм в аларм-менеджере. При срабатывании кидает новый бродкаст.
 	 */
 	private void setNextAlarm(){
-		
+		AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+		PendingIntent intent = PendingIntent.getBroadcast(mContext.getApplicationContext(), 0, new Intent(mContext.getApplicationContext(),PairReceiver.class), 0);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, mPairs[0].getEndTimeMillis(), intent);
 	}
 	
 	/**
@@ -64,10 +88,10 @@ public class PairReceiver extends BroadcastReceiver {
 	 * @param id
 	 * @return
 	 */
-	private PendingIntent existAlarm(int id) {
-		Intent intent = new Intent(mContext.getApplicationContext(), SchedulerActivity.class);
+	public static PendingIntent existAlarm(Context context, int id) {
+		Intent intent = new Intent(context.getApplicationContext(), SchedulerActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);
-		PendingIntent test = PendingIntent.getActivity(mContext,NOTIFICATION_ID , intent, PendingIntent.FLAG_NO_CREATE);
+		PendingIntent test = PendingIntent.getActivity(context,NOTIFICATION_ID , intent, PendingIntent.FLAG_NO_CREATE);
 		return test;
 	}
 }

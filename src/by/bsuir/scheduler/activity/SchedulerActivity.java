@@ -4,6 +4,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import by.bsuir.scheduler.DayPagerAdapter;
 import by.bsuir.scheduler.GridCellAdapter;
+import by.bsuir.scheduler.PairReceiver;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.model.DBAdapter;
 import by.bsuir.scheduler.parser.Parser;
@@ -160,6 +162,8 @@ public class SchedulerActivity extends Activity {
 		viewPager = new LimitedViewPager(this);
 		viewPager.setAdapter(dayPagerAdapter);
 		viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
+		if (PairReceiver.existAlarm(getApplicationContext(), PairReceiver.NOTIFICATION_ID)==null)
+			sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
 		setContentView(viewPager);
 	}
 
