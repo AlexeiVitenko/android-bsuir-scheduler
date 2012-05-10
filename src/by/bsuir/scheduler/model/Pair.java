@@ -36,9 +36,9 @@ public class Pair{
 	
 	private int mPairIndex;
 	private int mWeek;
-	private String mLesson;
-	private String mTeacher;
-	private String mRoom;
+	private String mLesson = "";
+	private String mTeacher = "";
+	private String mRoom = "";
 //	private String mStringType;
 	private int mSubGroup;
 	private int mType;
@@ -47,11 +47,11 @@ public class Pair{
 	private int mEndingHours = -1;
 	private int mEndingMinutes = -1;
 	private Day mDay;
-	private String mNote;
+	private String mNote = "";
 	private GregorianCalendar mDate;
 	private DBAdapter mAdapter;
 	private int mScheduleId;
-	protected Pair(Day container, int week, int subGroup, String lesson, int type/*, String sType*/, String room, String teacher, int times[],int index, int schedule){
+	protected Pair(Day container,DBAdapter adapter, int week, int subGroup, String lesson, int type/*, String sType*/, String room, String teacher, int times[],int index, int schedule){
 		mDay = container;
 		mSubGroup = subGroup;
 		mBeginningHours = times[0];
@@ -68,6 +68,9 @@ public class Pair{
 		mNote = "";
 		mPairIndex = index;
 		mScheduleId = schedule;
+		mBeginningTimeS = String.format("%2d:%02d", mBeginningHours,mBeginningMinutes);
+		mEndingTimeS = String.format("%2d:%02d", mEndingHours,mEndingMinutes);
+		mAdapter = adapter;
 	}
 	
 	protected Pair(DBAdapter adapter, GregorianCalendar date, int week, int subGroup, String lesson, int type/*, String sType*/, String room, String teacher, int times[], int index, int schedule){
@@ -81,14 +84,13 @@ public class Pair{
 //		mStringType = sType;
 		mWeek = week;
 		mType = type;
-
 		mLesson = lesson;
 		mTeacher = teacher;
 		mRoom = room;
 		mPairIndex = index;
 		mScheduleId = schedule;
-		
-
+		mBeginningTimeS = String.format("%2d:%02d", mBeginningHours,mBeginningMinutes);
+		mEndingTimeS = String.format("%2d:%02d", mEndingHours,mEndingMinutes);
 		mNote = adapter.getNote(date, schedule);
 	}
 	
@@ -142,7 +144,17 @@ public class Pair{
 	public int getId(){
 		return mScheduleId;
 	}
-	
+	public Calendar getDate(){
+		return mDate;
+	}
+	private String mBeginningTimeS;
+	public String beginningTime(){
+		return mBeginningTimeS;
+	}
+	private String mEndingTimeS;
+	public String endingTimeS(){
+		return mEndingTimeS;
+	}
 	public PairStatus getStatus() {
 		GregorianCalendar time = new GregorianCalendar(Locale.getDefault());
 		time.setTimeInMillis(System.currentTimeMillis());
@@ -182,14 +194,27 @@ public class Pair{
 		}
 	}
 	
-	private Pair(int endHour, int endMinute, GregorianCalendar date){
+	private Pair(int bh, int bm, int endHour, int endMinute, GregorianCalendar date){
 		mLesson = "Перерыв";
 		mEndingHours = endHour;
 		mEndingMinutes = endMinute;
 		mDate = date;
+		mBeginningHours = bh;
+		mBeginningMinutes = bm;
+		if (bh>0) {
+			mBeginningTimeS = String.format("%2d:%02d", mBeginningHours,mBeginningMinutes);
+		}
+		mEndingTimeS = String.format("%2d:%02d", mEndingHours,mEndingMinutes);
 	}
-	public static Pair getPreviuosBreak(Pair p){
-		return new Pair(p.mBeginningHours, p.mBeginningMinutes, p.mDate);
+	public Pair getPreviuosBreak(){
+		int mBH = -1;
+		int mBM = -1;
+		if (mPairIndex>0) {
+			Day current = mAdapter.getDay(mDate);
+			mBH = current.getPair(mPairIndex-1).mEndingHours;
+			mBM = current.getPair(mPairIndex-1).mEndingMinutes;
+		}
+		return new Pair(mBH,mBM,mBeginningHours, mBeginningMinutes, mDate);
 	}
 	
 	public long getEndTimeMillis(){

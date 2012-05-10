@@ -86,7 +86,8 @@ public class Day {
 		data.moveToFirst();
 		int i = 0;
 		do {
-			mPairs.add(new Pair(this, 
+			mPairs.add(new Pair(this,
+					mDbAdapter, 
 					data.getInt(WEEK),
 					data.getInt(SUBGROUP),
 					data.getString(SUBJECT),

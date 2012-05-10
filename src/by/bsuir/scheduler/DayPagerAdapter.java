@@ -191,7 +191,7 @@ public class DayPagerAdapter extends PagerAdapter {
 
 		/******************************************************************/
 
-		final DayListAdapter adapter = new DayListAdapter(mContext, needed,
+		final DayListAdapter adapter = new DayListAdapter(mContext,(GregorianCalendar) needed.clone(),
 				day.getPairs());
 
 		ListView listView = (ListView) view.findViewById(R.id.listView1);

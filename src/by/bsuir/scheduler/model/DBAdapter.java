@@ -278,10 +278,11 @@ public class DBAdapter implements Pushable, Closeable{
 		return mLastDay.get(GregorianCalendar.YEAR);
 	}
 	
-	public Pair[] getNextPairs() {
+	public Pair[] getNextPairs(GregorianCalendar day) {
 		Pair p0 = null;
 		Pair p1 = null;
-		Day d = getDay((GregorianCalendar)Calendar.getInstance());
+		
+		Day d = getDay(day);
 		int i;
 		for (Pair pair : d.getPairs()) {
 			int status = pair.getStatus().status;
@@ -290,16 +291,24 @@ public class DBAdapter implements Pushable, Closeable{
 			}
 			if (status == Pair.PAIR_STATUS_CURRENT_DAY_FUTURE) {
 				if (p0 == null) {
-					p0 = Pair.getPreviuosBreak(pair);
+					p0 = pair.getPreviuosBreak();
 					p1 = pair;
 					break;
 				} else {
-					p1 = Pair.getPreviuosBreak(pair);
+					p1 = pair.getPreviuosBreak();
 					break;
 				}
 			}
 		}
-		
+		if (p0==null) {
+			//TODO вот тут будет осуществляться подстановка будильника.
+			do {
+				day.add(Calendar.DAY_OF_MONTH, 1);
+			} while (!isWorkDay(day));
+			d = getDay(day);
+			p1 = d.getPair(0);
+			p0 = p1.getPreviuosBreak();
+		}
 		//TODO Если не подобрали пару, то тогда надо искать будильники
 		return new Pair[]{p0,p1};
 	}
