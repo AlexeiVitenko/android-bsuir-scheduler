@@ -199,12 +199,12 @@ public class SchedulerActivity extends Activity {
 												getApplicationContext(),
 												"Очевидно, что-то пошло не так :("
 														+ System.getProperty("LINE_SEPARATOR")
-														+ e.getLocalizedMessage(),
+														+ e.getClass(),
 												Toast.LENGTH_LONG).show();
 									}
 								});
 								succesfull = false;
-								if (!mAdapter.isFilling()) {
+								/*if (!mAdapter.isFilling())*/ {
 									finish();
 								}
 							}
@@ -217,6 +217,7 @@ public class SchedulerActivity extends Activity {
 										init(System.currentTimeMillis());
 									}
 								});
+								sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
 								succesfull = true;
 							}
 						});
