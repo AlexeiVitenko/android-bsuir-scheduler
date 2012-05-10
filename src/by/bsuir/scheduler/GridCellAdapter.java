@@ -85,6 +85,7 @@ public class GridCellAdapter extends BaseAdapter implements OnClickListener {
 				&& (mAdapter.dayMatcher(data.getDate()) == DayMatcherConditions.WORK_DAY
 						|| mAdapter.dayMatcher(data.getDate()) == DayMatcherConditions.FIRST_DAY || mAdapter
 						.dayMatcher(data.getDate()) == DayMatcherConditions.LAST_DAY)) {
+//			gridcell.setShadowLayer(8f, 0, 0, Color.BLACK);
 			gridcell.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -95,6 +96,8 @@ public class GridCellAdapter extends BaseAdapter implements OnClickListener {
 					context.finish();
 				}
 			});
+		} else {
+			gridcell.setBackgroundResource(R.layout.gradient_radial_2);
 		}
 
 		return row;

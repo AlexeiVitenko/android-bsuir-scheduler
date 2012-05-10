@@ -39,9 +39,7 @@ public class SchedulerActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		day = new GregorianCalendar(Locale.getDefault());
-		
+
 		mAdapter = DBAdapter.getInstance(getApplicationContext());
 		if (!mAdapter.isFilling()) {
 			startActivityForResult(
@@ -49,12 +47,15 @@ public class SchedulerActivity extends Activity {
 							.getClass().hashCode());
 		}
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
 		if (!mChooseMode) {
 			if (mAdapter.isFilling()) {
+				if (day == null) {
+					day = new GregorianCalendar(Locale.getDefault());
+				}
 				init(day.getTimeInMillis());
 			}
 		} else {
@@ -64,11 +65,14 @@ public class SchedulerActivity extends Activity {
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		Log.d("saving", "save");
-		day = dayPagerAdapter.getCurrentDay();
+		if (day == null) {
+			day = new GregorianCalendar(Locale.getDefault());
+		} else {
+			day = dayPagerAdapter.getCurrentDay();
+		}
 		super.onSaveInstanceState(outState);
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == this.getClass().hashCode()) {
@@ -88,12 +92,13 @@ public class SchedulerActivity extends Activity {
 		} else
 			super.onActivityResult(requestCode, resultCode, data);
 	}
-	
+
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		mChooseMode = true;
-		init(intent.getLongExtra(GridCellAdapter.DAY, System.currentTimeMillis()));
+		init(intent.getLongExtra(GridCellAdapter.DAY,
+				System.currentTimeMillis()));
 	}
 
 	@Override
@@ -110,8 +115,8 @@ public class SchedulerActivity extends Activity {
 		case R.id.menu_item_day:
 			intent = new Intent(this, SchedulerActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			intent.putExtra(MonthActivity.EXTRA_MONTH,
-					dayPagerAdapter.getCurrentDay().getTimeInMillis());
+			intent.putExtra(MonthActivity.EXTRA_MONTH, dayPagerAdapter
+					.getCurrentDay().getTimeInMillis());
 			startActivity(intent);
 			return true;
 
@@ -122,8 +127,8 @@ public class SchedulerActivity extends Activity {
 		case R.id.menu_item_month:
 			if (mAdapter.isFilling()) {
 				intent = new Intent(this, MonthActivity.class);
-				intent.putExtra(MonthActivity.EXTRA_MONTH,
-						dayPagerAdapter.getCurrentDay().getTimeInMillis());
+				intent.putExtra(MonthActivity.EXTRA_MONTH, dayPagerAdapter
+						.getCurrentDay().getTimeInMillis());
 				startActivityForResult(intent, this.getClass().hashCode());
 			}
 			return true;
@@ -145,8 +150,12 @@ public class SchedulerActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	private void init(long time) {
+		if (day == null) {
+			day = new GregorianCalendar(Locale.getDefault());
+		}
+		day.setTimeInMillis(time);
 		dayPagerAdapter = new DayPagerAdapter(this, time);
 		viewPager = new LimitedViewPager(this);
 		viewPager.setAdapter(dayPagerAdapter);
@@ -161,50 +170,60 @@ public class SchedulerActivity extends Activity {
 				.getDefaultSharedPreferences(this);
 		AsyncTask<String, String, Boolean> asc = new AsyncTask<String, String, Boolean>() {
 			private boolean succesfull = false;
+
 			@Override
 			protected Boolean doInBackground(String... params) {
-				
-				DBAdapter.getInstance(getApplicationContext()).refreshSchedule(prefs.getString(getString(R.string.group_number), ""+(-1)
-						), Integer.parseInt(prefs.getString(getString(R.string.preference_sub_group_list),""+ 0)), new ParserListiner() {
-					
-					@Override
-					public void onException(final Exception e) {
-						pd.cancel();
-						//Looper.prepare();
-						runOnUiThread(new Runnable() {
-							
+
+				DBAdapter.getInstance(getApplicationContext()).refreshSchedule(
+						prefs.getString(getString(R.string.group_number), ""
+								+ (-1)),
+						Integer.parseInt(prefs.getString(
+								getString(R.string.preference_sub_group_list),
+								"" + 0)), new ParserListiner() {
+
 							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-								Toast.makeText(getApplicationContext(), "Очевидно, что-то пошло не так :("+System.getProperty("LINE_SEPARATOR")+e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+							public void onException(final Exception e) {
+								pd.cancel();
+								// Looper.prepare();
+								runOnUiThread(new Runnable() {
+
+									@Override
+									public void run() {
+										// TODO Auto-generated method stub
+										Toast.makeText(
+												getApplicationContext(),
+												"Очевидно, что-то пошло не так :("
+														+ System.getProperty("LINE_SEPARATOR")
+														+ e.getLocalizedMessage(),
+												Toast.LENGTH_LONG).show();
+									}
+								});
+								succesfull = false;
+								if (!mAdapter.isFilling()) {
+									finish();
+								}
+							}
+
+							@Override
+							public void onComplete() {
+								pd.cancel();
+								runOnUiThread(new Runnable() {
+									public void run() {
+										init(System.currentTimeMillis());
+									}
+								});
+								succesfull = true;
 							}
 						});
-						succesfull = false;
-						if (!mAdapter.isFilling()) {
-							finish();
-						}
-					}
-					
-					@Override
-					public void onComplete() {
-						pd.cancel();	
-						runOnUiThread(new Runnable() {
-							public void run() {
-								init(System.currentTimeMillis());
-							}
-						});
-						succesfull = true;
-					}
-				});
 				return succesfull;
 			}
-			
+
 			@Override
 			protected void onProgressUpdate(String... values) {
 				pd.setTitle(values[0]);
 				super.onProgressUpdate(values);
 			}
-			
+
 			@Override
 			protected void onPostExecute(Boolean result) {
 				pd.cancel();
@@ -215,8 +234,9 @@ public class SchedulerActivity extends Activity {
 		pd.setCancelable(false);
 		pd.setCanceledOnTouchOutside(false);
 		pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		
+
 		pd.show();
-		//FIXEME всё это в onComplete + возвращаться в тот день, который был текущим 
+		// FIXEME всё это в onComplete + возвращаться в тот день, который был
+		// текущим
 	}
 }

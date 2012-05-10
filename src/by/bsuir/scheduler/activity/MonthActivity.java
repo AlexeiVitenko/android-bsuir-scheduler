@@ -10,8 +10,10 @@ import by.bsuir.scheduler.R;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,27 +22,43 @@ public class MonthActivity extends Activity {
 	public static final int GET_DAY = 1;
 	public static final String EXTRA_MONTH = "month";
 
+	private MonthPagerAdapter monthPagerAdapter;
+	private ViewPager viewPager;
 	private GregorianCalendar prevDay;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		init(getIntent());
+		init(getIntent().getLongExtra(EXTRA_MONTH,
+				new GregorianCalendar(Locale.getDefault()).getTimeInMillis()));
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {			
+			int currentItem = viewPager.getCurrentItem();
+			monthPagerAdapter = new MonthPagerAdapter(this);
+			viewPager = new ViewPager(this);
+			viewPager.setAdapter(monthPagerAdapter);
+			viewPager.setCurrentItem(currentItem);
+			setContentView(viewPager);
+		}
+		super.onConfigurationChanged(newConfig);
 	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		init(intent);
+		init(intent.getLongExtra(EXTRA_MONTH,
+				new GregorianCalendar(Locale.getDefault()).getTimeInMillis()));
 	}
 
-	private void init(Intent intent) {
+	private void init(long time) {
 		prevDay = new GregorianCalendar(Locale.getDefault());
-		MonthPagerAdapter monthPagerAdapter = new MonthPagerAdapter(this);
-		ViewPager viewPager = new ViewPager(this);
+		monthPagerAdapter = new MonthPagerAdapter(this);
+		viewPager = new ViewPager(this);
 		viewPager.setAdapter(monthPagerAdapter);
-		prevDay.setTimeInMillis(intent.getLongExtra(EXTRA_MONTH,
-				new GregorianCalendar(Locale.getDefault()).getTimeInMillis()));
+		prevDay.setTimeInMillis(time);
 		viewPager.setCurrentItem(monthPagerAdapter.getCurrentItem(prevDay
 				.get(GregorianCalendar.MONTH)));
 		setContentView(viewPager);
