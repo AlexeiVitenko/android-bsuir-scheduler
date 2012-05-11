@@ -47,6 +47,8 @@ public class SchedulerActivity extends Activity {
 			startActivityForResult(
 					new Intent(this, ConfiguratorActivity.class), this
 							.getClass().hashCode());
+		}else{
+			sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
 		}
 	}
 

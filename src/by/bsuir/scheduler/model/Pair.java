@@ -64,7 +64,9 @@ public class Pair{
 		mDate = container.getDate();
 		mLesson = lesson;
 		mTeacher = teacher;
-		mRoom = room;
+		if (room!=null) {
+			mRoom = room;			
+		}
 		mNote = "";
 		mPairIndex = index;
 		mScheduleId = schedule;
@@ -86,7 +88,9 @@ public class Pair{
 		mType = type;
 		mLesson = lesson;
 		mTeacher = teacher;
-		mRoom = room;
+		if (room!=null) {
+			mRoom = room;			
+		}
 		mPairIndex = index;
 		mScheduleId = schedule;
 		mBeginningTimeS = String.format("%2d:%02d", mBeginningHours,mBeginningMinutes);
@@ -215,6 +219,17 @@ public class Pair{
 			mBM = current.getPair(mPairIndex-1).mEndingMinutes;
 		}
 		return new Pair(mBH,mBM,mBeginningHours, mBeginningMinutes, mDate);
+	}
+	
+	public Pair getPreviuosBreak(Pair beforeBreak){
+		int mBH = -1;
+		int mBM = -1;
+		if (mPairIndex>0) {
+			Day current = mAdapter.getDay(mDate);
+			mBH = current.getPair(mPairIndex-1).mEndingHours;
+			mBM = current.getPair(mPairIndex-1).mEndingMinutes;
+		}
+		return new Pair(beforeBreak.mEndingHours,beforeBreak.mEndingMinutes,mBeginningHours, mBeginningMinutes, mDate);
 	}
 	
 	public long getEndTimeMillis(){

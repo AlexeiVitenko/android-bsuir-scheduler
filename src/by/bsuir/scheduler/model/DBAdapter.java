@@ -309,6 +309,15 @@ public class DBAdapter implements Pushable, Closeable{
 			p1 = d.getPair(0);
 			p0 = p1.getPreviuosBreak();
 		}
+		if (p1==null) {
+			//TODO вот тут будет осуществляться подстановка будильника.
+			do {
+				day.add(Calendar.DAY_OF_MONTH, 1);
+			} while (!isWorkDay(day));
+			d = getDay(day);
+			Pair p = d.getPair(0);
+			p1 = p.getPreviuosBreak(p0);
+		}
 		return new Pair[]{p0,p1};
 	}
 }

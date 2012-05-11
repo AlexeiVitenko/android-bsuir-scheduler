@@ -97,7 +97,7 @@ public class GridCellAdapter extends BaseAdapter implements OnClickListener {
 				}
 			});
 		} else {
-			gridcell.setBackgroundResource(R.layout.gradient_radial_2);
+			gridcell.setBackgroundResource(R.drawable.gradient_radial_2);
 		}
 
 		return row;
