@@ -45,6 +45,13 @@ public class DBAdapter implements Pushable, Closeable{
 	private GregorianCalendar septFirst;// = new GregorianCalendar(2011, 9, 1);
 	private GregorianCalendar mStartDay;
 	private GregorianCalendar mLastDay;
+	public long getStartTimeMillis(){
+		return mStartDay.getTimeInMillis();
+	}
+	
+	public long getLastDayMillis(){
+		return mLastDay.getTimeInMillis();
+	}
 	private Context mContext;
 	private DBHelper mDBHelper;
 	private String[] daysOfWeek;
@@ -96,7 +103,7 @@ public class DBAdapter implements Pushable, Closeable{
 	}
 	
 	public Pair getPair(GregorianCalendar date)  {
-		Cursor data = mDBHelper.getReadableDatabase().query(DBHelper.SCHEDULE_VIEW_NAME, new String[]{
+		Cursor data = mDBHelper.getWritableDatabase().query(DBHelper.SCHEDULE_VIEW_NAME, new String[]{
 				BaseColumns._ID,
 				DBColumns.DAY,
 				DBColumns.WEEK,
@@ -162,7 +169,7 @@ public class DBAdapter implements Pushable, Closeable{
 
 	
 	public Cursor getDay(int dayOfWeek,int week) {
-		return mDBHelper.getReadableDatabase().query(DBHelper.SCHEDULE_VIEW_NAME, new String[]{
+		return mDBHelper.getWritableDatabase().query(DBHelper.SCHEDULE_VIEW_NAME, new String[]{
 				BaseColumns._ID,
 				DBColumns.DAY,
 				DBColumns.WEEK,
