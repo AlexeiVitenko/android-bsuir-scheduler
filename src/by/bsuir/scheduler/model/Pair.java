@@ -67,7 +67,7 @@ public class Pair{
 		if (room!=null) {
 			mRoom = room;			
 		}
-		mNote = "";
+		mNote = adapter.getNote(mDate, schedule);
 		mPairIndex = index;
 		mScheduleId = schedule;
 		mBeginningTimeS = String.format("%2d:%02d", mBeginningHours,mBeginningMinutes);

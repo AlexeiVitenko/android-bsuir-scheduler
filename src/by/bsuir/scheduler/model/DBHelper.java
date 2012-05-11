@@ -143,7 +143,7 @@ class DBHelper extends SQLiteOpenHelper {
 	private long getItemWithNameValue(String tableName, String columnName, String value){
 		try {
 			long t = System.currentTimeMillis();
-			SQLiteDatabase db = this.getReadableDatabase();
+			SQLiteDatabase db = this.getWritableDatabase();
 			mTotalTime += (System.currentTimeMillis()-t);
 			Log.d("Total time", ""+mTotalTime);
 			Cursor cursor = db.query(
@@ -355,7 +355,7 @@ class DBHelper extends SQLiteOpenHelper {
 	
 	public String getNote(long scheduleId, GregorianCalendar date) {
 		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date.getTime());
-		Cursor cursor = this.getReadableDatabase().query(
+		Cursor cursor = this.getWritableDatabase().query(
 							NOTE_TABLE_NAME,
 							new String[] {
 									BaseColumns._ID,

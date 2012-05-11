@@ -149,7 +149,7 @@ public class DayListAdapter extends BaseAdapter {
 		GregorianCalendar noteTime = new GregorianCalendar(Locale.getDefault());
 		noteTime.setTimeInMillis(currentDay.getTimeInMillis());
 		noteTime.set(GregorianCalendar.HOUR_OF_DAY, lesson.getTime()[0]);
-		Pair tempLesson = adapter.getPair(noteTime);
+		Pair tempLesson = mPairs.get(position);
 		if (tempLesson.getNote().length() > 0) {
 			holder.note.setImageResource(R.drawable.ic_note);
 		}

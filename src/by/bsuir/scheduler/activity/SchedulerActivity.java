@@ -4,20 +4,13 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.view.LimitedViewPager;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,10 +20,10 @@ import by.bsuir.scheduler.GridCellAdapter;
 import by.bsuir.scheduler.PairReceiver;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.model.DBAdapter;
-import by.bsuir.scheduler.parser.Parser;
+import by.bsuir.scheduler.model.DBAdapter.DayMatcherConditions;
 import by.bsuir.scheduler.parser.ParserListiner;
 
-public class SchedulerActivity extends Activity {
+public class SchedulerActivity extends Activity implements OnSemesterParametersChangeListiner{
 	public static final int RESULT_DAY = 2;
 	private DayPagerAdapter dayPagerAdapter;
 	private LimitedViewPager viewPager;
@@ -94,6 +87,16 @@ public class SchedulerActivity extends Activity {
 				break;
 			}
 		} else
+			if (requestCode == SettingsActivity.CALL_CONFIG) {
+				if ((resultCode & SettingsActivity.GROUP_CHANGES) > 0) {
+					mChooseMode = true;
+					parse();
+				}else{
+					if ((resultCode & SettingsActivity.SEMESTER_CHANGES)>0) {
+						init(day.getTimeInMillis());
+					}
+				}
+			}else
 			super.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -101,8 +104,13 @@ public class SchedulerActivity extends Activity {
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		mChooseMode = true;
-		init(intent.getLongExtra(GridCellAdapter.DAY,
-				System.currentTimeMillis()));
+		if (day == null) {
+			init(intent.getLongExtra(GridCellAdapter.DAY,
+					System.currentTimeMillis()));
+		} else {
+			init(intent.getLongExtra(GridCellAdapter.DAY,
+					day.getTimeInMillis()));
+		}
 	}
 
 	@Override
@@ -142,7 +150,7 @@ public class SchedulerActivity extends Activity {
 
 		case R.id.menu_item_preferences:
 			intent = new Intent(this, SettingsActivity.class);
-			startActivity(intent);
+			startActivityForResult(intent,SettingsActivity.CALL_CONFIG);
 			return true;
 
 		case R.id.menu_item_info_details:
@@ -161,7 +169,13 @@ public class SchedulerActivity extends Activity {
 			day = new GregorianCalendar(Locale.getDefault());
 		}
 		day.setTimeInMillis(time);
-		dayPagerAdapter = new DayPagerAdapter(this, time);
+		if (mAdapter.dayMatcher(day)==DayMatcherConditions.OVERFLOW_LEFT) {
+			day.setTimeInMillis(mAdapter.getStartTimeMillis());
+		}
+		if (mAdapter.dayMatcher(day)==DayMatcherConditions.OVERFLOW_RIGTH) {
+			day.setTimeInMillis(mAdapter.getLastDayMillis());
+		}
+		dayPagerAdapter = new DayPagerAdapter(this, day.getTimeInMillis());
 		viewPager = new LimitedViewPager(this);
 		viewPager.setAdapter(dayPagerAdapter);
 		viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
@@ -196,7 +210,6 @@ public class SchedulerActivity extends Activity {
 
 									@Override
 									public void run() {
-										// TODO Auto-generated method stub
 										Toast.makeText(
 												getApplicationContext(),
 												"Очевидно, что-то пошло не так :("
@@ -238,7 +251,7 @@ public class SchedulerActivity extends Activity {
 				super.onPostExecute(result);
 			}
 		};
-		asc.execute(null);
+		asc.execute(new String[]{});
 		pd.setCancelable(false);
 		pd.setCanceledOnTouchOutside(false);
 		pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -246,5 +259,10 @@ public class SchedulerActivity extends Activity {
 		pd.show();
 		// FIXEME всё это в onComplete + возвращаться в тот день, который был
 		// текущим
+	}
+
+	@Override
+	public void onSemesterChanges() {
+		init(day.getTimeInMillis());
 	}
 }
