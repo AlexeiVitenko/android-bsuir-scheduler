@@ -34,7 +34,6 @@
                 android:textSize="8pt" />
         </LinearLayout>
     </RelativeLayout>
-
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -103,16 +102,18 @@
             android:gravity="center_horizontal"
             android:text="ВС" />
     </TableRow>
-
-    <GridView
-        android:id="@+id/calendar"
-        android:layout_width="fill_parent"
-        android:layout_height="265dp"
-        android:background="#616161"
-        android:gravity="center_horizontal"
-        android:horizontalSpacing="-1px"
-        android:numColumns="7"
-        android:verticalSpacing="-1px" >
-    </GridView>
+    
+	    <GridView
+	        android:id="@+id/calendar"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:background="#616161"
+	        android:gravity="center_horizontal"
+	        android:horizontalSpacing="-1px"
+	        android:numColumns="7"
+	        android:verticalSpacing="-1px"
+	        android:scrollbars="vertical"
+	        android:focusableInTouchMode="true" >
+	    </GridView>
 
 </LinearLayout>
