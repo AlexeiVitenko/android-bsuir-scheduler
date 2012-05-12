@@ -129,8 +129,7 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 		case R.id.menu_item_day:
 			intent = new Intent(this, SchedulerActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			intent.putExtra(MonthActivity.EXTRA_MONTH, dayPagerAdapter
-					.getCurrentDay().getTimeInMillis());
+			intent.putExtra(MonthActivity.EXTRA_MONTH, System.currentTimeMillis());
 			startActivity(intent);
 			return true;
 
