@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+import by.bsuir.scheduler.AlarmClockReceiver;
 import by.bsuir.scheduler.DayPagerAdapter;
 import by.bsuir.scheduler.GridCellAdapter;
 import by.bsuir.scheduler.PairReceiver;
@@ -44,6 +45,9 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 		}else{
 			sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
 		}
+		Intent intent = new Intent(getApplicationContext(), AlarmClockReceiver.class);
+		intent.putExtra(AlarmClockReceiver.ALARM_STATUS, AlarmClockReceiver.CHANGE);
+		sendBroadcast(intent);
 	}
 
 	@Override

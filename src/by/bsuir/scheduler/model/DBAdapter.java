@@ -190,6 +190,40 @@ public class DBAdapter implements Pushable, Closeable {
 		data.close();
 		return p;
 	}
+	
+	public Pair getPair(int schedulerID) {
+		Cursor data = mDBHelper.getWritableDatabase().query(
+				DBHelper.SCHEDULE_VIEW_NAME,
+				new String[] { BaseColumns._ID, DBColumns.DAY, DBColumns.WEEK,
+						DBColumns.VIEW_SUBJECT, DBColumns.SUBJECT_TYPE,
+						DBColumns.ROOM, DBColumns.SUBGROUP,
+						DBColumns.VIEW_TEACHER, DBColumns.START_HOUR,
+						DBColumns.START_MINUTES, DBColumns.END_HOUR,
+						DBColumns.END_MINUTES },
+				BaseColumns._ID + " = ?",
+				new String[] { "" + schedulerID }, null, null, null);
+		int ID = data.getColumnIndex(BaseColumns._ID);
+		int DAY = data.getColumnIndex(DBColumns.DAY);
+		int WEEK = data.getColumnIndex(DBColumns.WEEK);
+		int SUBJECT = data.getColumnIndex(DBColumns.VIEW_SUBJECT);
+		int SUBJECT_TYPE = data.getColumnIndex(DBColumns.SUBJECT_TYPE);
+		int ROOM = data.getColumnIndex(DBColumns.ROOM);
+		int SUBGROUP = data.getColumnIndex(DBColumns.SUBGROUP);
+		int TEACHER = data.getColumnIndex(DBColumns.VIEW_TEACHER);
+		int START_HOUR = data.getColumnIndex(DBColumns.START_HOUR);
+		int START_MINUTES = data.getColumnIndex(DBColumns.START_MINUTES);
+		int END_HOUR = data.getColumnIndex(DBColumns.END_HOUR);
+		int END_MINUTES = data.getColumnIndex(DBColumns.END_MINUTES);
+		data.moveToFirst();
+		Pair p = (new Pair(this, null, data.getInt(WEEK),
+				data.getInt(SUBGROUP), data.getString(SUBJECT),
+				data.getInt(SUBJECT_TYPE), data.getString(ROOM),
+				data.getString(TEACHER), new int[] { data.getInt(START_HOUR),
+						data.getInt(START_MINUTES), data.getInt(END_HOUR),
+						data.getInt(END_MINUTES) }, -1, data.getInt(ID)));
+		data.close();
+		return p;
+	}
 
 	public void recalculateSomeThings() {
 		SharedPreferences pref = PreferenceManager
