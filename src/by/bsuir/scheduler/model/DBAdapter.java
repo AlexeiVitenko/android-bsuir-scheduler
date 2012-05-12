@@ -39,8 +39,7 @@ public class DBAdapter implements Pushable, Closeable {
 		return mInstance;
 	}
 
-	// FIXEME доделать нормально
-	private GregorianCalendar septFirst;// = new GregorianCalendar(2011, 9, 1);
+	private GregorianCalendar septFirst;
 	private GregorianCalendar mStartDay;
 	private GregorianCalendar mLastDay;
 
@@ -92,6 +91,12 @@ public class DBAdapter implements Pushable, Closeable {
 		return is;
 	}
 
+	/**
+	 * Высчитывается какая неделя.
+	 * отсчёт идёт от недели, на которой расположено 1-е сентября
+	 * @param day
+	 * @return
+	 */
 	private int getWeekNumber(GregorianCalendar day) {
 		int weeks = 0;
 		if (day.get(Calendar.YEAR) > septFirst.get(Calendar.YEAR)) {
@@ -109,6 +114,7 @@ public class DBAdapter implements Pushable, Closeable {
 		return weeks % 4 + 1;
 	}
 
+	//FIXME эти методы различаются только запросом, поэтому надо бы сделать перегрузку.
 	public Pair getPair(GregorianCalendar date) {
 		Cursor data = mDBHelper.getWritableDatabase().query(
 				DBHelper.SCHEDULE_VIEW_NAME,
@@ -302,11 +308,9 @@ public class DBAdapter implements Pushable, Closeable {
 
 	@Override
 	/**
-	 * Наш адаптер также будет принимать пары от парсера. В этом ему поможет наш метод
+	 * Наш адаптер также будет принимать пары от парсера. В этом ему поможет этот метод
 	 */
-	public void push(Lesson lesson) { // для реализации метода необходимо
-										// наличие get/set у экземпляров класса
-										// Lesson
+	public void push(Lesson lesson) {
 		mDBHelper.addScheduleItem(lesson.getLesson(), lesson.getType(),
 				lesson.getBeginningHours(), lesson.getBeginningMinutes(),
 				lesson.getEndingHours(), lesson.getEndingMinutes(),
@@ -316,7 +320,6 @@ public class DBAdapter implements Pushable, Closeable {
 
 	@Override
 	public void close() throws IOException {
-		// TODO Auto-generated method stub
 		mDBHelper.close();
 	}
 

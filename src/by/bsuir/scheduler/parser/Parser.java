@@ -157,19 +157,19 @@ public class Parser {
 					int ii = 1;
 					Lesson l = new Lesson(day, weeks[k], params[ii++], params[ii++],
 							params[ii++], params[ii++], params[ii++], params[ii++]);					
-					lessons.add(l); //TODO delete this
+					lessons.add(l);
 				} else {
 					if (params[2].equals(""+mSubGroup)||params[2].equals("")) {
 						int ii = 1;
 						Lesson l = new Lesson(day, weeks[k], params[ii++], params[ii++],
 								params[ii++], params[ii++], params[ii++], params[ii++]);					
-						lessons.add(l); //TODO delete this
+						lessons.add(l);
 					}
 				}				
 			}
 		}
 		
-		for (Lesson lesson : lessons) { //TODO and this
+		for (Lesson lesson : lessons) {
 //			System.out.println(lesson);
 			mBridge.push(lesson);
 			counter++;
