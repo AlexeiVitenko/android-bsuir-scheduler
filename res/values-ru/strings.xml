@@ -18,12 +18,14 @@
     <string name="weeks">" недель"</string>
     <string name="group">Группа</string>
     <string name="subgroup">Подгруппа</string>
+    <string name="alarm_clock">Будильник</string>
     <string name="alarm_type">Тип будильника</string>
     <string name="alarm_before_lesson">До пары</string>
     <string name="alarm_time">Время</string>
     <string name="alarm_ringtone">Звук сигнала</string>
     <string name="alarm_volume">Громкость</string>
     <string name="alarm_vibration">Вибросигнал</string>
+    <string name="key_alarm_clock">pref_alarm_clock</string>
     <string name="key_alarm_type">pref_alarm_type</string>
     <string name="key_alarm_before_lesson">pref_alarm_before_lesson</string>
     <string name="key_alarm_time">pref_alarm_time</string>
@@ -42,4 +44,6 @@
 	<string name="day">день</string>
 	<string name="notifications">Уведомления</string>
 	<string name="notifications_enabled_question">Активировать уведомления?</string>
+	<string name="Close">Закрыть</string>
+	<string name="alarm_toast">Следущий будильник:</string>
 </resources>

@@ -98,16 +98,14 @@ public class MonthPagerAdapter extends PagerAdapter {
 				((GridView) view.findViewById(R.id.calendar))
 						.setAdapter(gridCellAdapter);
 
-				int[] daysOfWeekID = { R.id.Mo, R.id.Tu, R.id.We, R.id.Th,
-						R.id.Fr, R.id.Sa, R.id.Su };
+				int[] daysOfWeekID = { R.id.Su, R.id.Mo, R.id.Tu, R.id.We, R.id.Th,
+						R.id.Fr, R.id.Sa };
 				String[] daysOfWeek = context.getResources().getStringArray(
 						R.array.days_of_week_abb);
-				for (int j = 0; j < 6; j++) {
+				for (int j = 0; j < 7; j++) {
 					((TextView) view.findViewById(daysOfWeekID[j]))
-							.setText(daysOfWeek[j+1]);
+							.setText(daysOfWeek[j]);
 				}
-				((TextView) view.findViewById(daysOfWeekID[6]))
-				.setText(daysOfWeek[0]);
 				list.add(view);
 				((ViewPager) container).addView(new View(context), i - firstMonth);
 			}

@@ -116,7 +116,7 @@ public class DBAdapter implements Pushable, Closeable {
 
 	//FIXME эти методы различаются только запросом, поэтому надо бы сделать перегрузку.
 	public Pair getPair(GregorianCalendar date) {
-		return getPairFromCursor(mDBHelper.getWritableDatabase().query(
+		Pair pair = getPairFromCursor(mDBHelper.getWritableDatabase().query(
 				DBHelper.SCHEDULE_VIEW_NAME,
 				new String[] { BaseColumns._ID, DBColumns.DAY, DBColumns.WEEK,
 						DBColumns.VIEW_SUBJECT, DBColumns.SUBJECT_TYPE,
@@ -129,10 +129,12 @@ public class DBAdapter implements Pushable, Closeable {
 				new String[] { "" + date.get(Calendar.DAY_OF_WEEK),
 						"" + date.get(Calendar.HOUR_OF_DAY),
 						"" + getWeekNumber(date) }, null, null, null));
+		pair.setDate(date);
+		return pair;
 	}
 
 	public Pair getPair(GregorianCalendar date, int schedulerID) {
-		return getPairFromCursor(mDBHelper.getWritableDatabase().query(
+		Pair pair = getPairFromCursor(mDBHelper.getWritableDatabase().query(
 				DBHelper.SCHEDULE_VIEW_NAME,
 				new String[] { BaseColumns._ID, DBColumns.DAY, DBColumns.WEEK,
 						DBColumns.VIEW_SUBJECT, DBColumns.SUBJECT_TYPE,
@@ -147,6 +149,8 @@ public class DBAdapter implements Pushable, Closeable {
 						"" + date.get(Calendar.DAY_OF_WEEK),
 						"" + date.get(Calendar.HOUR_OF_DAY),
 						"" + getWeekNumber(date) }, null, null, null));
+		pair.setDate(date);
+		return pair;
 	}
 	
 	public Pair getPair(int schedulerID) {
@@ -176,7 +180,7 @@ public class DBAdapter implements Pushable, Closeable {
 		int END_HOUR = data.getColumnIndex(DBColumns.END_HOUR);
 		int END_MINUTES = data.getColumnIndex(DBColumns.END_MINUTES);
 		data.moveToFirst();
-		Pair p = (new Pair(this, null, data.getInt(WEEK),
+		Pair p = (new Pair(this, new GregorianCalendar(Locale.getDefault()), data.getInt(WEEK),
 				data.getInt(SUBGROUP), data.getString(SUBJECT),
 				data.getInt(SUBJECT_TYPE), data.getString(ROOM),
 				data.getString(TEACHER), new int[] { data.getInt(START_HOUR),

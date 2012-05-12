@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import by.bsuir.scheduler.AlarmClockReceiver;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.model.Day;
 import android.app.Dialog;
@@ -36,6 +37,7 @@ public class AlarmActivity extends PreferenceActivity {
 	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat(
 			"HH:mm");
 	public static final String ALARM_PREF = "alarm_pref";
+	public static final String ALARM_CLOCK = "pref_alarm_clock";
 	public static final String ALARM_TYPE = "pref_alarm_type";
 	public static final String ALARM_LESSON = "pref_alarm_before_lesson";
 	public static final String ALARM_TIME = "pref_alarm_time";
@@ -43,6 +45,7 @@ public class AlarmActivity extends PreferenceActivity {
 	public static final String ALARM_VOLUME = "pref_alarm_volume";
 	public static final String ALARM_VIBRATION = "pref_alarm_vibration";
 
+	private CheckBoxPreference alarmClock;
 	private ListPreference alarmType;
 	private ListPreference alarmBeforeLesson;
 	private Preference alarmTime;
@@ -58,6 +61,7 @@ public class AlarmActivity extends PreferenceActivity {
 		addPreferencesFromResource(R.xml.alarm);
 		sharedPref = getSharedPreferences(ALARM_PREF, MODE_PRIVATE);
 
+		alarmClock = (CheckBoxPreference) findPreference(ALARM_CLOCK);
 		alarmType = (ListPreference) findPreference(ALARM_TYPE);
 		alarmBeforeLesson = (ListPreference) findPreference(ALARM_LESSON);
 		alarmTime = findPreference(ALARM_TIME);
@@ -187,11 +191,16 @@ public class AlarmActivity extends PreferenceActivity {
 	protected void onPause() {
 		super.onPause();
 		Editor editor = sharedPref.edit();
+		editor.putBoolean(ALARM_CLOCK, alarmClock.isChecked());
 		editor.putInt(ALARM_TYPE, Integer.parseInt(alarmType.getValue()));
 		editor.putInt(ALARM_LESSON,
 				Integer.parseInt(alarmBeforeLesson.getValue()));
 		editor.putBoolean(ALARM_VIBRATION, alarmVibration.isChecked());
 		editor.commit();
+
+		Intent intent = new Intent(getApplicationContext(), AlarmClockReceiver.class);
+		intent.putExtra(AlarmClockReceiver.ALARM_STATUS, AlarmClockReceiver.CHANGE);
+		sendBroadcast(intent);
 	}
 
 	public static String getAlarmTimeString(Context context, Day day) {
@@ -204,35 +213,40 @@ public class AlarmActivity extends PreferenceActivity {
 
 	private static GregorianCalendar calculateAlarmTime(Context context, Day day) {
 		GregorianCalendar alarm = new GregorianCalendar(Locale.getDefault());
-		SharedPreferences sharedPref = context.getSharedPreferences(ALARM_PREF,
-				MODE_PRIVATE);
-		alarm.setTimeInMillis(day.getDate().getTimeInMillis());
-		
-		GregorianCalendar temp = new GregorianCalendar(Locale.getDefault());
-		temp.setTimeInMillis(sharedPref.getLong(ALARM_TIME,
-				System.currentTimeMillis()));
-		
-		alarm.set(GregorianCalendar.HOUR_OF_DAY, temp.get(GregorianCalendar.HOUR_OF_DAY));
-		alarm.set(GregorianCalendar.MINUTE, temp.get(GregorianCalendar.MINUTE));
-		alarm.set(GregorianCalendar.SECOND, 0);
-		alarm.set(GregorianCalendar.MILLISECOND, 0);
-		
-		if (sharedPref.getInt(AlarmActivity.ALARM_TYPE, 0) == 1) {
-			int index = sharedPref.getInt(AlarmActivity.ALARM_LESSON, 0);
-			int maxIndex = day.getCount() - 1;
-			if (index > maxIndex) {
-				index = maxIndex;
+		if (day.getCount() > 0) {
+			SharedPreferences sharedPref = context.getSharedPreferences(
+					ALARM_PREF, MODE_PRIVATE);
+			alarm.setTimeInMillis(day.getDate().getTimeInMillis());
+
+			GregorianCalendar temp = new GregorianCalendar(Locale.getDefault());
+			temp.setTimeInMillis(sharedPref.getLong(ALARM_TIME,
+					System.currentTimeMillis()));
+
+			alarm.set(GregorianCalendar.HOUR_OF_DAY,
+					temp.get(GregorianCalendar.HOUR_OF_DAY));
+			alarm.set(GregorianCalendar.MINUTE,
+					temp.get(GregorianCalendar.MINUTE));
+			alarm.set(GregorianCalendar.SECOND, 0);
+			alarm.set(GregorianCalendar.MILLISECOND, 0);
+
+			if (sharedPref.getInt(AlarmActivity.ALARM_TYPE, 0) == 1) {
+				int index = sharedPref.getInt(AlarmActivity.ALARM_LESSON, 0);
+				int maxIndex = day.getCount() - 1;
+				if (index > maxIndex) {
+					index = maxIndex;
+				}
+				int[] temptime = day.getPair(index).getTime();
+				temptime[2] = temptime[0]
+						- alarm.get(GregorianCalendar.HOUR_OF_DAY);
+				temptime[3] = temptime[1] - alarm.get(GregorianCalendar.MINUTE);
+				if (temptime[2] < 0 || (temptime[2] == 0 && temptime[3] < 0)) {
+					temptime[2] = 0;
+					temptime[3] = 0;
+				}
+				alarm.set(GregorianCalendar.HOUR_OF_DAY, temptime[2]);
+				alarm.set(GregorianCalendar.MINUTE, temptime[3]);
 			}
-			int[] temptime = day.getPair(index).getTime();
-			temptime[2] = temptime[0]
-					- alarm.get(GregorianCalendar.HOUR_OF_DAY);
-			temptime[3] = temptime[1] - alarm.get(GregorianCalendar.MINUTE);
-			if (temptime[2] < 0 || (temptime[2] == 0 && temptime[3] < 0)) {
-				temptime[2] = 0;
-				temptime[3] = 0;
-			}
-			alarm.set(GregorianCalendar.HOUR_OF_DAY, temptime[2]);
-			alarm.set(GregorianCalendar.MINUTE, temptime[3]);
+			
 		}
 		return alarm;
 	}

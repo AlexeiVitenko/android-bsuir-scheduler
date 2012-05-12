@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/key_alarm_clock"
+        android:title="@string/alarm_clock" />
     <ListPreference
         android:defaultValue="0"
         android:entries="@array/alarm_types"
@@ -19,7 +23,7 @@
 
     <RingtonePreference
         android:key="@string/key_alarm_ringtone"
-        android:ringtoneType="all"
+        android:ringtoneType="alarm|ringtone"
         android:showDefault="true"
         android:showSilent="true"
         android:title="@string/alarm_ringtone" />
