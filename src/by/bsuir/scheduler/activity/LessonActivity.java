@@ -9,16 +9,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import by.bsuir.scheduler.GridCellAdapter;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.model.DBAdapter;
 import by.bsuir.scheduler.model.Pair;
@@ -42,7 +39,7 @@ public class LessonActivity extends Activity {
 		mTime = new GregorianCalendar(Locale.getDefault());
 		mTime.setTimeInMillis(getIntent().getLongExtra(DAY, -1));
 		mLesson = (mAdapter = DBAdapter.getInstance(getApplicationContext()))
-				.getPair(mTime); // , getIntent().getIntExtra(PAIR, -1));
+				.getPair(mTime, getIntent().getIntExtra(PAIR, -1)); // , getIntent().getIntExtra(PAIR, -1));
 
 		((TextView) findViewById(R.id.day_of_week)).setText(""
 				+ daysOfWeek[mTime.get(GregorianCalendar.DAY_OF_WEEK) - 1]
@@ -93,10 +90,10 @@ public class LessonActivity extends Activity {
 
 		mNoteText = (TextView) findViewById(R.id.lesson_note);
 		mNoteText.setText(mLesson.getNote());
-		mNoteText.setOnLongClickListener(new OnLongClickListener() {
-			public boolean onLongClick(View v) {
+		mNoteText.setOnClickListener(new android.view.View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
 				showDialog(DIALOG);
-				return true;
 			}
 		});
 
