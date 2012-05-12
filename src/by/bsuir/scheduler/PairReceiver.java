@@ -45,13 +45,16 @@ public class PairReceiver extends BroadcastReceiver {
 		SharedPreferences pref = PreferenceManager
 				.getDefaultSharedPreferences(mContext);
 		mAdapter = DBAdapter.getInstance(mContext.getApplicationContext());
-		PendingIntent pi = existAlarm(mContext, NOTIFICATION_ID);
+		PendingIntent pi = existNotification(mContext, NOTIFICATION_ID);
 		if (pi != null) {
 			pi.cancel();
 		}
-		getNextAction();
-		setNextNotification();
-		setNextAlarm();
+		if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(
+				mContext.getString(R.string.notifications_enabled), true)) {
+			getNextAction();
+			setNextNotification();
+			setNextAlarm();
+		}
 		setNextAlarmClock();
 	}
 
@@ -59,8 +62,11 @@ public class PairReceiver extends BroadcastReceiver {
 		GregorianCalendar tempDay = new GregorianCalendar(Locale.getDefault());
 		Day day = mAdapter.getDay(tempDay);
 		tempDay.setTimeInMillis(AlarmActivity.getAlarmTimeLong(mContext, day));
-		
-		Toast.makeText(mContext, "AlarmClock " + AlarmActivity.getAlarmTimeString(mContext, day), Toast.LENGTH_SHORT).show();
+
+		Toast.makeText(
+				mContext,
+				"AlarmClock " + AlarmActivity.getAlarmTimeString(mContext, day),
+				Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -99,20 +105,27 @@ public class PairReceiver extends BroadcastReceiver {
 		Log.d("p0", mPairs[0].getLesson());
 		Log.d("p1null", "" + (mPairs[1] == null));
 		Log.d("p1", mPairs[1].getLesson());
-		String current = mPairs[0].getLesson() + " до " + mPairs[0].endingTimeS() + " "
-				+ mPairs[0].getRoom();
+		String current = mPairs[0].getLesson() + " до "
+				+ mPairs[0].endingTimeS() + " " + mPairs[0].getRoom();
 		Calendar d = Calendar.getInstance();
-		if (mPairs[0].getDate().get(Calendar.DAY_OF_YEAR)>d.get(Calendar.DAY_OF_YEAR)) {
-			current += " "+mContext.getResources().getStringArray(R.array.days_of_week_abb)[mPairs[0].getDate().get(Calendar.DAY_OF_WEEK)-1];
+		if (mPairs[0].getDate().get(Calendar.DAY_OF_YEAR) > d
+				.get(Calendar.DAY_OF_YEAR)) {
+			current += " "
+					+ mContext.getResources().getStringArray(
+							R.array.days_of_week_abb)[mPairs[0].getDate().get(
+							Calendar.DAY_OF_WEEK) - 1];
 		}
-		String next = mPairs[1].getLesson() + " c " + mPairs[1].beginningTime() + " "
-				+ mPairs[1].getRoom();
-		if (mPairs[1].getDate().get(Calendar.DAY_OF_YEAR)>d.get(Calendar.DAY_OF_YEAR)) {
-			next += " "+mContext.getResources().getStringArray(R.array.days_of_week_abb)[mPairs[1].getDate().get(Calendar.DAY_OF_WEEK)-1];
+		String next = mPairs[1].getLesson() + " c " + mPairs[1].beginningTime()
+				+ " " + mPairs[1].getRoom();
+		if (mPairs[1].getDate().get(Calendar.DAY_OF_YEAR) > d
+				.get(Calendar.DAY_OF_YEAR)) {
+			next += " "
+					+ mContext.getResources().getStringArray(
+							R.array.days_of_week_abb)[mPairs[1].getDate().get(
+							Calendar.DAY_OF_WEEK) - 1];
 		}
 		notification.setLatestEventInfo(mContext.getApplicationContext(),
-				current,
-				next, nPendingIntent);
+				current, next, nPendingIntent);
 		nm.notify(NOTIFICATION_ID, notification);
 	}
 
@@ -124,9 +137,10 @@ public class PairReceiver extends BroadcastReceiver {
 		AlarmManager alarmManager = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
 		PendingIntent intent = PendingIntent
-				.getBroadcast(mContext.getApplicationContext(), 0, new Intent(
-						mContext.getApplicationContext(), PairReceiver.class),
-						0);
+				.getBroadcast(mContext.getApplicationContext(),
+						NOTIFICATION_ID,
+						new Intent(mContext.getApplicationContext(),
+								PairReceiver.class), 0);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, mPairs[0].getEndTimeMillis(),
 				intent);
 	}
@@ -137,12 +151,33 @@ public class PairReceiver extends BroadcastReceiver {
 	 * @param id
 	 * @return
 	 */
-	public static PendingIntent existAlarm(Context context, int id) {
+	public static PendingIntent existNotification(Context context, int id) {
 		Intent intent = new Intent(context.getApplicationContext(),
 				SchedulerActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);
 		PendingIntent test = PendingIntent.getActivity(context, id, intent,
 				PendingIntent.FLAG_NO_CREATE);
 		return test;
+	}
+
+	public static PendingIntent existAlarm(Context context, int id) {
+		return PendingIntent
+				.getBroadcast(context.getApplicationContext(), id, new Intent(
+						context.getApplicationContext(), PairReceiver.class), 0);
+	}
+
+	public static void clearIntents(Context context) {
+		PendingIntent pi = existNotification(context.getApplicationContext(),
+				NOTIFICATION_ID);
+		if (pi != null) {
+			pi.cancel();
+		}
+		pi = existAlarm(context, NOTIFICATION_ID);
+		if (pi != null) {
+			pi.cancel();
+		}
+		NotificationManager nm = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		nm.cancel(NOTIFICATION_ID);
 	}
 }
