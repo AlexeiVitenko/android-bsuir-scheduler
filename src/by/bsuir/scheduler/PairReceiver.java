@@ -99,11 +99,20 @@ public class PairReceiver extends BroadcastReceiver {
 		Log.d("p0", mPairs[0].getLesson());
 		Log.d("p1null", "" + (mPairs[1] == null));
 		Log.d("p1", mPairs[1].getLesson());
+		String current = mPairs[0].getLesson() + " до " + mPairs[0].endingTimeS() + " "
+				+ mPairs[0].getRoom();
+		Calendar d = Calendar.getInstance();
+		if (mPairs[0].getDate().get(Calendar.DAY_OF_YEAR)>d.get(Calendar.DAY_OF_YEAR)) {
+			current += " +"+(mPairs[0].getDate().get(Calendar.DAY_OF_YEAR)-d.get(Calendar.DAY_OF_YEAR))+" "+mContext.getString(R.string.day);
+		}
+		String next = mPairs[1].getLesson() + " c " + mPairs[1].beginningTime() + " "
+				+ mPairs[1].getRoom();
+		if (mPairs[1].getDate().get(Calendar.DAY_OF_YEAR)>d.get(Calendar.DAY_OF_YEAR)) {
+			next += " +"+(mPairs[1].getDate().get(Calendar.DAY_OF_YEAR)-d.get(Calendar.DAY_OF_YEAR))+" "+mContext.getString(R.string.day);
+		}
 		notification.setLatestEventInfo(mContext.getApplicationContext(),
-				mPairs[0].getLesson() + " до " + mPairs[0].endingTimeS() + " "
-						+ mPairs[0].getRoom(),
-				mPairs[1].getLesson() + " c " + mPairs[1].beginningTime() + " "
-						+ mPairs[1].getRoom(), nPendingIntent);
+				current,
+				next, nPendingIntent);
 		nm.notify(NOTIFICATION_ID, notification);
 	}
 

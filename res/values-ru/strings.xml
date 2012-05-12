@@ -39,4 +39,5 @@
 	<string name="room">ауд.: </string>
 	<string name="teacher">Преподаватель:</string>
 	<string name="time">Время:</string>
+	<string name="day">день</string>
 </resources>
