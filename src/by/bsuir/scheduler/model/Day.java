@@ -61,10 +61,10 @@ public class Day {
 		mDbAdapter.changeNote(mDate,scheduleId, note);
 	}
 	
-	protected GregorianCalendar getDate(){
+	public GregorianCalendar getDate(){
 		GregorianCalendar date = new GregorianCalendar(Locale.getDefault());
 		date.setTimeInMillis(mDate.getTimeInMillis());
-		return mDate;
+		return date;
 	}
 	
 	private void generatePairs(Cursor data){

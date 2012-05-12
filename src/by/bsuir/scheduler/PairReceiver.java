@@ -49,6 +49,9 @@ public class PairReceiver extends BroadcastReceiver {
 		if (pi != null) {
 			pi.cancel();
 		}
+		
+		Log.i("PairReceiver", "onReceive");
+		
 		getNextAction();
 		setNextNotification();
 		setNextAlarm();
