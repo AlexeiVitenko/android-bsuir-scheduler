@@ -214,7 +214,7 @@ public class DayPagerAdapter extends PagerAdapter {
 			}
 		});
 		TextView alarm = (TextView) view.findViewById(R.id.alarm_time);
-		alarm.setText(AlarmActivity.getAlarmTime(mContext, day));
+		alarm.setText(AlarmActivity.getAlarmTimeString(mContext, day));
 
 		((LimitedViewPager) container).addView(view, position % 3);
 		return view;

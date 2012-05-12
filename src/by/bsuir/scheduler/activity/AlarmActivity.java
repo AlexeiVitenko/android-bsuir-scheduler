@@ -194,7 +194,15 @@ public class AlarmActivity extends PreferenceActivity {
 		editor.commit();
 	}
 
-	public static String getAlarmTime(Context context, Day day) {
+	public static String getAlarmTimeString(Context context, Day day) {
+		return formatTime(calculateAlarmTime(context, day).getTimeInMillis());
+	}
+	
+	public static long getAlarmTimeLong(Context context, Day day) {
+		return calculateAlarmTime(context, day).getTimeInMillis();
+	}
+	
+	private static GregorianCalendar calculateAlarmTime(Context context, Day day) {
 		GregorianCalendar alarm = new GregorianCalendar(Locale.getDefault());
 		SharedPreferences sharedPref = context.getSharedPreferences(ALARM_PREF,
 				MODE_PRIVATE);
@@ -213,7 +221,7 @@ public class AlarmActivity extends PreferenceActivity {
 					(temptime[0] - temptime[2]));
 			alarm.set(GregorianCalendar.MINUTE, (temptime[1] - temptime[3]));
 		}
-		return formatTime(alarm.getTimeInMillis());
+		return alarm;
 	}
 
 	private void updateRingtonePref(RingtonePreference preference,
