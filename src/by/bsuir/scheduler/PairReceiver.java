@@ -55,7 +55,7 @@ public class PairReceiver extends BroadcastReceiver {
 			setNextNotification();
 			setNextAlarm();
 		}
-		setNextAlarmClock();
+		//setNextAlarmClock();
 	}
 
 	private void setNextAlarmClock() {
