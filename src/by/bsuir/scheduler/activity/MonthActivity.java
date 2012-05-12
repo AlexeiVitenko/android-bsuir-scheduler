@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+//FIXME посмотреть что происходит, если меняется день начала. Смотреть справа (т.е. последний месяц)
 public class MonthActivity extends Activity {
 	public static final int GET_DAY = 1;
 	public static final String EXTRA_MONTH = "month";
