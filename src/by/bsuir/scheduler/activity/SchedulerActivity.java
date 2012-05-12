@@ -23,6 +23,7 @@ import by.bsuir.scheduler.model.DBAdapter;
 import by.bsuir.scheduler.model.DBAdapter.DayMatcherConditions;
 import by.bsuir.scheduler.parser.ParserListiner;
 
+//FIXME Сделать передачу текущего дня через интент. Так как не работает твоя кнопочка месяц и не работает вызов текущего дня из статусбара.
 public class SchedulerActivity extends Activity implements OnSemesterParametersChangeListiner{
 	public static final int RESULT_DAY = 2;
 	private DayPagerAdapter dayPagerAdapter;
@@ -104,6 +105,7 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		mChooseMode = true;
+		//FIXME вот меня этот кусок бесит очень сильно.
 		if (day == null) {
 			init(intent.getLongExtra(GridCellAdapter.DAY,
 					System.currentTimeMillis()));

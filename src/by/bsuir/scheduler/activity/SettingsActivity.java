@@ -170,12 +170,6 @@ public class SettingsActivity extends PreferenceActivity {
 		super.onPause();
 	}
 	
-	/*
-	 * @Override protected void onPrepareDialog(int id, Dialog dialog) { switch
-	 * (id) { case DATE_DIALOG: ((DatePickerDialog)dialog).set break; default:
-	 * super.onPrepareDialog(id, dialog); break; } }
-	 */
-
 	public static class DefaultValuesSettings {
 		
 		public static int getWeeks() {
