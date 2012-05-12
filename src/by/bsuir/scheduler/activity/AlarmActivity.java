@@ -197,17 +197,26 @@ public class AlarmActivity extends PreferenceActivity {
 	public static String getAlarmTimeString(Context context, Day day) {
 		return formatTime(calculateAlarmTime(context, day).getTimeInMillis());
 	}
-	
+
 	public static long getAlarmTimeLong(Context context, Day day) {
 		return calculateAlarmTime(context, day).getTimeInMillis();
 	}
-	
+
 	private static GregorianCalendar calculateAlarmTime(Context context, Day day) {
 		GregorianCalendar alarm = new GregorianCalendar(Locale.getDefault());
 		SharedPreferences sharedPref = context.getSharedPreferences(ALARM_PREF,
 				MODE_PRIVATE);
-		alarm.setTimeInMillis(sharedPref.getLong(ALARM_TIME,
+		alarm.setTimeInMillis(day.getDate().getTimeInMillis());
+		
+		GregorianCalendar temp = new GregorianCalendar(Locale.getDefault());
+		temp.setTimeInMillis(sharedPref.getLong(ALARM_TIME,
 				System.currentTimeMillis()));
+		
+		alarm.set(GregorianCalendar.HOUR_OF_DAY, temp.get(GregorianCalendar.HOUR_OF_DAY));
+		alarm.set(GregorianCalendar.MINUTE, temp.get(GregorianCalendar.MINUTE));
+		alarm.set(GregorianCalendar.SECOND, 0);
+		alarm.set(GregorianCalendar.MILLISECOND, 0);
+		
 		if (sharedPref.getInt(AlarmActivity.ALARM_TYPE, 0) == 1) {
 			int index = sharedPref.getInt(AlarmActivity.ALARM_LESSON, 0);
 			int maxIndex = day.getCount() - 1;
@@ -215,11 +224,15 @@ public class AlarmActivity extends PreferenceActivity {
 				index = maxIndex;
 			}
 			int[] temptime = day.getPair(index).getTime();
-			temptime[2] = alarm.get(GregorianCalendar.HOUR_OF_DAY);
-			temptime[3] = alarm.get(GregorianCalendar.MINUTE);
-			alarm.set(GregorianCalendar.HOUR_OF_DAY,
-					(temptime[0] - temptime[2]));
-			alarm.set(GregorianCalendar.MINUTE, (temptime[1] - temptime[3]));
+			temptime[2] = temptime[0]
+					- alarm.get(GregorianCalendar.HOUR_OF_DAY);
+			temptime[3] = temptime[1] - alarm.get(GregorianCalendar.MINUTE);
+			if (temptime[2] < 0 || (temptime[2] == 0 && temptime[3] < 0)) {
+				temptime[2] = 0;
+				temptime[3] = 0;
+			}
+			alarm.set(GregorianCalendar.HOUR_OF_DAY, temptime[2]);
+			alarm.set(GregorianCalendar.MINUTE, temptime[3]);
 		}
 		return alarm;
 	}
