@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import by.bsuir.scheduler.PairReceiver;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.model.DBAdapter;
 import android.app.DatePickerDialog;
@@ -15,6 +16,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -37,10 +39,13 @@ public class SettingsActivity extends PreferenceActivity {
 	private Preference mStartDate;
 	private EditTextPreference mGroupNumber;
 	private ListPreference mSubGroup;
+	private CheckBoxPreference mNEnabled;
 	private SharedPreferences mPref;
 	private DBAdapter mAdapter;
 	private boolean mIsChange = false;
 	private boolean mGroupChanges = false;
+	private boolean mNEnableStart;
+	private boolean mNEnableEnd;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -114,6 +119,8 @@ public class SettingsActivity extends PreferenceActivity {
 						return true;
 					}
 				});
+		mNEnabled = (CheckBoxPreference)findPreference(getString(R.string.notifications_enabled));
+		mNEnableStart = mPref.getBoolean(getString(R.string.notifications_enabled), true);
 	}
 
 	@Override
@@ -161,6 +168,12 @@ public class SettingsActivity extends PreferenceActivity {
 			result |= GROUP_CHANGES;
 		}
 		setResult(result);
+		if (mNEnableStart && !mPref.getBoolean(getString(R.string.notifications_enabled), true)) {
+			PairReceiver.clearIntents(getApplicationContext());
+		}else
+			if (!mNEnableStart && mPref.getBoolean(getString(R.string.notifications_enabled), true)) {
+				sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
+			}
 		super.onBackPressed();
 	}
 	

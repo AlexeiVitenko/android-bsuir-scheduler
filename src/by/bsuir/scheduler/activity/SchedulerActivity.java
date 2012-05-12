@@ -180,7 +180,7 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 		viewPager = new LimitedViewPager(this);
 		viewPager.setAdapter(dayPagerAdapter);
 		viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
-		if (PairReceiver.existAlarm(getApplicationContext(), PairReceiver.NOTIFICATION_ID)==null)
+		if (PairReceiver.existNotification(getApplicationContext(), PairReceiver.NOTIFICATION_ID)==null)
 			sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
 		setContentView(viewPager);
 	}

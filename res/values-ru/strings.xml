@@ -40,4 +40,6 @@
 	<string name="teacher">Преподаватель:</string>
 	<string name="time">Время:</string>
 	<string name="day">день</string>
+	<string name="notifications">Уведомления</string>
+	<string name="notifications_enabled_question">Активировать уведомления?</string>
 </resources>
