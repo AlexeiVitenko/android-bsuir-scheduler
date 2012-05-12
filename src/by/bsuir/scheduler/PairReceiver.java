@@ -103,12 +103,12 @@ public class PairReceiver extends BroadcastReceiver {
 				+ mPairs[0].getRoom();
 		Calendar d = Calendar.getInstance();
 		if (mPairs[0].getDate().get(Calendar.DAY_OF_YEAR)>d.get(Calendar.DAY_OF_YEAR)) {
-			current += " +"+(mPairs[0].getDate().get(Calendar.DAY_OF_YEAR)-d.get(Calendar.DAY_OF_YEAR))+" "+mContext.getString(R.string.day);
+			current += " "+mContext.getResources().getStringArray(R.array.days_of_week_abb)[mPairs[0].getDate().get(Calendar.DAY_OF_WEEK)-1];
 		}
 		String next = mPairs[1].getLesson() + " c " + mPairs[1].beginningTime() + " "
 				+ mPairs[1].getRoom();
 		if (mPairs[1].getDate().get(Calendar.DAY_OF_YEAR)>d.get(Calendar.DAY_OF_YEAR)) {
-			next += " +"+(mPairs[1].getDate().get(Calendar.DAY_OF_YEAR)-d.get(Calendar.DAY_OF_YEAR))+" "+mContext.getString(R.string.day);
+			next += " "+mContext.getResources().getStringArray(R.array.days_of_week_abb)[mPairs[1].getDate().get(Calendar.DAY_OF_WEEK)-1];
 		}
 		notification.setLatestEventInfo(mContext.getApplicationContext(),
 				current,

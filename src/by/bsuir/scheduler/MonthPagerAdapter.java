@@ -102,11 +102,12 @@ public class MonthPagerAdapter extends PagerAdapter {
 						R.id.Fr, R.id.Sa, R.id.Su };
 				String[] daysOfWeek = context.getResources().getStringArray(
 						R.array.days_of_week_abb);
-				for (int j = 0; j < 7; j++) {
+				for (int j = 1; j < 7; j++) {
 					((TextView) view.findViewById(daysOfWeekID[j]))
-							.setText(daysOfWeek[j]);
+							.setText(daysOfWeek[j-1]);
 				}
-				
+				((TextView) view.findViewById(daysOfWeekID[6]))
+				.setText(daysOfWeek[0]);
 				list.add(view);
 				((ViewPager) container).addView(new View(context), i - firstMonth);
 			}

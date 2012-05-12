@@ -30,4 +30,8 @@
             android:defaultValue="0"
             />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="">
+        
+    </PreferenceCategory>
 </PreferenceScreen>

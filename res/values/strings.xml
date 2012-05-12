@@ -18,6 +18,8 @@
     <string name="semester_length_weeks">semesterlengthweeks</string>
     <string name="semester_start_day">semester_start_day</string>
     <string name="semester_start">First day</string>
+    <string name="notifications_enabled">notifications_enabled</string>
+    <string name="notifications">Notifications</string>
     <string name="group_number">group_number</string>
     <string name="sub_group_number">sub_group_number</string>
     <string name="group">Group</string>

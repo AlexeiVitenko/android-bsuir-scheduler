@@ -198,8 +198,8 @@ public class Pair{
 		}
 	}
 	
-	private Pair(int bh, int bm, int endHour, int endMinute, GregorianCalendar date){
-		mLesson = "Перерыв";
+	private Pair(String name, int bh, int bm, int endHour, int endMinute, GregorianCalendar date){
+		mLesson = name;
 		mEndingHours = endHour;
 		mEndingMinutes = endMinute;
 		mDate = date;
@@ -210,7 +210,7 @@ public class Pair{
 		}
 		mEndingTimeS = String.format("%2d:%02d", mEndingHours,mEndingMinutes);
 	}
-	public Pair getPreviuosBreak(){
+	protected Pair getPreviuosBreak(){
 		int mBH = -1;
 		int mBM = -1;
 		if (mPairIndex>0) {
@@ -218,10 +218,10 @@ public class Pair{
 			mBH = current.getPair(mPairIndex-1).mEndingHours;
 			mBM = current.getPair(mPairIndex-1).mEndingMinutes;
 		}
-		return new Pair(mBH,mBM,mBeginningHours, mBeginningMinutes, mDate);
+		return new Pair("Перерыв",mBH,mBM,mBeginningHours, mBeginningMinutes, mDate);
 	}
 	
-	public Pair getPreviuosBreak(Pair beforeBreak){
+	protected Pair getPreviuosBreak(Pair beforeBreak){
 		int mBH = -1;
 		int mBM = -1;
 		if (mPairIndex>0) {
@@ -229,7 +229,7 @@ public class Pair{
 			mBH = current.getPair(mPairIndex-1).mEndingHours;
 			mBM = current.getPair(mPairIndex-1).mEndingMinutes;
 		}
-		return new Pair(beforeBreak.mEndingHours,beforeBreak.mEndingMinutes,mBeginningHours, mBeginningMinutes, mDate);
+		return new Pair("Свободное время",beforeBreak.mEndingHours,beforeBreak.mEndingMinutes,mBeginningHours, mBeginningMinutes, mDate);
 	}
 	
 	public long getEndTimeMillis(){
