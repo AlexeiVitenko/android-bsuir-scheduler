@@ -66,7 +66,7 @@ public class SettingsActivity extends PreferenceActivity {
 							Object newValue) {
 						mSemesterLength.setSummary("" + (String) newValue
 								+ getString(R.string.weeks));
-						mAdapter.recalculateSomeThings();
+//						mAdapter.recalculateSomeThings();
 						mIsChange = true;
 						return true;
 					}
@@ -138,7 +138,7 @@ public class SettingsActivity extends PreferenceActivity {
 									getString(R.string.semester_start_day),
 									gcc.getTimeInMillis());
 							edit.commit();
-							mAdapter.recalculateSomeThings();
+//							mAdapter.recalculateSomeThings();
 							mIsChange = true;
 						}
 					}, gc.get(GregorianCalendar.YEAR),
@@ -162,6 +162,12 @@ public class SettingsActivity extends PreferenceActivity {
 		}
 		setResult(result);
 		super.onBackPressed();
+	}
+	
+	@Override
+	protected void onPause() {
+		mAdapter.recalculateSomeThings();
+		super.onPause();
 	}
 	
 	/*

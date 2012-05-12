@@ -144,8 +144,8 @@ public class DayListAdapter extends BaseAdapter {
 			holder.subgroup.setText("");
 		}
 
-		DBAdapter adapter = DBAdapter.getInstance(inflater.getContext()
-				.getApplicationContext());
+//		DBAdapter adapter = DBAdapter.getInstance(inflater.getContext()
+//				.getApplicationContext());
 		GregorianCalendar noteTime = new GregorianCalendar(Locale.getDefault());
 		noteTime.setTimeInMillis(currentDay.getTimeInMillis());
 		noteTime.set(GregorianCalendar.HOUR_OF_DAY, lesson.getTime()[0]);

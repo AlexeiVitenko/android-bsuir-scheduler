@@ -30,6 +30,9 @@ public class MonthPagerAdapter extends PagerAdapter {
 
 	public MonthPagerAdapter(Activity context) {
 		DBAdapter dbAdapter = DBAdapter.getInstance(context.getApplicationContext());
+		
+		Log.i("MonthPagerAdapter", "firstMonth = " + dbAdapter.getFirstMonth() + "lastMonth = " + dbAdapter.getLastMonth());
+		
 		firstMonth = dbAdapter.getFirstMonth();
 		lastMonth = dbAdapter.getLastMonth();
 		year = dbAdapter.getYear();

@@ -36,12 +36,8 @@ public class MonthActivity extends Activity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {		
-				
+		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			int currentItem = viewPager.getCurrentItem();
-			
-			Log.i("MonthActivity", "LANDSCAPE " + currentItem);
-			
 			monthPagerAdapter = new MonthPagerAdapter(this);
 			viewPager = new ViewPager(this);
 			viewPager.setAdapter(monthPagerAdapter);
@@ -55,6 +51,25 @@ public class MonthActivity extends Activity {
 		super.onNewIntent(intent);
 		init(intent.getLongExtra(EXTRA_MONTH,
 				new GregorianCalendar(Locale.getDefault()).getTimeInMillis()));
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == SettingsActivity.CALL_CONFIG) {
+			if ((resultCode & SettingsActivity.SEMESTER_CHANGES) > 0) {
+				
+				Log.i("MonthActivity", "SEMESTER_CHANGES");
+				
+				monthPagerAdapter = new MonthPagerAdapter(this);
+				viewPager = new ViewPager(this);
+				viewPager.setAdapter(monthPagerAdapter);
+				viewPager.setCurrentItem(monthPagerAdapter.getCurrentItem(prevDay
+						.get(GregorianCalendar.MONTH)));
+				setContentView(viewPager);
+			}
+		} else
+			super.onActivityResult(requestCode, resultCode, data);
+
 	}
 
 	private void init(long time) {
@@ -101,7 +116,7 @@ public class MonthActivity extends Activity {
 
 		case R.id.menu_item_preferences:
 			intent = new Intent(this, SettingsActivity.class);
-			startActivity(intent);
+			startActivityForResult(intent,SettingsActivity.CALL_CONFIG);
 			return true;
 
 		case R.id.menu_item_info_details:
