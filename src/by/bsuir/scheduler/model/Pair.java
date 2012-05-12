@@ -151,6 +151,12 @@ public class Pair{
 	public Calendar getDate(){
 		return mDate;
 	}
+	public void setDate(GregorianCalendar date){
+		if (mDate == null) {
+			mDate = new GregorianCalendar(Locale.getDefault());
+		}
+		mDate.setTimeInMillis(date.getTimeInMillis());
+	}
 	private String mBeginningTimeS;
 	public String beginningTime(){
 		return mBeginningTimeS;
