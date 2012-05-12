@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Scheduler</string>
+    <string name="menu_item_day">День</string>
+    <string name="menu_item_week">Неделя</string>
+    <string name="menu_item_month">Месяц</string>
+    <string name="menu_item_refresh">Обновить</string>
+    <string name="menu_item_preferences">Настройки</string>
+    <string name="menu_item_info_details">О Scheduler</string>
+    <string name="note">Заметка</string>
+    <string name="dialog_save">Сохранить</string>
+    <string name="dialog_clear">Очистить</string>
+    <string name="dialog_cancel">Отмена</string>
+    <string name="semester">Семестр</string>
+    <string name="semester_length">Длина семестра</string>
+    <string name="semester_start">Начало семестра</string>
+    <string name="weeks">" недель"</string>
+    <string name="group">Группа</string>
+    <string name="subgroup">Подгруппа</string>
+    <string name="alarm_type">Тип будильника</string>
+    <string name="alarm_before_lesson">До пары</string>
+    <string name="alarm_time">Время</string>
+    <string name="alarm_ringtone">Звук сигнала</string>
+    <string name="alarm_volume">Громкость</string>
+    <string name="alarm_vibration">Вибросигнал</string>
+    <string name="key_alarm_type">pref_alarm_type</string>
+    <string name="key_alarm_before_lesson">pref_alarm_before_lesson</string>
+    <string name="key_alarm_time">pref_alarm_time</string>
+    <string name="key_alarm_ringtone">pref_alarm_ringtone</string>
+    <string name="key_alarm_volume">pref_alarm_volume</string>
+    <string name="key_alarm_vibration">pref_alarm_vibration</string>
+	<string name="welcome">Благодарим Вас за выбор нашего продукта!\nДля того, чтобы начать полноценное использование, необходимо ввести первоночальные настройки:</string>
+	<string name="back">Назад</string>
+	<string name="next">Далее</string>
+	<string name="sorry">Эти данные ни откуда автоматически взять нельзя.\nПоэтому вводите.</string>
+	<string name="start_work">Для начала работы нажмите "Далее".</string>
+	<string name="start_parsing">Загрузка расписания</string>
+	<string name="room">ауд.: </string>
+	<string name="teacher">Преподаватель:</string>
+	<string name="time">Время:</string>
+	<string name="day">день</string>
+</resources>
