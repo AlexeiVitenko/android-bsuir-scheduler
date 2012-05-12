@@ -9,7 +9,6 @@ import android.preference.PreferenceActivity;
 public class InfoActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.about);
 		
@@ -19,7 +18,6 @@ public class InfoActivity extends PreferenceActivity {
 			pref = findPreference("vCode");
 			pref.setSummary(""+getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode);
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
