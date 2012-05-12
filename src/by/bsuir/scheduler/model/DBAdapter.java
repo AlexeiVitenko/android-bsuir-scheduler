@@ -116,7 +116,7 @@ public class DBAdapter implements Pushable, Closeable {
 
 	//FIXME эти методы различаются только запросом, поэтому надо бы сделать перегрузку.
 	public Pair getPair(GregorianCalendar date) {
-		Cursor data = mDBHelper.getWritableDatabase().query(
+		return getPairFromCursor(mDBHelper.getWritableDatabase().query(
 				DBHelper.SCHEDULE_VIEW_NAME,
 				new String[] { BaseColumns._ID, DBColumns.DAY, DBColumns.WEEK,
 						DBColumns.VIEW_SUBJECT, DBColumns.SUBJECT_TYPE,
@@ -128,32 +128,11 @@ public class DBAdapter implements Pushable, Closeable {
 						+ " = ? AND " + DBColumns.WEEK + " IN (?,0) ",
 				new String[] { "" + date.get(Calendar.DAY_OF_WEEK),
 						"" + date.get(Calendar.HOUR_OF_DAY),
-						"" + getWeekNumber(date) }, null, null, null);
-		int ID = data.getColumnIndex(BaseColumns._ID);
-		int DAY = data.getColumnIndex(DBColumns.DAY);
-		int WEEK = data.getColumnIndex(DBColumns.WEEK);
-		int SUBJECT = data.getColumnIndex(DBColumns.VIEW_SUBJECT);
-		int SUBJECT_TYPE = data.getColumnIndex(DBColumns.SUBJECT_TYPE);
-		int ROOM = data.getColumnIndex(DBColumns.ROOM);
-		int SUBGROUP = data.getColumnIndex(DBColumns.SUBGROUP);
-		int TEACHER = data.getColumnIndex(DBColumns.VIEW_TEACHER);
-		int START_HOUR = data.getColumnIndex(DBColumns.START_HOUR);
-		int START_MINUTES = data.getColumnIndex(DBColumns.START_MINUTES);
-		int END_HOUR = data.getColumnIndex(DBColumns.END_HOUR);
-		int END_MINUTES = data.getColumnIndex(DBColumns.END_MINUTES);
-		data.moveToFirst();
-		Pair p = (new Pair(this, date, data.getInt(WEEK),
-				data.getInt(SUBGROUP), data.getString(SUBJECT),
-				data.getInt(SUBJECT_TYPE), data.getString(ROOM),
-				data.getString(TEACHER), new int[] { data.getInt(START_HOUR),
-						data.getInt(START_MINUTES), data.getInt(END_HOUR),
-						data.getInt(END_MINUTES) }, -1, data.getInt(ID)));
-		data.close();
-		return p;
+						"" + getWeekNumber(date) }, null, null, null));
 	}
 
 	public Pair getPair(GregorianCalendar date, int schedulerID) {
-		Cursor data = mDBHelper.getWritableDatabase().query(
+		return getPairFromCursor(mDBHelper.getWritableDatabase().query(
 				DBHelper.SCHEDULE_VIEW_NAME,
 				new String[] { BaseColumns._ID, DBColumns.DAY, DBColumns.WEEK,
 						DBColumns.VIEW_SUBJECT, DBColumns.SUBJECT_TYPE,
@@ -167,32 +146,11 @@ public class DBAdapter implements Pushable, Closeable {
 				new String[] { "" + schedulerID,
 						"" + date.get(Calendar.DAY_OF_WEEK),
 						"" + date.get(Calendar.HOUR_OF_DAY),
-						"" + getWeekNumber(date) }, null, null, null);
-		int ID = data.getColumnIndex(BaseColumns._ID);
-		int DAY = data.getColumnIndex(DBColumns.DAY);
-		int WEEK = data.getColumnIndex(DBColumns.WEEK);
-		int SUBJECT = data.getColumnIndex(DBColumns.VIEW_SUBJECT);
-		int SUBJECT_TYPE = data.getColumnIndex(DBColumns.SUBJECT_TYPE);
-		int ROOM = data.getColumnIndex(DBColumns.ROOM);
-		int SUBGROUP = data.getColumnIndex(DBColumns.SUBGROUP);
-		int TEACHER = data.getColumnIndex(DBColumns.VIEW_TEACHER);
-		int START_HOUR = data.getColumnIndex(DBColumns.START_HOUR);
-		int START_MINUTES = data.getColumnIndex(DBColumns.START_MINUTES);
-		int END_HOUR = data.getColumnIndex(DBColumns.END_HOUR);
-		int END_MINUTES = data.getColumnIndex(DBColumns.END_MINUTES);
-		data.moveToFirst();
-		Pair p = (new Pair(this, date, data.getInt(WEEK),
-				data.getInt(SUBGROUP), data.getString(SUBJECT),
-				data.getInt(SUBJECT_TYPE), data.getString(ROOM),
-				data.getString(TEACHER), new int[] { data.getInt(START_HOUR),
-						data.getInt(START_MINUTES), data.getInt(END_HOUR),
-						data.getInt(END_MINUTES) }, -1, data.getInt(ID)));
-		data.close();
-		return p;
+						"" + getWeekNumber(date) }, null, null, null));
 	}
 	
 	public Pair getPair(int schedulerID) {
-		Cursor data = mDBHelper.getWritableDatabase().query(
+		return getPairFromCursor(mDBHelper.getWritableDatabase().query(
 				DBHelper.SCHEDULE_VIEW_NAME,
 				new String[] { BaseColumns._ID, DBColumns.DAY, DBColumns.WEEK,
 						DBColumns.VIEW_SUBJECT, DBColumns.SUBJECT_TYPE,
@@ -201,7 +159,10 @@ public class DBAdapter implements Pushable, Closeable {
 						DBColumns.START_MINUTES, DBColumns.END_HOUR,
 						DBColumns.END_MINUTES },
 				BaseColumns._ID + " = ?",
-				new String[] { "" + schedulerID }, null, null, null);
+				new String[] { "" + schedulerID }, null, null, null));
+	}
+	
+	private Pair getPairFromCursor(Cursor data){
 		int ID = data.getColumnIndex(BaseColumns._ID);
 		int DAY = data.getColumnIndex(DBColumns.DAY);
 		int WEEK = data.getColumnIndex(DBColumns.WEEK);
