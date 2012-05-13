@@ -151,6 +151,7 @@ public class SettingsActivity extends PreferenceActivity {
 					}, gc.get(GregorianCalendar.YEAR),
 					gc.get(GregorianCalendar.MONTH),
 					gc.get(GregorianCalendar.DAY_OF_MONTH));
+			dpd.setTitle(R.string.date);
 			return dpd;
 
 		default:

@@ -11,6 +11,8 @@ import by.bsuir.scheduler.model.DBAdapter;
 import by.bsuir.scheduler.model.Pair;
 
 import android.app.Activity;
+import android.app.KeyguardManager;
+import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +24,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
+import android.text.style.UpdateLayout;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -53,17 +56,23 @@ public class AlarmClockActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		PowerManager pm = (PowerManager) getSystemService(this.POWER_SERVICE);
-		wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
+		wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP, "My Tag");
 		wl.acquire();
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
+		KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 
+		KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("Keyguard_Lock_Test");
+		 keyguardLock.disableKeyguard();
 		setContentView(R.layout.alarm_clock_dialog);
 		setTitle(R.string.app_name);
 
 		dbAdapter = DBAdapter.getInstance(getApplicationContext());
 		sharedPref = getSharedPreferences(AlarmActivity.ALARM_PREF,
 				AlarmActivity.MODE_PRIVATE);
+		
 		time = new GregorianCalendar(Locale.getDefault());
 
 		Intent intent = getIntent();

@@ -360,7 +360,7 @@ public class DBAdapter implements Pushable, Closeable {
 			}
 			if (status == Pair.PAIR_STATUS_CURRENT_DAY_FUTURE) {
 				if (p0 == null) {
-					p0 = pair.getPreviuosBreak();
+					p0 = pair.getPreviuosBreak(pair);
 					p1 = pair;
 					break;
 				} else {
