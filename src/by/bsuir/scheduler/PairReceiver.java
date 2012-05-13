@@ -23,6 +23,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * 
+ * @author Alexei
+ *
+ */
 public class PairReceiver extends BroadcastReceiver {
 	public static final String DAY = "day";
 	public static final String PAIR_NUMBER = "pair_number";
@@ -88,7 +93,7 @@ public class PairReceiver extends BroadcastReceiver {
 	private void setNextNotification() {
 		NotificationManager nm = (NotificationManager) mContext
 				.getSystemService(Context.NOTIFICATION_SERVICE);
-		Notification notification = new Notification(R.drawable.ic_course,
+		Notification notification = new Notification(R.drawable.ic_app,
 				mPairs[0].getLesson() + " " + mPairs[0].getRoom(),
 				System.currentTimeMillis());
 		notification.flags = Notification.FLAG_NO_CLEAR;

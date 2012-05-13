@@ -275,6 +275,7 @@ class DBHelper extends SQLiteOpenHelper {
 				resultId = -1;
 				break;
 			}
+			cursor.close();
 			break;
 		default:
 			cursor = db.query(
