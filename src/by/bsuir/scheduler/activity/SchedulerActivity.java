@@ -44,10 +44,10 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 			mChooseMode = true;
 		}else{
 			sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
+			Intent intent = new Intent(getApplicationContext(), AlarmClockReceiver.class);
+			intent.putExtra(AlarmClockReceiver.ALARM_STATUS, AlarmClockReceiver.CHANGE);
+			sendBroadcast(intent);
 		}
-		Intent intent = new Intent(getApplicationContext(), AlarmClockReceiver.class);
-		intent.putExtra(AlarmClockReceiver.ALARM_STATUS, AlarmClockReceiver.CHANGE);
-		sendBroadcast(intent);
 	}
 
 	@Override
