@@ -289,6 +289,7 @@ public class DBAdapter implements Pushable, Closeable {
 			return;
 		}
 		mDBHelper.dropTables(mDBHelper.getWritableDatabase());
+		mDBHelper.close();
 		long startTime = System.currentTimeMillis();
 		Parser p = new Parser(group, subGroup, this, listiner);
 		p.parseSchedule();
