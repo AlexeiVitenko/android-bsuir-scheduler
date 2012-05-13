@@ -296,12 +296,16 @@ public class DBAdapter implements Pushable, Closeable {
 	}
 
 	public boolean isFilling() {
-		Cursor c = mDBHelper.getWritableDatabase()
-				.query(DBHelper.SCHEDULE_VIEW_NAME, null, null, null, null,
-						null, null);
-		boolean is = c.getCount() > 0;
-		c.close();
-		return is;
+		try{
+			Cursor c = mDBHelper.getWritableDatabase()
+					.query(DBHelper.SCHEDULE_VIEW_NAME, null, null, null, null,
+							null, null);
+			boolean is = c.getCount() > 0;
+			c.close();
+			return is;
+		}catch (Exception e) {
+			return false;
+		}
 	}
 
 	@Override
