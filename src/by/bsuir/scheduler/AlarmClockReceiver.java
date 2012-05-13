@@ -13,6 +13,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -43,7 +44,11 @@ public class AlarmClockReceiver extends BroadcastReceiver {
 
 			// если вызывается будильник
 			if (intent.getStringExtra(ALARM_STATUS).equals(CLOCK)) {
-
+				PowerManager.WakeLock wl;
+				PowerManager pm = (PowerManager) context.getSystemService(context.POWER_SERVICE);
+				wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP, "My Tag");
+				wl.acquire();
+				Log.d("wake","up");
 				Intent it = new Intent(context, AlarmClockActivity.class);
 				it.putExtras(intent.getExtras());
 				it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
