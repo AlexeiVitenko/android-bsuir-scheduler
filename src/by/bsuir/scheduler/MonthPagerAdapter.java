@@ -11,6 +11,7 @@ import by.bsuir.scheduler.model.DBAdapter;
 import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,20 +24,18 @@ public class MonthPagerAdapter extends PagerAdapter {
 	private LayoutInflater inflater;
 	private List<View> pages;
 	private GregorianCalendar calendar;
-//	private int numberOfWeeks;
-//	private int monthOfStart2sem;
 	private int firstMonth;
 	private int lastMonth;
 	private int year;
 
 	public MonthPagerAdapter(Activity context) {
 		DBAdapter dbAdapter = DBAdapter.getInstance(context.getApplicationContext());
+		
+		Log.i("MonthPagerAdapter", "firstMonth = " + dbAdapter.getFirstMonth() + "lastMonth = " + dbAdapter.getLastMonth());
+		
 		firstMonth = dbAdapter.getFirstMonth();
 		lastMonth = dbAdapter.getLastMonth();
 		year = dbAdapter.getYear();
-//		this.numberOfWeeks = numberOfWeeks;
-//		this.dayOfStart2sem = dayOfStart2sem;
-//		this.monthOfStart2sem = monthOfStart2sem;
 		this.context = context;
 		inflater = LayoutInflater.from(context);
 		calendar = new GregorianCalendar(Locale.getDefault());
@@ -44,29 +43,23 @@ public class MonthPagerAdapter extends PagerAdapter {
 
 	@Override
 	public int getCount() {
-		/*if (numberOfWeeks > 17) {
-			return 5;
-		} else {
-			return 4;
-		}*/
-		return lastMonth - firstMonth;
+		return lastMonth - firstMonth + 1  ;
 	}
 
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 
 		if (pages == null) {
-//			pages = generatePages(container,
-//					calendar.get(GregorianCalendar.MONTH),
-//					calendar.get(GregorianCalendar.YEAR));
+			Log.i("MonthPagerAdapter", "instantiateItem " + getCount());
 			pages = generatePages(container);
 		}
 
-		View view = pages.get(position);
-		((ViewPager) container).addView(view, ((ViewPager) container)
+		//View view = pages.get(position);
+		/*((ViewPager) container).addView(view, ((ViewPager) container)
 				.getChildCount() > position ? position
-				: ((ViewPager) container).getChildCount());
-		return view;
+				: ((ViewPager) container).getChildCount());*/
+		((ViewPager) container).addView(pages.get(position), position);
+		return pages.get(position);
 	}
 
 	@Override
@@ -79,37 +72,14 @@ public class MonthPagerAdapter extends PagerAdapter {
 		return view.equals(object);
 	}
 
-	public int getCurrentItem() {
+	public int getCurrentItem(int currentMonth) {
 		int currentItem = 0;
-//		int sep = GregorianCalendar.SEPTEMBER;
-//		int dec = GregorianCalendar.DECEMBER;
-//		int may = GregorianCalendar.MAY;
-		int currentMonth = calendar.get(GregorianCalendar.MONTH);
 		currentItem = currentMonth - firstMonth;
-//		if (sep <= month && dec >= month) {
-//			currentItem = month - sep;
-//
-//		} else if (monthOfStart2sem <= month && may >= month) {
-//			currentItem = month - monthOfStart2sem;
-//		}
 		return currentItem;
 	}
 
 	private List<View> generatePages(ViewGroup container) {
 		List<View> list = new ArrayList<View>();
-//		int sep = GregorianCalendar.SEPTEMBER;
-//		int dec = GregorianCalendar.DECEMBER;
-//		int may = GregorianCalendar.MAY;
-//		int startMonth = 0;
-//		int endMonth = 0;
-//		if (sep <= month && dec >= month) {
-//			startMonth = sep;
-//			endMonth = dec;
-//
-//		} else if (monthOfStart2sem <= month && may >= month) {
-//			startMonth = monthOfStart2sem;
-//			endMonth = may;
-//		}
 
 		if ((lastMonth - firstMonth) > 0) {
 
@@ -128,16 +98,16 @@ public class MonthPagerAdapter extends PagerAdapter {
 				((GridView) view.findViewById(R.id.calendar))
 						.setAdapter(gridCellAdapter);
 
-				int[] daysOfWeekID = { R.id.Mo, R.id.Tu, R.id.We, R.id.Th,
-						R.id.Fr, R.id.Sa, R.id.Su };
+				int[] daysOfWeekID = { R.id.Su, R.id.Mo, R.id.Tu, R.id.We, R.id.Th,
+						R.id.Fr, R.id.Sa };
 				String[] daysOfWeek = context.getResources().getStringArray(
 						R.array.days_of_week_abb);
 				for (int j = 0; j < 7; j++) {
 					((TextView) view.findViewById(daysOfWeekID[j]))
 							.setText(daysOfWeek[j]);
 				}
-
 				list.add(view);
+				((ViewPager) container).addView(new View(context), i - firstMonth);
 			}
 		}
 

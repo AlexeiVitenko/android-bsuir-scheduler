@@ -30,4 +30,10 @@
             android:defaultValue="0"
             />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/notifications">
+        <CheckBoxPreference android:title="@string/notifications_enabled_question"
+            android:key="@string/notifications_enabled"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
 </PreferenceScreen>

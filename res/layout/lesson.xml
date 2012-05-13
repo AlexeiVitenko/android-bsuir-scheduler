@@ -39,12 +39,13 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:orientation="horizontal" >
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/lesson_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_weight="0.5"
                 android:text="Предмет"
                 android:textColor="@android:color/white"
@@ -56,6 +57,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="Тип"
+                android:textSize="7pt" />
+
+            <TextView
+                android:id="@+id/lesson_subgroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Подгруппа"
                 android:textSize="7pt" />
 
             <TextView

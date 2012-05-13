@@ -16,13 +16,13 @@
         <item>Суббота</item>
     </string-array>
     <string-array name="days_of_week_abb">
+        <item>ВС</item>
         <item>ПН</item>
         <item>ВТ</item>
         <item>СР</item>
         <item>ЧТ</item>
         <item>ПТ</item>
         <item>СБ</item>
-        <item>ВС</item>
     </string-array>
     <string-array name="months">
         <item>Январь</item>
@@ -70,7 +70,7 @@
         <item>Лабораторная работа</item>
         <item>Курсовое проектирование</item>
         <item>Физкультура</item>
-        <item>Спецподготовка</item>
+        <item></item>
     </string-array>
     <string-array name="weeks">
         <item>1-я неделя</item>

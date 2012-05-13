@@ -18,11 +18,15 @@
     <string name="semester_length_weeks">semesterlengthweeks</string>
     <string name="semester_start_day">semester_start_day</string>
     <string name="semester_start">First day</string>
+    <string name="notifications_enabled">notifications_enabled</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_enabled_question">Enable notifications?</string>
     <string name="group_number">group_number</string>
     <string name="sub_group_number">sub_group_number</string>
     <string name="group">Group</string>
     <string name="preference_sub_group_list">preference_sub_group_list</string>
     <string name="subgroup">Subgroup</string>
+    <string name="alarm_clock">Alarm clock</string>
     <string name="alarm_type">Type of alarm</string>
     <string name="alarm_before_lesson">Before lesson</string>
     <string name="alarm_time">Time</string>
@@ -36,4 +40,10 @@
 	<string name="sorry">Надоело :)</string>
 	<string name="start_work">To start work click "Next".</string>
 	<string name="start_parsing">Downloading schedule</string>
+	<string name="room">room: </string>
+	<string name="teacher">Teacher:</string>
+	<string name="time">Time: </string>
+	<string name="day">day</string>
+	<string name="Close">Close</string>
+	<string name="alarm_toast">Next alarm:</string>
 </resources>

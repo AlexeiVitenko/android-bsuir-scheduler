@@ -1,23 +1,15 @@
 package by.bsuir.scheduler;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.prefs.Preferences;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
+import android.support.v4.view.LimitedViewPager;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -73,7 +65,7 @@ public class DayPagerAdapter extends PagerAdapter {
 		while (!mAdapter.isWorkDay(mCurrentDay)) {
 			mCurrentDay.add(GregorianCalendar.DAY_OF_YEAR, -1);
 		}
-		// //
+		// //	
 		mCurrentDayPosition--;
 		dayLeft = new GregorianCalendar(Locale.getDefault());
 		dayLeft.setTimeInMillis(currentDay);
@@ -81,6 +73,14 @@ public class DayPagerAdapter extends PagerAdapter {
 		dayRight = new GregorianCalendar(Locale.getDefault());
 		dayRight.setTimeInMillis(currentDay);
 
+	}
+	
+//	public int getCurrentMonth() {
+//		return mCurrentDay.get(GregorianCalendar.MONTH);
+//	}
+//	
+	public GregorianCalendar getCurrentDay() {
+		return mCurrentDay;
 	}
 
 	@Override
@@ -97,7 +97,17 @@ public class DayPagerAdapter extends PagerAdapter {
 	public Object instantiateItem(ViewGroup container, int position) {
 		View view = null;
 		GregorianCalendar needed;
-		int shift;
+		int shift;/*
+		switch (mAdapter.dayMatcher(mCurrentDay)) {
+		case FIRST_DAY:
+			((LimitedViewPager)container).setLeftBorder(mCurrentDayPosition);
+			break;
+		case LAST_DAY:
+			mSize = position+2;
+			break;
+		default:
+			break;
+		}*/
 		if (position - mCurrentDayPosition > 0) {
 			shift = 1;
 			needed = dayRight;
@@ -114,10 +124,31 @@ public class DayPagerAdapter extends PagerAdapter {
 
 		needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
 		while (!mAdapter.isWorkDay(needed)) {
+			if (mAdapter.dayMatcher(needed) == DayMatcherConditions.LAST_DAY) {
+				mSize = position+2;
+			}
+			if (mAdapter.dayMatcher(needed) == DayMatcherConditions.FIRST_DAY) {
+				((LimitedViewPager)container).setLeftBorder(position);//mCurrentDayPosition-1);
+			//	return new View(mContext);
+			}
+			if (mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_LEFT || mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_RIGTH) {
+				view = new  View(mContext);
+				((LimitedViewPager) container).addView(view, position % 3);
+				return view;
+			}
 			needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
 		}
 		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.LAST_DAY) {
-			mSize = position;
+			mSize = position+2;
+		}
+		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.FIRST_DAY) {
+			((LimitedViewPager)container).setLeftBorder(position);//mCurrentDayPosition-1);
+		//	return new View(mContext);
+		}
+		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_LEFT || mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_RIGTH) {
+			view = new  View(mContext);
+			((LimitedViewPager) container).addView(view, position % 3);
+			return view;
 		}
 		final long time = needed.getTimeInMillis();
 		GregorianCalendar pushedDay = new GregorianCalendar(Locale.getDefault());
@@ -164,7 +195,7 @@ public class DayPagerAdapter extends PagerAdapter {
 
 		/******************************************************************/
 
-		final DayListAdapter adapter = new DayListAdapter(mContext, needed,
+		final DayListAdapter adapter = new DayListAdapter(mContext,(GregorianCalendar) needed.clone(),
 				day.getPairs());
 
 		ListView listView = (ListView) view.findViewById(R.id.listView1);
@@ -178,7 +209,8 @@ public class DayPagerAdapter extends PagerAdapter {
 				Pair p = day.getPair(position);
 				tm.set(Calendar.HOUR_OF_DAY, p.getTime()[0]);
 				intent.putExtra(LessonActivity.DAY, tm.getTimeInMillis());
-				intent.putExtra(LessonActivity.PAIR, position);
+//				intent.putExtra(LessonActivity.PAIR, position);
+				intent.putExtra(LessonActivity.PAIR, p.getId());
 				mContext.startActivity(intent);
 			}
 		});
@@ -194,15 +226,15 @@ public class DayPagerAdapter extends PagerAdapter {
 			}
 		});
 		TextView alarm = (TextView) view.findViewById(R.id.alarm_time);
-		alarm.setText(AlarmActivity.getAlarmTime(mContext ,adapter));
+		alarm.setText(AlarmActivity.getAlarmTimeString(mContext, day));
 
-		((ViewPager) container).addView(view, position % 3);
+		((LimitedViewPager) container).addView(view, position % 3);
 		return view;
 	}
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
-		((ViewPager) container).removeView((View) object);
+		((LimitedViewPager) container).removeView((View) object);
 	}
 
 	@Override
