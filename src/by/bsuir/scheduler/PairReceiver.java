@@ -92,7 +92,27 @@ public class PairReceiver extends BroadcastReceiver {
 				mPairs[0].getLesson() + " " + mPairs[0].getRoom(),
 				System.currentTimeMillis());
 		notification.flags = Notification.FLAG_NO_CLEAR;
-		notification.defaults = Notification.DEFAULT_ALL;
+		int counter = 0;
+		int flag = 0;
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+		if (prefs.getBoolean(mContext.getString(R.string.notif_sound), false)) {
+			counter++;
+			flag |= Notification.DEFAULT_SOUND;
+		}
+		if (prefs.getBoolean(mContext.getString(R.string.notif_vibrate), false)) {
+			counter++;
+			flag |= Notification.DEFAULT_VIBRATE;
+		}
+		if (prefs.getBoolean(mContext.getString(R.string.notif_lights), false)) {
+			counter++;
+			flag |= Notification.DEFAULT_LIGHTS;
+		}
+		if (counter>=3) {
+			notification.defaults = Notification.DEFAULT_ALL;
+		}else{
+			notification.defaults = flag;
+		}
+		
 		// Notification.FLAG_NO_CLEAR - использовать его
 		Intent notifyIntent = new Intent(mContext.getApplicationContext(),
 				SchedulerActivity.class);

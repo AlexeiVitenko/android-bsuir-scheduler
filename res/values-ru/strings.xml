@@ -46,4 +46,7 @@
 	<string name="notifications_enabled_question">Активировать уведомления?</string>
 	<string name="Close">Закрыть</string>
 	<string name="alarm_toast">Следущий будильник:</string>
+    <string name="notification_sound">Звук</string>
+    <string name="notification_lights">Подсветка</string>
+    
 </resources>

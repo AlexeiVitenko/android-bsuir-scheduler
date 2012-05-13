@@ -47,4 +47,9 @@
 	<string name="day">day</string>
 	<string name="Close">Close</string>
 	<string name="alarm_toast">Next alarm:</string>
+	<string name="notif_vibrate">notif_vibrate</string>
+	<string name="notif_sound">notif_sound</string>
+	<string name="notif_lights">notif_lights</string>
+	<string name="notification_sound">Sound</string>
+    <string name="notification_lights">Lights</string>
 </resources>

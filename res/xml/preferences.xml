@@ -35,5 +35,14 @@
         <CheckBoxPreference android:title="@string/notifications_enabled_question"
             android:key="@string/notifications_enabled"
             android:defaultValue="true"/>
+        <CheckBoxPreference android:title="@string/notification_sound"
+            android:key="@string/notif_sound"
+            android:defaultValue="false"/>
+        <CheckBoxPreference android:title="@string/alarm_vibration"
+            android:key="@string/notif_vibrate"
+            android:defaultValue="true"/>
+        <CheckBoxPreference android:title="@string/notification_lights"
+            android:key="@string/notif_lights"
+            android:defaultValue="false"/>
     </PreferenceCategory>
 </PreferenceScreen>
