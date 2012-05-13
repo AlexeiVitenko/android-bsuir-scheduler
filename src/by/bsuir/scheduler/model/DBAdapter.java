@@ -128,7 +128,7 @@ public class DBAdapter implements Pushable, Closeable {
 						+ " = ? AND " + DBColumns.WEEK + " IN (?,0) ",
 				new String[] { "" + date.get(Calendar.DAY_OF_WEEK),
 						"" + date.get(Calendar.HOUR_OF_DAY),
-						"" + getWeekNumber(date) }, null, null, null));
+						"" + getWeekNumber(date) }, null, null, null), date);
 		pair.setDate(date);
 		return pair;
 	}
@@ -148,8 +148,7 @@ public class DBAdapter implements Pushable, Closeable {
 				new String[] { "" + schedulerID,
 						"" + date.get(Calendar.DAY_OF_WEEK),
 						"" + date.get(Calendar.HOUR_OF_DAY),
-						"" + getWeekNumber(date) }, null, null, null));
-		pair.setDate(date);
+						"" + getWeekNumber(date) }, null, null, null), date);
 		return pair;
 	}
 	
@@ -163,10 +162,10 @@ public class DBAdapter implements Pushable, Closeable {
 						DBColumns.START_MINUTES, DBColumns.END_HOUR,
 						DBColumns.END_MINUTES },
 				BaseColumns._ID + " = ?",
-				new String[] { "" + schedulerID }, null, null, null));
+				new String[] { "" + schedulerID }, null, null, null),new GregorianCalendar(Locale.getDefault()));
 	}
 	
-	private Pair getPairFromCursor(Cursor data){
+	private Pair getPairFromCursor(Cursor data, GregorianCalendar date){
 		int ID = data.getColumnIndex(BaseColumns._ID);
 		int DAY = data.getColumnIndex(DBColumns.DAY);
 		int WEEK = data.getColumnIndex(DBColumns.WEEK);
@@ -180,7 +179,7 @@ public class DBAdapter implements Pushable, Closeable {
 		int END_HOUR = data.getColumnIndex(DBColumns.END_HOUR);
 		int END_MINUTES = data.getColumnIndex(DBColumns.END_MINUTES);
 		data.moveToFirst();
-		Pair p = (new Pair(this, new GregorianCalendar(Locale.getDefault()), data.getInt(WEEK),
+		Pair p = (new Pair(this, date, data.getInt(WEEK),
 				data.getInt(SUBGROUP), data.getString(SUBJECT),
 				data.getInt(SUBJECT_TYPE), data.getString(ROOM),
 				data.getString(TEACHER), new int[] { data.getInt(START_HOUR),
