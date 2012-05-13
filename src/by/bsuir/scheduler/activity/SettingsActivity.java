@@ -5,14 +5,18 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import by.bsuir.scheduler.PairReceiver;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.model.DBAdapter;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -24,6 +28,9 @@ import android.util.Log;
 import android.widget.DatePicker;
 
 public class SettingsActivity extends PreferenceActivity {
+	public static final int CALL_CONFIG = 9876;
+	public static final int SEMESTER_CHANGES = 0x010;
+	public static final int GROUP_CHANGES = 0x0100;
 	private static final int DATE_DIALOG = 1001;
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"dd.MM.yyyy");
@@ -32,9 +39,13 @@ public class SettingsActivity extends PreferenceActivity {
 	private Preference mStartDate;
 	private EditTextPreference mGroupNumber;
 	private ListPreference mSubGroup;
+	private CheckBoxPreference mNEnabled;
 	private SharedPreferences mPref;
 	private DBAdapter mAdapter;
-
+	private boolean mIsChange = false;
+	private boolean mGroupChanges = false;
+	private boolean mNEnableStart;
+	private boolean mNEnableEnd;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -60,7 +71,8 @@ public class SettingsActivity extends PreferenceActivity {
 							Object newValue) {
 						mSemesterLength.setSummary("" + (String) newValue
 								+ getString(R.string.weeks));
-						mAdapter.recalculateSomeThings();
+//						mAdapter.recalculateSomeThings();
+						mIsChange = true;
 						return true;
 					}
 				});
@@ -87,6 +99,7 @@ public class SettingsActivity extends PreferenceActivity {
 					public boolean onPreferenceChange(Preference preference,
 							Object newValue) {
 						preference.setSummary((String) newValue);
+						mGroupChanges = true;
 						return true;
 					}
 				});
@@ -102,9 +115,12 @@ public class SettingsActivity extends PreferenceActivity {
 						mSubGroup.setSummary(getResources().getStringArray(
 								R.array.preferences_sub_group_entries)[Integer
 								.parseInt((String) newValue)]);
+						mGroupChanges = true;
 						return true;
 					}
 				});
+		mNEnabled = (CheckBoxPreference)findPreference(getString(R.string.notifications_enabled));
+		mNEnableStart = mPref.getBoolean(getString(R.string.notifications_enabled), true);
 	}
 
 	@Override
@@ -129,7 +145,8 @@ public class SettingsActivity extends PreferenceActivity {
 									getString(R.string.semester_start_day),
 									gcc.getTimeInMillis());
 							edit.commit();
-							mAdapter.recalculateSomeThings();
+//							mAdapter.recalculateSomeThings();
+							mIsChange = true;
 						}
 					}, gc.get(GregorianCalendar.YEAR),
 					gc.get(GregorianCalendar.MONTH),
@@ -141,11 +158,30 @@ public class SettingsActivity extends PreferenceActivity {
 		}
 	}
 
-	/*
-	 * @Override protected void onPrepareDialog(int id, Dialog dialog) { switch
-	 * (id) { case DATE_DIALOG: ((DatePickerDialog)dialog).set break; default:
-	 * super.onPrepareDialog(id, dialog); break; } }
-	 */
+	@Override
+	public void onBackPressed() {
+		int result = 0;
+		if (mIsChange) {
+			result |= SEMESTER_CHANGES;
+		}
+		if (mGroupChanges) {
+			result |= GROUP_CHANGES;
+		}
+		setResult(result);
+		if (mNEnableStart && !mPref.getBoolean(getString(R.string.notifications_enabled), true)) {
+			PairReceiver.clearIntents(getApplicationContext());
+		}else
+			if (!mNEnableStart && mPref.getBoolean(getString(R.string.notifications_enabled), true)) {
+				sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
+			}
+		super.onBackPressed();
+	}
+	
+	@Override
+	protected void onPause() {
+		mAdapter.recalculateSomeThings();
+		super.onPause();
+	}
 	
 	public static class DefaultValuesSettings {
 		

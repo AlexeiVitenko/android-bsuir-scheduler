@@ -124,11 +124,13 @@ class DBHelper extends SQLiteOpenHelper {
 		if (oldVersion >= newVersion){
 			return;
 		}
+
+		Log.i("DBAdapter", "db upgraded");
 		dropTables(db);
 	}
 	
 	public void dropTables(SQLiteDatabase db){
-		Log.i("DBAdapter", "db upgraded");
+		
 		db.execSQL("DROP VIEW IF EXISTS " + SCHEDULE_VIEW_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + NOTE_TABLE_NAME); 
 		db.execSQL("DROP TABLE IF EXISTS " + TIME_TABLE_NAME);
@@ -143,7 +145,7 @@ class DBHelper extends SQLiteOpenHelper {
 	private long getItemWithNameValue(String tableName, String columnName, String value){
 		try {
 			long t = System.currentTimeMillis();
-			SQLiteDatabase db = this.getReadableDatabase();
+			SQLiteDatabase db = this.getWritableDatabase();
 			mTotalTime += (System.currentTimeMillis()-t);
 			Log.d("Total time", ""+mTotalTime);
 			Cursor cursor = db.query(
@@ -355,7 +357,7 @@ class DBHelper extends SQLiteOpenHelper {
 	
 	public String getNote(long scheduleId, GregorianCalendar date) {
 		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date.getTime());
-		Cursor cursor = this.getReadableDatabase().query(
+		Cursor cursor = this.getWritableDatabase().query(
 							NOTE_TABLE_NAME,
 							new String[] {
 									BaseColumns._ID,
@@ -368,11 +370,15 @@ class DBHelper extends SQLiteOpenHelper {
 							null, null, null
 
 						);
-		if(cursor.getCount()<=0)
+		if(cursor.getCount()<=0){
+			cursor.close();
 			return "";
+		}
 		else{
 			cursor.moveToFirst();
-			return cursor.getString((cursor.getColumnIndex(DBColumns.TEXT_NOTE)));
+			String s = cursor.getString((cursor.getColumnIndex(DBColumns.TEXT_NOTE)));
+			cursor.close();
+			return s;
 		}
 	}
 	

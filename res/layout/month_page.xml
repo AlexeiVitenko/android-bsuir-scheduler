@@ -34,12 +34,11 @@
                 android:textSize="8pt" />
         </LinearLayout>
     </RelativeLayout>
-
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
         android:background="#616161"
         android:horizontalSpacing="-1px"
         android:numColumns="7"
@@ -51,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="0.15"
+            android:gravity="center_horizontal"
             android:text="ПН" />
 
         <TextView
@@ -58,6 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.14"
+            android:gravity="center_horizontal"
             android:text="ВТ" />
 
         <TextView
@@ -65,6 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.14"
+            android:gravity="center_horizontal"
             android:text="СР" />
 
         <TextView
@@ -72,6 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.14"
+            android:gravity="center_horizontal"
             android:text="ЧТ" />
 
         <TextView
@@ -79,6 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.14"
+            android:gravity="center_horizontal"
             android:text="ПТ" />
 
         <TextView
@@ -86,24 +90,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.14"
+            android:gravity="center_horizontal"
             android:text="СБ" />
 
         <TextView
             android:id="@+id/Su"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:layout_weight="0.15"
+            android:gravity="center_horizontal"
             android:text="ВС" />
     </TableRow>
-
-    <GridView
-        android:id="@+id/calendar"
-        android:layout_width="fill_parent"
-        android:layout_height="265dp"
-        android:background="#616161"
-        android:horizontalSpacing="-1px"
-        android:numColumns="7"
-        android:verticalSpacing="-1px" >
-    </GridView>
+    
+	    <GridView
+	        android:id="@+id/calendar"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:background="#616161"
+	        android:gravity="center_horizontal"
+	        android:horizontalSpacing="-1px"
+	        android:numColumns="7"
+	        android:verticalSpacing="-1px"
+	        android:scrollbars="vertical"
+	        android:focusableInTouchMode="true" >
+	    </GridView>
 
 </LinearLayout>

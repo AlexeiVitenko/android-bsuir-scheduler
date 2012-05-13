@@ -32,6 +32,10 @@ public class Day {
 		generatePairs(data);
 	}
 	
+	public int getCount() {
+		return mPairs.size();
+	}
+	
 	/**
 	 * Необходмо для отметки текущей пары, проученных, оставшихся.
 	 * @param time - время, в которое совершался запрос
@@ -57,10 +61,10 @@ public class Day {
 		mDbAdapter.changeNote(mDate,scheduleId, note);
 	}
 	
-	protected GregorianCalendar getDate(){
+	public GregorianCalendar getDate(){
 		GregorianCalendar date = new GregorianCalendar(Locale.getDefault());
 		date.setTimeInMillis(mDate.getTimeInMillis());
-		return mDate;
+		return date;
 	}
 	
 	private void generatePairs(Cursor data){
@@ -82,7 +86,8 @@ public class Day {
 		data.moveToFirst();
 		int i = 0;
 		do {
-			mPairs.add(new Pair(this, 
+			mPairs.add(new Pair(this,
+					mDbAdapter, 
 					data.getInt(WEEK),
 					data.getInt(SUBGROUP),
 					data.getString(SUBJECT),

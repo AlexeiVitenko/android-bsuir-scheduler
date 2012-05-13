@@ -3,6 +3,7 @@ package by.bsuir.scheduler;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import by.bsuir.scheduler.model.DBAdapter;
 import by.bsuir.scheduler.model.Pair;
 
 public class DayListAdapter extends BaseAdapter {
@@ -78,6 +80,8 @@ public class DayListAdapter extends BaseAdapter {
 		holder.subject = (TextView) view.findViewById(R.id.subject);
 		holder.room = (TextView) view.findViewById(R.id.room);
 		holder.teacher = (TextView) view.findViewById(R.id.teacher);
+		holder.subgroup = (TextView) view.findViewById(R.id.subgroup);
+		holder.note = (ImageView) view.findViewById(R.id.note_status);
 		return holder;
 	}
 
@@ -91,22 +95,20 @@ public class DayListAdapter extends BaseAdapter {
 		holder.timeEnd.setText(String.format("%2d:%02d", times[2], times[3]));
 
 		int green = Color.rgb(0, 190, 0);
-		int gray = Color.rgb(100, 100, 100);
-		Pair.PairStatus status = lesson.getStatus(); 
+		Pair.PairStatus status = lesson.getStatus();
 		switch (status.status) {
-			case Pair.PAIR_STATUS_CURRENT_DAY_PAST:
-				holder.statusBar.setBackgroundColor(green);
-				break;
-			case Pair.PAIR_STATUS_CURRENT:
-				float pct = ((float) status.progress)
-						/ status.pair_length;
-				/*holder.statusBar
-						.setBackgroundColor(gradientColor(gray, green, pct));
-				/*holder.statusBar.setBackgroundDrawable(getGradient(gray, green, pct));*/
-				holder.statusBar.setBackgroundDrawable(getProgress(green, pct));
-				break;
-			default:
-				break;
+		case Pair.PAIR_STATUS_CURRENT_DAY_PAST:
+			holder.statusBar.setBackgroundColor(green);
+			break;
+		case Pair.PAIR_STATUS_CURRENT:
+			float pct = ((float) status.progress) / status.pair_length;
+			holder.statusBar.setBackgroundDrawable(getProgress(green, pct));
+			break;
+		case Pair.PAIR_STATUS_CURRENT_DAY_FUTURE:
+			holder.statusBar.setBackgroundDrawable(null);
+			break;
+		default:
+			break;
 		}
 
 		switch (lesson.getType()) {
@@ -135,8 +137,24 @@ public class DayListAdapter extends BaseAdapter {
 		holder.subject.setText(lesson.getLesson());
 		holder.room.setText(lesson.getRoom());
 		holder.teacher.setText(lesson.getTeacher());
+		int subgr = lesson.getSubGroup();
+		if (subgr > 0) {
+			holder.subgroup.setText("(" + subgr + ")");
+		} else {
+			holder.subgroup.setText("");
+		}
+
+//		DBAdapter adapter = DBAdapter.getInstance(inflater.getContext()
+//				.getApplicationContext());
+		GregorianCalendar noteTime = new GregorianCalendar(Locale.getDefault());
+		noteTime.setTimeInMillis(currentDay.getTimeInMillis());
+		noteTime.set(GregorianCalendar.HOUR_OF_DAY, lesson.getTime()[0]);
+		Pair tempLesson = mPairs.get(position);
+		if (tempLesson.getNote().length() > 0) {
+			holder.note.setImageResource(R.drawable.ic_note);
+		}
 	}
-	
+
 	private ClipDrawable getProgress(int color, float percent) {
 		Drawable progress = new ColorDrawable(color);
 		ClipDrawable clipProgress = new ClipDrawable(progress, Gravity.TOP,
@@ -145,26 +163,25 @@ public class DayListAdapter extends BaseAdapter {
 		return clipProgress;
 	}
 
-	private GradientDrawable getGradient(int startColor, int endColor ,float percent){
-		GradientDrawable gradient = new GradientDrawable(Orientation.TOP_BOTTOM, new int[]{
-			startColor,
-			endColor
-		});
-		gradient.setGradientType(GradientDrawable.LINE);
-		gradient.setGradientCenter(1f, percent);
-		return gradient;
-	}
-	
-	private int gradientColor(int startColor, int endColor, double percent) {
-		double sR = Color.red(startColor);
-		double sG = Color.green(startColor);
-		double sB = Color.blue(startColor);
-		double gR = Color.red(endColor) - sR;
-		double gG = Color.green(endColor) - sG;
-		double gB = Color.blue(endColor) - sB;
-		return Color.rgb((int) (sR + gR * percent), (int) (sG + gG * percent),
-				(int) (sB + gB * percent));
-	}
+	// private GradientDrawable getGradient(int startColor, int endColor,
+	// float percent) {
+	// GradientDrawable gradient = new GradientDrawable(
+	// Orientation.TOP_BOTTOM, new int[] { startColor, endColor });
+	// gradient.setGradientType(GradientDrawable.LINE);
+	// gradient.setGradientCenter(1f, percent);
+	// return gradient;
+	// }
+	//
+	// private int gradientColor(int startColor, int endColor, double percent) {
+	// double sR = Color.red(startColor);
+	// double sG = Color.green(startColor);
+	// double sB = Color.blue(startColor);
+	// double gR = Color.red(endColor) - sR;
+	// double gG = Color.green(endColor) - sG;
+	// double gB = Color.blue(endColor) - sB;
+	// return Color.rgb((int) (sR + gR * percent), (int) (sG + gG * percent),
+	// (int) (sB + gB * percent));
+	// }
 
 	class ViewHolder {
 		ImageView statusBar;
@@ -174,5 +191,7 @@ public class DayListAdapter extends BaseAdapter {
 		TextView subject;
 		TextView room;
 		TextView teacher;
+		TextView subgroup;
+		ImageView note;
 	}
 }
