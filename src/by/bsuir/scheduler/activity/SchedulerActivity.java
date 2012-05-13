@@ -84,6 +84,7 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 						System.currentTimeMillis()));
 				break;
 			case ConfiguratorActivity.RESULT_PREFERENCES_CHANGES:
+				mChooseMode = true;
 				mAdapter.recalculateSomeThings();
 				parse();
 				break;

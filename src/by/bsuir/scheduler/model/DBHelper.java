@@ -124,11 +124,14 @@ class DBHelper extends SQLiteOpenHelper {
 		if (oldVersion >= newVersion){
 			return;
 		}
+
+		Log.i("DBAdapter", "db upgraded");
 		dropTables(db);
 	}
 	
 	public void dropTables(SQLiteDatabase db){
-		Log.i("DBAdapter", "db upgraded");
+		
+		db.execSQL("DROP VIEW IF EXISTS " + SCHEDULE_VIEW_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + NOTE_TABLE_NAME); 
 		db.execSQL("DROP TABLE IF EXISTS " + TIME_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + TEACHER_TABLE_NAME);
@@ -136,7 +139,6 @@ class DBHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + SUBJECT_TYPE_TABLE_NAME);
 	//	db.execSQL("DROP TABLE IF EXISTS " + DAY_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + SCHEDULE_TABLE_NAME);
-		db.execSQL("DROP VIEW IF EXISTS " + SCHEDULE_VIEW_NAME);
 		onCreate(db);
 	}
 	
