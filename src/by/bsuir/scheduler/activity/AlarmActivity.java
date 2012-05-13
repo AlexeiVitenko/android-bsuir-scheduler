@@ -20,6 +20,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -60,7 +61,6 @@ public class AlarmActivity extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.alarm);
 		sharedPref = getSharedPreferences(ALARM_PREF, MODE_PRIVATE);
-
 		alarmClock = (CheckBoxPreference) findPreference(ALARM_CLOCK);
 		alarmType = (ListPreference) findPreference(ALARM_TYPE);
 		alarmBeforeLesson = (ListPreference) findPreference(ALARM_LESSON);

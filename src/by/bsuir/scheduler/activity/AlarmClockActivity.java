@@ -51,15 +51,17 @@ public class AlarmClockActivity extends Activity {
 	private Pair pair;
 	private MediaPlayer mediaPlayer;
 	private Vibrator vibrator;
-	private PowerManager.WakeLock wl;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		PowerManager pm = (PowerManager) getSystemService(this.POWER_SERVICE);
+
+		PowerManager.WakeLock wl;
+		PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP, "My Tag");
 		wl.acquire();
+		
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
 		KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
