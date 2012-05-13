@@ -70,6 +70,7 @@
         <activity
             android:name=".activity.AlarmClockActivity"
             android:theme="@android:style/Theme.Dialog"
+            android:screenOrientation="portrait"
             android:exported="true" >
         </activity>
     </application>
