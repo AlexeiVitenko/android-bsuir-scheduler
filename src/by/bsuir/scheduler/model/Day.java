@@ -30,6 +30,7 @@ public class Day {
 		mPairs = new ArrayList<Pair>();
 		mWeek = week;
 		generatePairs(data);
+		data.close();
 	}
 	
 	public int getCount() {

@@ -72,7 +72,7 @@ public class AlarmActivity extends PreferenceActivity {
 
 		final String[] alarmTypes = getResources().getStringArray(
 				R.array.alarm_types);
-		int indexOfType = sharedPref.getInt(ALARM_TYPE, 0);
+		int indexOfType = Integer.parseInt(sharedPref.getString(AlarmActivity.ALARM_TYPE,""+ 0));
 		alarmType.setSummary(alarmTypes[indexOfType]);
 		alarmBeforeLesson
 				.setEnabled(Integer.parseInt(alarmType.getValue()) == 1);
@@ -104,7 +104,7 @@ public class AlarmActivity extends PreferenceActivity {
 		}
 		alarmBeforeLesson.setEntries(entries);
 		alarmBeforeLesson.setEntryValues(entryValues);
-		int indexOfLesson = sharedPref.getInt(ALARM_LESSON, 0);
+		int indexOfLesson = Integer.parseInt(sharedPref.getString(ALARM_LESSON,""+ 0));
 		alarmBeforeLesson.setSummary(summaryValues[indexOfLesson]);
 		alarmBeforeLesson
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -193,9 +193,9 @@ public class AlarmActivity extends PreferenceActivity {
 		super.onPause();
 		Editor editor = sharedPref.edit();
 		editor.putBoolean(ALARM_CLOCK, alarmClock.isChecked());
-		editor.putInt(ALARM_TYPE, Integer.parseInt(alarmType.getValue()));
-		editor.putInt(ALARM_LESSON,
-				Integer.parseInt(alarmBeforeLesson.getValue()));
+		editor.putString(ALARM_TYPE,""+ Integer.parseInt(alarmType.getValue()));
+		editor.putString(ALARM_LESSON,
+				""+Integer.parseInt(alarmBeforeLesson.getValue()));
 		editor.putBoolean(ALARM_VIBRATION, alarmVibration.isChecked());
 		editor.commit();
 
@@ -230,8 +230,8 @@ public class AlarmActivity extends PreferenceActivity {
 			alarm.set(GregorianCalendar.SECOND, 0);
 			alarm.set(GregorianCalendar.MILLISECOND, 0);
 
-			if (sharedPref.getInt(AlarmActivity.ALARM_TYPE, 0) == 1) {
-				int index = sharedPref.getInt(AlarmActivity.ALARM_LESSON, 0);
+			if (Integer.parseInt(sharedPref.getString(AlarmActivity.ALARM_TYPE,""+ 0)) == 1) {
+				int index = Integer.parseInt(sharedPref.getString(AlarmActivity.ALARM_LESSON,""+ 0));
 				int maxIndex = day.getCount() - 1;
 				if (index > maxIndex) {
 					index = maxIndex;

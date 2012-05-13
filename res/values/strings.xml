@@ -52,4 +52,12 @@
 	<string name="notif_lights">notif_lights</string>
 	<string name="notification_sound">Sound</string>
     <string name="notification_lights">Lights</string>
+    
+    <string name="key_alarm_clock">pref_alarm_clock</string>
+    <string name="key_alarm_type">pref_alarm_type</string>
+    <string name="key_alarm_before_lesson">pref_alarm_before_lesson</string>
+    <string name="key_alarm_time">pref_alarm_time</string>
+    <string name="key_alarm_ringtone">pref_alarm_ringtone</string>
+    <string name="key_alarm_volume">pref_alarm_volume</string>
+    <string name="key_alarm_vibration">pref_alarm_vibration</string>
 </resources>

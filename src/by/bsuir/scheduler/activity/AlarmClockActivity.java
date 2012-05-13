@@ -78,7 +78,7 @@ public class AlarmClockActivity extends Activity {
 		time = new GregorianCalendar(Locale.getDefault());
 
 		Intent intent = getIntent();
-		if (sharedPref.getInt(AlarmActivity.ALARM_TYPE, 0) == 1) {
+		if (Integer.parseInt(sharedPref.getString(AlarmActivity.ALARM_TYPE,""+0)) == 1) {
 			pair = dbAdapter.getPair(intent.getIntExtra(
 					AlarmClockReceiver.ALARM_LESSON_ID, -1));
 		}
@@ -128,7 +128,7 @@ public class AlarmClockActivity extends Activity {
 		super.onStart();
 
 		alarmTime.setText(AlarmActivity.formatTime(time.getTimeInMillis()));
-		if (sharedPref.getInt(AlarmActivity.ALARM_TYPE, 0) == 0) {
+		if (Integer.parseInt(sharedPref.getString(AlarmActivity.ALARM_TYPE,""+0)) == 0) {
 			pairLayout.setEnabled(false);
 			subject.setHeight(0);
 			room.setHeight(0);

@@ -25,13 +25,6 @@
     <string name="alarm_ringtone">Звук сигнала</string>
     <string name="alarm_volume">Громкость</string>
     <string name="alarm_vibration">Вибросигнал</string>
-    <string name="key_alarm_clock">pref_alarm_clock</string>
-    <string name="key_alarm_type">pref_alarm_type</string>
-    <string name="key_alarm_before_lesson">pref_alarm_before_lesson</string>
-    <string name="key_alarm_time">pref_alarm_time</string>
-    <string name="key_alarm_ringtone">pref_alarm_ringtone</string>
-    <string name="key_alarm_volume">pref_alarm_volume</string>
-    <string name="key_alarm_vibration">pref_alarm_vibration</string>
 	<string name="welcome">Благодарим Вас за выбор нашего продукта!\nДля того, чтобы начать полноценное использование, необходимо ввести первоночальные настройки:</string>
 	<string name="back">Назад</string>
 	<string name="next">Далее</string>

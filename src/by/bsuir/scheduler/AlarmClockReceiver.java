@@ -97,8 +97,8 @@ public class AlarmClockReceiver extends BroadcastReceiver {
 		intent.putExtra(ALARM_TIME, 0);
 		intent.putExtra(ALARM_STATUS, CLOCK);
 
-		if (alarmPref.getInt(AlarmActivity.ALARM_TYPE, 0) == 1) {
-			int index = alarmPref.getInt(AlarmActivity.ALARM_LESSON, 0);
+		if (Integer.parseInt(alarmPref.getString(AlarmActivity.ALARM_TYPE,""+ 0)) == 1) {
+			int index = Integer.parseInt(alarmPref.getString(AlarmActivity.ALARM_TYPE,""+ 0));
 			int maxIndex = day.getCount() - 1;
 			if (index > maxIndex) {
 				index = maxIndex;
