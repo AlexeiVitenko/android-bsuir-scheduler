@@ -1,0 +1,194 @@
+package by.bsuir.scheduler.activity;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
+import by.bsuir.scheduler.DayListAdapter;
+import by.bsuir.scheduler.R;
+import by.bsuir.scheduler.model.Pair;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.PreferenceActivity;
+import android.preference.RingtonePreference;
+import android.util.Log;
+import android.widget.TimePicker;
+
+public class AlarmActivity extends PreferenceActivity {
+
+	public static final String TIME_FIRST_LESSON = "time_first_lesson";
+	private static final int TIME_DIALOG = 10;
+	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat(
+			"HH:mm");
+	public static final String ALARM_PREF = "alarm_pref";
+	public static final String ALARM_TYPE = "pref_alarm_type";
+	public static final String ALARM_LESSON = "pref_alarm_before_lesson";
+	public static final String ALARM_TIME = "pref_alarm_time";
+	public static final String ALARM_RINGTONE = "pref_alarm_ringtone";
+	public static final String ALARM_VOLUME = "pref_alarm_volume";
+	public static final String ALARM_VIBRATION = "pref_alarm_vibration";
+
+	private ListPreference alarmType;
+	private ListPreference alarmBeforeLesson;
+	private Preference alarmTime;
+	private RingtonePreference alarmRingtone;
+	private Preference alarmVolume;
+	private CheckBoxPreference alarmVibration;
+
+	private SharedPreferences sharedPref;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		addPreferencesFromResource(R.xml.alarm);
+		sharedPref = getSharedPreferences(ALARM_PREF, MODE_PRIVATE);
+
+		alarmType = (ListPreference) findPreference(ALARM_TYPE);
+		alarmBeforeLesson = (ListPreference) findPreference(ALARM_LESSON);
+		alarmTime = findPreference(ALARM_TIME);
+		alarmRingtone =  (RingtonePreference) findPreference(ALARM_RINGTONE);
+		alarmVolume = findPreference(ALARM_VOLUME);
+		alarmVibration = (CheckBoxPreference) findPreference(ALARM_VIBRATION);
+
+		final String[] alarmTypes = getResources().getStringArray(
+				R.array.alarm_types);
+		int indexOfType = sharedPref.getInt(ALARM_TYPE, 0);
+		alarmType.setSummary(alarmTypes[indexOfType]);
+		alarmBeforeLesson
+				.setEnabled(Integer.parseInt(alarmType.getValue()) == 1);
+		alarmType
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						int value = Integer.parseInt((String) newValue);
+						alarmType.setValue((String) newValue);
+						alarmType.setSummary(alarmTypes[value]);
+
+						alarmBeforeLesson.setEnabled(value == 1);
+						return true;
+					}
+				});
+
+		
+		// ЗАГЛУШКА
+		int numberOfLessons = 5;
+		//
+		
+		String[] summaryValues = getResources().getStringArray(
+				R.array.alarm_summary_values);
+		final CharSequence[] entries = new String[numberOfLessons];
+		CharSequence[] entryValues = new String[numberOfLessons];
+		for (int i = 0; i < numberOfLessons; i++) {
+			entries[i] = summaryValues[i];
+			entryValues[i] = "" + i;
+		}
+		alarmBeforeLesson.setEntries(entries);
+		alarmBeforeLesson.setEntryValues(entryValues);
+		int indexOfLesson = sharedPref.getInt(ALARM_LESSON, 0);
+		alarmBeforeLesson.setSummary(summaryValues[indexOfLesson]);
+		alarmBeforeLesson
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						int value = Integer.parseInt((String) newValue);
+						alarmBeforeLesson.setValue((String) newValue);
+						alarmBeforeLesson.setSummary(entries[value]);
+						return true;
+					}
+				});
+		alarmTime.setSummary(formatTime(sharedPref.getLong(ALARM_TIME, System.currentTimeMillis())));
+		alarmTime.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				showDialog(TIME_DIALOG);
+				return false;
+			}
+		});
+	
+		
+		alarmRingtone.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				Log.i("AlarmActivity", newValue.toString());
+				return false;
+			}
+		});
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case TIME_DIALOG:
+			final GregorianCalendar cal = new GregorianCalendar(Locale.getDefault());
+			cal.setTimeInMillis(sharedPref.getLong(ALARM_TIME, System.currentTimeMillis()));
+			TimePickerDialog dialog = new TimePickerDialog(this,
+					new OnTimeSetListener() {
+						@Override
+						public void onTimeSet(TimePicker view, int hourOfDay,
+								int minute) {
+							cal.set(GregorianCalendar.HOUR_OF_DAY, hourOfDay);
+							cal.set(GregorianCalendar.MINUTE, minute);
+							Editor editor = sharedPref.edit();
+							editor.putLong(ALARM_TIME, cal.getTimeInMillis());
+							editor.commit();
+							
+							//////////////////////////////////
+							alarmTime.setSummary(formatTime(sharedPref.getLong(ALARM_TIME, System.currentTimeMillis())));
+						}
+					}, cal.get(GregorianCalendar.HOUR_OF_DAY), cal.get(GregorianCalendar.MINUTE), true);
+			return dialog;
+		default:
+			return super.onCreateDialog(id);
+		}
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Editor editor = sharedPref.edit();
+		editor.putInt(ALARM_TYPE, Integer.parseInt(alarmType.getValue()));
+		editor.putInt(ALARM_LESSON,
+				Integer.parseInt(alarmBeforeLesson.getValue()));
+		editor.putString(ALARM_RINGTONE, alarmRingtone.toString());
+		
+		Log.i("AlarmActivity", alarmRingtone.getKey());
+		
+		editor.commit();
+	}
+
+	public static String getAlarmTime(Context context, DayListAdapter adapter) {
+		GregorianCalendar alarm = new GregorianCalendar(Locale.getDefault());
+		SharedPreferences sharedPref = context.getSharedPreferences(ALARM_PREF, MODE_PRIVATE);
+		alarm.setTimeInMillis(sharedPref.getLong(ALARM_TIME, System.currentTimeMillis()));
+		if (sharedPref.getInt(AlarmActivity.ALARM_TYPE, 0) == 1) {
+			int index = sharedPref.getInt(AlarmActivity.ALARM_LESSON, 0);
+			int maxIndex = adapter.getCount() - 1;
+			if (index > maxIndex) {
+				index = maxIndex;
+			}
+			int[] temptime = ((Pair) adapter.getItem(index)).getTime(); 
+			temptime[2] = alarm.get(GregorianCalendar.HOUR_OF_DAY);
+			temptime[3] = alarm.get(GregorianCalendar.MINUTE);
+			alarm.set(GregorianCalendar.HOUR_OF_DAY, (temptime[0] - temptime[2]));
+			alarm.set(GregorianCalendar.MINUTE, (temptime[1] - temptime[3]));
+		}
+		return formatTime(alarm.getTimeInMillis());
+	}
+	
+	public static String formatTime(long date) {
+		return TIME_FORMAT.format(new Date(date));
+	}
+}
