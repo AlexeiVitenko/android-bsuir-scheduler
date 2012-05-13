@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.text.style.UpdateLayout;
 import android.view.View;
 import android.view.Window;
@@ -72,8 +73,7 @@ public class AlarmClockActivity extends Activity {
 		setTitle(R.string.app_name);
 
 		dbAdapter = DBAdapter.getInstance(getApplicationContext());
-		sharedPref = getSharedPreferences(AlarmActivity.ALARM_PREF,
-				AlarmActivity.MODE_PRIVATE);
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		time = new GregorianCalendar(Locale.getDefault());
 

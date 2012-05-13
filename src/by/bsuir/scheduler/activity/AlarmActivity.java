@@ -24,6 +24,7 @@ import android.os.PowerManager;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
@@ -37,7 +38,7 @@ public class AlarmActivity extends PreferenceActivity {
 	private static final int VOLUME_DIALOG = 11;
 	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat(
 			"HH:mm");
-	public static final String ALARM_PREF = "alarm_pref";
+	//public static final String ALARM_PREF = "alarm_pref";
 	public static final String ALARM_CLOCK = "pref_alarm_clock";
 	public static final String ALARM_TYPE = "pref_alarm_type";
 	public static final String ALARM_LESSON = "pref_alarm_before_lesson";
@@ -54,13 +55,13 @@ public class AlarmActivity extends PreferenceActivity {
 	private Preference alarmVolume;
 	private CheckBoxPreference alarmVibration;
 
-	private SharedPreferences sharedPref;
+	private static SharedPreferences sharedPref;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.alarm);
-		sharedPref = getSharedPreferences(ALARM_PREF, MODE_PRIVATE);
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);//getSharedPreferences(ALARM_PREF, MODE_PRIVATE);
 		alarmClock = (CheckBoxPreference) findPreference(ALARM_CLOCK);
 		alarmType = (ListPreference) findPreference(ALARM_TYPE);
 		alarmBeforeLesson = (ListPreference) findPreference(ALARM_LESSON);
@@ -214,8 +215,8 @@ public class AlarmActivity extends PreferenceActivity {
 	private static GregorianCalendar calculateAlarmTime(Context context, Day day) {
 		GregorianCalendar alarm = new GregorianCalendar(Locale.getDefault());
 		if (day.getCount() > 0) {
-			SharedPreferences sharedPref = context.getSharedPreferences(
-					ALARM_PREF, MODE_PRIVATE);
+			//SharedPreferences sharedPref = context.getSharedPreferences(ALARM_PREF, MODE_PRIVATE);
+			sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 			alarm.setTimeInMillis(day.getDate().getTimeInMillis());
 
 			GregorianCalendar temp = new GregorianCalendar(Locale.getDefault());

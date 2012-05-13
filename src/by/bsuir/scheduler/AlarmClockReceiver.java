@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -35,8 +36,7 @@ public class AlarmClockReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		this.context = context;
-		alarmPref = context.getSharedPreferences(AlarmActivity.ALARM_PREF,
-				AlarmActivity.MODE_PRIVATE);
+		alarmPref = PreferenceManager.getDefaultSharedPreferences(context);
 
 		if (alarmPref.getBoolean(AlarmActivity.ALARM_CLOCK, false)) {
 			Log.i("AlarmClockReceiver",
