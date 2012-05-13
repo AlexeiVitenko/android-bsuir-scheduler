@@ -38,6 +38,7 @@ public class SchedulerActivity extends Activity {
 		mAdapter = DBAdapter.getInstance(getApplicationContext());
 		if (!mAdapter.isFilling()) {
 			startActivityForResult(new Intent(this, ConfiguratorActivity.class),this.getClass().hashCode());
+			mChooseMode = true;
 		}
 	}
 	
