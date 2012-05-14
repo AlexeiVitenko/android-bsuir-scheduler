@@ -125,11 +125,15 @@ public class DayPagerAdapter extends PagerAdapter {
 		needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
 		while (!mAdapter.isWorkDay(needed)) {
 			if (mAdapter.dayMatcher(needed) == DayMatcherConditions.LAST_DAY) {
-				mSize = position+2;
+				mSize = position+1;
+				needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
+				break;
 			}
-			if (mAdapter.dayMatcher(needed) == DayMatcherConditions.FIRST_DAY) {
-				((LimitedViewPager)container).setLeftBorder(position);//mCurrentDayPosition-1);
-			//	return new View(mContext);
+			if (mAdapter.dayMatcher(needed) == DayMatcherConditions.FIRST_DAY && shift < 0) {
+				((LimitedViewPager)container).setLeftBorder(position+1);
+				view = new  View(mContext);
+				((LimitedViewPager) container).addView(view, position % 3);
+				return view;
 			}
 			if (mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_LEFT || mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_RIGTH) {
 				view = new  View(mContext);
@@ -142,8 +146,7 @@ public class DayPagerAdapter extends PagerAdapter {
 			mSize = position+2;
 		}
 		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.FIRST_DAY) {
-			((LimitedViewPager)container).setLeftBorder(position);//mCurrentDayPosition-1);
-		//	return new View(mContext);
+			((LimitedViewPager)container).setLeftBorder(position);
 		}
 		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_LEFT || mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_RIGTH) {
 			view = new  View(mContext);
