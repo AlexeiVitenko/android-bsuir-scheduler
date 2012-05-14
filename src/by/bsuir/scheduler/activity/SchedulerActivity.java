@@ -1,5 +1,6 @@
 package by.bsuir.scheduler.activity;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -99,6 +100,9 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 					parse();
 				}else{
 					if ((resultCode & SettingsActivity.SEMESTER_CHANGES)>0) {
+						/*while (!mAdapter.isWorkDay(day)) {
+							day
+						}*/
 						init(day.getTimeInMillis());
 					}
 				}
@@ -175,6 +179,16 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 		if (mAdapter.dayMatcher(day)==DayMatcherConditions.OVERFLOW_RIGTH) {
 			day.setTimeInMillis(mAdapter.getLastDayMillis());
 		}
+		if (mAdapter.dayMatcher(day)==DayMatcherConditions.FIRST_DAY) {
+			while(!mAdapter.isWorkDay(day)){
+				day.add(Calendar.DAY_OF_YEAR, 1);	
+			}
+		}
+		if (mAdapter.dayMatcher(day)==DayMatcherConditions.LAST_DAY && !mAdapter.isWorkDay(day)) {
+			while(!mAdapter.isWorkDay(day)){
+				day.add(Calendar.DAY_OF_YEAR, -1);	
+			}
+		}
 		dayPagerAdapter = new DayPagerAdapter(this, day.getTimeInMillis());
 		viewPager = new LimitedViewPager(this);
 		viewPager.setAdapter(dayPagerAdapter);
@@ -183,7 +197,12 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 			sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
 		setContentView(viewPager);
 	}
-
+	
+	@Override
+	public void onBackPressed() {
+		moveTaskToBack(true);
+	}
+	
 	private void parse() {
 		final ProgressDialog pd = new ProgressDialog(this);
 		pd.setMessage(getString(R.string.start_parsing));
