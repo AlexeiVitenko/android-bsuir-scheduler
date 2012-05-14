@@ -45,6 +45,8 @@ public class ConfiguratorActivity extends Activity {
 		c.setTimeInMillis(preferences.getLong(getString(R.string.semester_start_day), System.currentTimeMillis()));
 		dp.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), null);
 		views.add(l);
+		l = (ScrollView)inflater.inflate(R.layout.configurator_2, null);
+		views.add(l);
 		final NonScrollableAdapter adapter = new NonScrollableAdapter(views);
 		mPager.setOnInputCompleteListiner(new OnInputCompleteListiner() {
 			

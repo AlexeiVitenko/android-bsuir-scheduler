@@ -87,7 +87,7 @@ public class AlarmClockReceiver extends BroadcastReceiver {
 			time.setTimeInMillis(AlarmActivity.getAlarmTimeLong(context, day));
 		}
 	}
-
+	
 	private void setNewAlarmClock() {
 		AlarmManager alarmManager = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);

@@ -67,7 +67,7 @@ public class NonScrollableViewPager extends ViewPager {
 			}
 		}
     }
-    
+ 
     void prev(){
     	if (mCurrenItem>0) {
     		setCurrentItem(mCurrenItem-1, true);

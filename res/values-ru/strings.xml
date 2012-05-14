@@ -41,5 +41,6 @@
 	<string name="alarm_toast">Следущий будильник:</string>
     <string name="notification_sound">Звук</string>
     <string name="notification_lights">Подсветка</string>
-    
+    <string name="crazy">Помните, приложение поставляется по принципу \"как есть так есть\".\nВы его ипользуете на свой страх и риск. Мы не несём никакой ответственности за нарушение планов из-за приложения.</string>
+    <string name="agree">Согласен</string>
 </resources>

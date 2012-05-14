@@ -52,7 +52,8 @@
 	<string name="notif_lights">notif_lights</string>
 	<string name="notification_sound">Sound</string>
     <string name="notification_lights">Lights</string>
-    
+    <string name="crazy">This application distribute \"as is as\" and you use it on your own risk.\n</string>
+    <string name="agree">Agree</string>
     <string name="key_alarm_clock">pref_alarm_clock</string>
     <string name="key_alarm_type">pref_alarm_type</string>
     <string name="key_alarm_before_lesson">pref_alarm_before_lesson</string>

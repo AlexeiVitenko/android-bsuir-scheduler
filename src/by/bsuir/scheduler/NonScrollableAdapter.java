@@ -5,10 +5,12 @@ import java.util.List;
 
 import by.bsuir.scheduler.activity.ConfiguratorActivity;
 
+import android.support.v4.view.LimitedViewPager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -25,6 +27,11 @@ public class NonScrollableAdapter extends PagerAdapter {
 		View v = mViews.get(position);
 		((ViewPager)container).addView(v,position);
 		return v;
+	}
+	
+	@Override
+	public void destroyItem(ViewGroup container, int position, Object object) {
+		((ViewPager) container).removeView((View) object);
 	}
 	
 	@Override
@@ -47,7 +54,8 @@ public class NonScrollableAdapter extends PagerAdapter {
 		c.set(Calendar.YEAR, picker.getYear());
 		c.set(Calendar.MONTH, picker.getMonth());
 		c.set(Calendar.DAY_OF_MONTH, picker.getDayOfMonth());
-		if (group.length()>0 && weeks.length()>0) {
+		CheckBox checkBox = (CheckBox)mViews.get(2).findViewById(R.id.iAmCrazy);
+		if (group.length()>0 && weeks.length()>0 && checkBox.isChecked()) {
 			activity.setResult(group, subGroup, weeks, c.getTimeInMillis());
 		}
 	}

@@ -8,11 +8,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
     <application
         android:icon="@drawable/ic_app"
         android:label="@string/app_name" >
@@ -53,25 +54,31 @@
             android:name=".activity.ConfiguratorActivity"
             android:configChanges="keyboard|keyboardHidden|orientation" >
         </activity>
-        <receiver android:name=".PairReceiver"
-            android:enabled="true">
+
+        <receiver
+            android:name=".PairReceiver"
+            android:enabled="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.DEFAULT"/>
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".AlarmClockReceiver"
-            android:enabled="true">
+        <receiver
+            android:name=".AlarmClockReceiver"
+            android:enabled="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.DEFAULT"/>
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name=".activity.AlarmClockActivity"
-            android:theme="@android:style/Theme.Dialog"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:exported="true" >
+            android:theme="@android:style/Theme.Dialog" >
         </activity>
     </application>
 
