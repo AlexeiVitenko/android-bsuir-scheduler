@@ -43,4 +43,6 @@
     <string name="notification_lights">Подсветка</string>
     <string name="crazy">Помните, приложение поставляется по принципу \"как есть так есть\".\nВы его ипользуете на свой страх и риск. Мы не несём никакой ответственности за нарушение планов из-за приложения.</string>
     <string name="agree">Согласен</string>
+    <string name="author_names">Алексей Витенко, Владислав Николаев, Владислав Соколенко</string>
+    <string name="author_title">Авторы</string>
 </resources>

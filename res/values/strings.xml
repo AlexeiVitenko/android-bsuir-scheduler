@@ -61,4 +61,6 @@
     <string name="key_alarm_ringtone">pref_alarm_ringtone</string>
     <string name="key_alarm_volume">pref_alarm_volume</string>
     <string name="key_alarm_vibration">pref_alarm_vibration</string>
+    <string name="author_names">Alexei Vitenko, Vladislav Nikolaev, Vladislav Sokolenko</string>
+    <string name="author_title">Authors</string>
 </resources>
