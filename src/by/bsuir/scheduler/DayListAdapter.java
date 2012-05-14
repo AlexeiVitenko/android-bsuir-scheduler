@@ -152,6 +152,8 @@ public class DayListAdapter extends BaseAdapter {
 		Pair tempLesson = mPairs.get(position);
 		if (tempLesson.getNote().length() > 0) {
 			holder.note.setImageResource(R.drawable.ic_note);
+		}else{
+			holder.note.setImageDrawable(null);
 		}
 	}
 
