@@ -10,5 +10,10 @@
             android:key="vCode"
             android:title="Build #"
             />
+        <Preference 
+            android:key="authors"
+            android:title="@string/author_title"
+            android:summary="@string/author_names"
+            />
     </PreferenceCategory>
 </PreferenceScreen>
