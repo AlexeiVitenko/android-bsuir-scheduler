@@ -62,8 +62,7 @@ public class AlarmClockActivity extends Activity {
 		PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP, "My Tag");
 		wl.acquire();
-		
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+	//	getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
 		KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 
@@ -71,7 +70,7 @@ public class AlarmClockActivity extends Activity {
 		 keyguardLock.disableKeyguard();
 		setContentView(R.layout.alarm_clock_dialog);
 		setTitle(R.string.app_name);
-
+		
 		dbAdapter = DBAdapter.getInstance(getApplicationContext());
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		
