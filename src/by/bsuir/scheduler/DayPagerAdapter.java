@@ -134,12 +134,17 @@ public class DayPagerAdapter extends PagerAdapter {
 				view = new  View(mContext);
 				((LimitedViewPager) container).addView(view, position % 3);
 				return view;
-			}
+			}/*
 			if (mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_LEFT || mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_RIGTH) {
-				view = new  View(mContext);
-				((LimitedViewPager) container).addView(view, position % 3);
-				return view;
-			}
+				view = new  View(mContext);/*
+				needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
+				if (mAdapter.dayMatcher(needed)==DayMatcherConditions.FIRST_DAY && mAdapter.isWorkDay(needed)) {
+					*
+				//} else {
+					((LimitedViewPager) container).addView(view, position % 3);
+					return view;
+				//}
+			}*/
 			needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
 		}
 		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.LAST_DAY) {
