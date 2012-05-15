@@ -65,8 +65,12 @@
     <string name="key_alarm_vibration">pref_alarm_vibration</string>
     <string name="author_names">Alexei Vitenko, Vladislav Nikolaev, Vladislav Sokolenko</string>
     <string name="author_title">Authors</string>
-    <string name="parser_exception_text">Error! Data structure was changed on the website.</string>
-    <string name="group_exception_text">Set your group number in settings.</string>
-    <string name="internet_exception_text">Internet connection problems.</string>
-    <string name="groupname_exception_text">No such group.</string>
+    <string name="parser_exception_text">Error! Document structure was changed on the website</string>                                                                                     <string name="indian_code">Developers, developers, developser, developers, developers, developers...\nDevelopers! Developers! Developers! Developers! Developers! Developers! Developers! Developers!\nYes!\nClap-clap-clap.</string>
+    <string name="group_exception_text">Set your group number in settings</string>
+    <string name="internet_exception_text">Check internet connection</string>
+    <string name="groupname_exception_text">No such group: </string>
+    <string name="groupname_server_text">Smth strange happend on the server side</string>
+    <string name="group_probably_not_exsist">or this group don\'t exsist: </string>
+    <string name="sax_exception">XML not valid. It seems that document structure was changed on the website</string> 
+    <string name="magic">Do you like... magic?</string>
 </resources>

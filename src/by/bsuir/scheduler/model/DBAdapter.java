@@ -274,8 +274,7 @@ public class DBAdapter implements Pushable, Closeable {
 	public void refreshSchedule(String group, int subGroup,
 			ParserListiner listiner) {
 		if (group.equals("-1")) {
-			Toast.makeText(mContext, R.string.group_exception_text,
-					Toast.LENGTH_SHORT).show();
+			listiner.onException(new Exception(mContext.getString(R.string.group_exception_text)+" "+group));
 			return;
 		}
 		if (((ConnectivityManager) mContext
@@ -285,11 +284,11 @@ public class DBAdapter implements Pushable, Closeable {
 						.getSystemService(Context.CONNECTIVITY_SERVICE))
 						.getActiveNetworkInfo().isConnected()) {
 			listiner.onException(new Exception(
-					String.valueOf(R.string.internet_exception_text)));
+					mContext.getString(R.string.internet_exception_text)));
 			return;
 		}
 		Log.d("Parsing", "Start");
-		Parser p = new Parser(group, subGroup, this, listiner);
+		Parser p = new Parser(group, subGroup, this, listiner, mContext);
 		if(p.prepare()){
 			mDBHelper.dropTables(mDBHelper.getWritableDatabase());
 			mDBHelper.close();
@@ -297,7 +296,7 @@ public class DBAdapter implements Pushable, Closeable {
 			p.parseSchedule();
 			Log.d("Parse time", "" + (System.currentTimeMillis() - startTime));
 		}else{
-			listiner.onException(new Exception(String.valueOf(R.string.groupname_exception_text)));
+			listiner.onException(new Exception(mContext.getString(R.string.groupname_server_text)+" "+mContext.getString(R.string.group_probably_not_exsist)+" "+group));
 		}
 	}
 

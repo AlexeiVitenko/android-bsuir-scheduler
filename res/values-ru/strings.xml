@@ -45,8 +45,13 @@
     <string name="agree">Согласен</string>
     <string name="author_names">Алексей Витенко, Владислав Николаев, Владислав Соколенко</string>
     <string name="author_title">Авторы</string>
-    <string name="parser_exception_text">Ошибка! Структура данных на сайте была изменена.</string>
-    <string name="group_exception_text">Введите группу в настройках.</string>
-    <string name="internet_exception_text">Отсутсвует подключение к интеренту.</string>
-    <string name="groupname_exception_text">Данной группы не существует.</string>
+    <string name="parser_exception_text">Ошибка! Структура данных на сайте была изменена</string>
+    <string name="group_exception_text">Введите группу в настройках</string>
+    <string name="internet_exception_text">Проверьте подключение к интернету</string>
+    <string name="groupname_exception_text">Данной группы не существует: </string>
+    <string name="groupname_server_text">Произошли неполадки на стороне сервера </string>
+    <string name="group_probably_not_exsist">либо такой группы не существует: </string> 
+    <string name="sax_exception">XML не валиден. Скорее всего поменялась структура расписания на сайте</string>
+    <string name="indian_code">Парсер настроен неверно.\nНапинайте разработчикам</string>
+    <string name="magic">Do you like... magic?</string>
 </resources>
