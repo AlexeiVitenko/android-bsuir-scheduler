@@ -61,8 +61,7 @@ public class SchedulerActivity extends Activity implements
 			}
 			Toast.makeText(
 					getApplicationContext(),
-					"Очевидно, что-то пошло не так :("
-							+ System.getProperty("LINE_SEPARATOR")
+					R.string.parser_exception_text
 					// + e.getClass(),
 					, Toast.LENGTH_LONG).show();
 			if (!mAdapter.isFilling()) {

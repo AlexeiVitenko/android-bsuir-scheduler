@@ -274,7 +274,7 @@ public class DBAdapter implements Pushable, Closeable {
 	public void refreshSchedule(String group, int subGroup,
 			ParserListiner listiner) {
 		if (group.equals("-1")) {
-			Toast.makeText(mContext, "Введите группу в настройках.",
+			Toast.makeText(mContext, R.string.group_exception_text,
 					Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -285,7 +285,7 @@ public class DBAdapter implements Pushable, Closeable {
 						.getSystemService(Context.CONNECTIVITY_SERVICE))
 						.getActiveNetworkInfo().isConnected()) {
 			listiner.onException(new Exception(
-					"Отсутсвует подключение к интеренту"));
+					String.valueOf(R.string.internet_exception_text)));
 			return;
 		}
 		Log.d("Parsing", "Start");
@@ -297,7 +297,7 @@ public class DBAdapter implements Pushable, Closeable {
 			p.parseSchedule();
 			Log.d("Parse time", "" + (System.currentTimeMillis() - startTime));
 		}else{
-			listiner.onException(new Exception("No such group"));
+			listiner.onException(new Exception(String.valueOf(R.string.groupname_exception_text)));
 		}
 	}
 
