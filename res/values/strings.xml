@@ -24,6 +24,8 @@
     <string name="notifications_enabled_question">Enable notifications?</string>
     <string name="group_number">group_number</string>
     <string name="sub_group_number">sub_group_number</string>
+    <string name="last_group_number">last_group_number</string>
+    <string name="last_sub_group_number">last_sub_group_number</string>
     <string name="group">Group</string>
     <string name="preference_sub_group_list">preference_sub_group_list</string>
     <string name="subgroup">Subgroup</string>

@@ -82,7 +82,9 @@ public class ConfiguratorActivity extends Activity {
 		Editor editor = pref.edit();
 		editor.putString(getString(R.string.semester_length_weeks), semesterLength);
 		editor.putString(getString(R.string.preference_sub_group_list), ""+subGroup);
+		editor.putString(getString(R.string.last_sub_group_number), String.valueOf(subGroup));
 		editor.putString(getString(R.string.group_number), group);
+		editor.putString(getString(R.string.last_group_number), group);
 		editor.putLong(getString(R.string.semester_start_day), date);
 		editor.commit();
 		setResult(RESULT_PREFERENCES_CHANGES);

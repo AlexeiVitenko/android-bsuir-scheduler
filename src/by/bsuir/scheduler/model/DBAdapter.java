@@ -289,6 +289,7 @@ public class DBAdapter implements Pushable, Closeable {
 			return;
 		}
 		Log.d("Parsing", "Start");
+		//TODO проверить лежит ли сайт бгуира
 		mDBHelper.dropTables(mDBHelper.getWritableDatabase());
 		mDBHelper.close();
 		long startTime = System.currentTimeMillis();
