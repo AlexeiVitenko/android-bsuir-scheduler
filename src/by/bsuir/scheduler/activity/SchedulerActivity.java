@@ -48,6 +48,7 @@ public class SchedulerActivity extends Activity implements
 			activity.putExtra(GridCellAdapter.DAY, System.currentTimeMillis());
 			context.sendBroadcast(new Intent(context.getApplicationContext(),
 					PairReceiver.class));
+			activity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(activity);
 		}
 	};
@@ -260,112 +261,13 @@ public class SchedulerActivity extends Activity implements
 	private void parse() {
 		final ProgressDialog pd = new ProgressDialog(this);
 		mProgressDialog = pd;
-		pd.setMessage(getString(R.string.start_parsing));/*
-														 * final
-														 * SharedPreferences
-														 * prefs =
-														 * PreferenceManager .
-														 * getDefaultSharedPreferences
-														 * (this);
-														 * AsyncTask<String,
-														 * String, Boolean> asc
-														 * = new
-														 * AsyncTask<String,
-														 * String, Boolean>() {
-														 * private boolean
-														 * succesfull = false;
-														 * 
-														 * @Override protected
-														 * Boolean
-														 * doInBackground
-														 * (String... params) {
-														 * 
-														 * DBAdapter.getInstance(
-														 * getApplicationContext
-														 * ()).refreshSchedule(
-														 * prefs
-														 * .getString(getString
-														 * (R
-														 * .string.group_number
-														 * ), "" + (-1)),
-														 * Integer
-														 * .parseInt(prefs
-														 * .getString(
-														 * getString(R.string.
-														 * preference_sub_group_list
-														 * ), "" + 0)), new
-														 * ParserListiner() {
-														 * 
-														 * @Override public void
-														 * onException(final
-														 * Exception e) {
-														 * pd.cancel(); //
-														 * Looper.prepare();
-														 * runOnUiThread(new
-														 * Runnable() {
-														 * 
-														 * @Override public void
-														 * run() {
-														 * Toast.makeText(
-														 * getApplicationContext
-														 * (),
-														 * "Очевидно, что-то пошло не так :("
-														 * + System.getProperty(
-														 * "LINE_SEPARATOR") +
-														 * e.getClass(),
-														 * Toast.LENGTH_LONG
-														 * ).show(); } });
-														 * succesfull = false;
-														 * /*if
-														 * (!mAdapter.isFilling
-														 * ())/ { finish(); } }
-														 * 
-														 * @Override public void
-														 * onComplete() {
-														 * pd.cancel();
-														 * runOnUiThread(new
-														 * Runnable() { public
-														 * void run() {
-														 * init(System
-														 * .currentTimeMillis
-														 * ()); } });
-														 * sendBroadcast(new
-														 * Intent
-														 * (getApplicationContext
-														 * (),
-														 * PairReceiver.class));
-														 * succesfull = true; }
-														 * }); return
-														 * succesfull; }
-														 * 
-														 * @Override protected
-														 * void
-														 * onProgressUpdate(
-														 * String... values) {
-														 * pd
-														 * .setTitle(values[0]);
-														 * super
-														 * .onProgressUpdate
-														 * (values); }
-														 * 
-														 * @Override protected
-														 * void
-														 * onPostExecute(Boolean
-														 * result) {
-														 * pd.cancel();
-														 * super.onPostExecute
-														 * (result); } };
-														 * asc.execute(new
-														 * String[]{});
-														 */
+		pd.setMessage(getString(R.string.start_parsing));
 		pd.setCancelable(false);
 		pd.setCanceledOnTouchOutside(false);
 		pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-
+		mChooseMode = true;
 		startService(new Intent(getApplicationContext(), ParserService.class));
 		pd.show();
-		// FIXEME всё это в onComplete + возвращаться в тот день, который был
-		// текущим
 	}
 
 	@Override
