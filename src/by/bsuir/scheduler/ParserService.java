@@ -4,6 +4,7 @@ import by.bsuir.scheduler.activity.SchedulerActivity;
 import by.bsuir.scheduler.model.DBAdapter;
 import by.bsuir.scheduler.parser.ParserListiner;
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class ParserService extends IntentService {
+	public static final String EXCEPTION="exception";
+	
 	private Object mMonitor = new Object();
 	
 	public ParserService() {
@@ -47,7 +50,9 @@ public class ParserService extends IntentService {
 											prefs.getString(getString(R.string.last_sub_group_number),"" + -1)
 										);
 									prefsEditor.commit();
-									sendBroadcast(new Intent(SchedulerActivity.PARSER_EXCEPTION));
+									Intent intent = new Intent(SchedulerActivity.PARSER_EXCEPTION);
+									intent.putExtra(EXCEPTION, e.getMessage());
+									sendBroadcast(intent);
 									synchronized (mMonitor) {
 										mMonitor.notifyAll();	
 									}

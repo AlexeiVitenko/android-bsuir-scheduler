@@ -59,11 +59,12 @@ public class SchedulerActivity extends Activity implements
 			if (mProgressDialog != null) {
 				mProgressDialog.cancel();
 			}
-			Toast.makeText(
-					getApplicationContext(),
-					R.string.parser_exception_text
-					// + e.getClass(),
-					, Toast.LENGTH_LONG).show();
+			if (intent.getExtras()!=null && intent.getExtras().containsKey(ParserService.EXCEPTION)) {
+				Toast.makeText(
+						getApplicationContext(),
+						intent.getExtras().getString(ParserService.EXCEPTION)
+						, Toast.LENGTH_LONG).show();	
+			}
 			if (!mAdapter.isFilling()) {
 				finish();
 			}

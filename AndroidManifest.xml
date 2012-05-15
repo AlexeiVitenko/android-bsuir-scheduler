@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="by.bsuir.scheduler"
-    android:versionCode="16"
-    android:versionName="0.91" >
+    android:versionCode="18"
+    android:versionName="0.95" >
 
     <uses-sdk android:minSdkVersion="8" />
 

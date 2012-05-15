@@ -27,6 +27,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import by.bsuir.scheduler.R;
+
+import android.content.Context;
 import android.util.Log;
 
 public class Parser {
@@ -37,7 +40,9 @@ public class Parser {
 	private Pushable mBridge;
 	private ParserListiner mListiner;
 	private String mBody;
+	private Node mTable;
 	private int counter = 0;
+	private Context mContext;
 	/**
 	 * 
 	 * @param group - группа. String
@@ -45,7 +50,7 @@ public class Parser {
 	 * @param bridge - Класс, который проталкивает пары в базу
 	 * @param listiner - слушатель на 2 события: успешное завершение и исключительная ситуация.
 	 */
-	public Parser(String group, int subGroup, Pushable bridge, ParserListiner listiner){
+	public Parser(String group, int subGroup, Pushable bridge, ParserListiner listiner, Context context){
 		HttpParams params = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(params, 30000);
 		mClient = new DefaultHttpClient(params);
@@ -53,6 +58,7 @@ public class Parser {
 		mSubGroup = subGroup;
 		mBridge = bridge;
 		mListiner = listiner;
+		mContext = context;
 	}
 	
 	/**
@@ -108,22 +114,11 @@ public class Parser {
 	
 	public void parseSchedule(){
 		try {
-			String body = mBody;
-			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(body)));
-			NodeList list = doc.getElementsByTagName("table");
-			parseTable(list.item(0));
-			if (mListiner!=null) mListiner.onComplete();/*
-		} catch (SAXException e) {
-			if (mListiner!=null) mListiner.onException(e);
-			return;
-		} catch (IOException e) {
-			if (mListiner!=null) mListiner.onException(e);
-			return;
-		} catch (ParserConfigurationException e) {
-			if (mListiner!=null) mListiner.onException(e);
-			return;*/
+			parseTable(mTable);
+			if (mListiner!=null) mListiner.onComplete();
 		}catch (Exception e) {
-			if (mListiner!=null) mListiner.onException(e);
+			//тут мэджик
+			if (mListiner!=null) mListiner.onException(new Exception(mContext.getString(R.string.magic)));
 			return;
 		}
 		Log.d("Counter",""+counter);
@@ -186,17 +181,24 @@ public class Parser {
 		try {
 			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(mBody)));
 			NodeList list = doc.getElementsByTagName("table");
-			return list.getLength()>0;
+			if (list.getLength()>0) {
+				mTable = list.item(0);
+				return true;
+			} else {
+				return false;
+			}
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
-			if (mListiner!=null) mListiner.onException(e);
+			if (mListiner!=null) mListiner.onException(new Exception(mContext.getString(R.string.sax_exception)));
+			return false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			if (mListiner!=null) mListiner.onException(e);
+			if (mListiner!=null) mListiner.onException(new Exception(mContext.getString(R.string.internet_exception_text)));
+			return false;
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
-			if (mListiner!=null) mListiner.onException(e);
+			if (mListiner!=null) mListiner.onException(new Exception(mContext.getString(R.string.indian_code)));
+			return false;
 		}
-		return false;
 	}
 }
