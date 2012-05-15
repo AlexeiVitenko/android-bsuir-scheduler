@@ -120,7 +120,8 @@ public class SchedulerActivity extends Activity implements
 		if (day == null) {
 			day = new GregorianCalendar(Locale.getDefault());
 		} else {
-			day = dayPagerAdapter.getCurrentDay();
+			if(dayPagerAdapter != null)
+				day = dayPagerAdapter.getCurrentDay();
 		}
 		super.onSaveInstanceState(outState);
 	}
