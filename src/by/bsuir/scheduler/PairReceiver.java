@@ -127,9 +127,9 @@ public class PairReceiver extends BroadcastReceiver {
 		PendingIntent nPendingIntent = PendingIntent.getActivity(
 				mContext.getApplicationContext(), NOTIFICATION_ID,
 				notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		Log.d("p0", mPairs[0].getLesson());
-		Log.d("p1null", "" + (mPairs[1] == null));
-		Log.d("p1", mPairs[1].getLesson());
+		//Log.d("p0", mPairs[0].getLesson());
+		//Log.d("p1null", "" + (mPairs[1] == null));
+		//Log.d("p1", mPairs[1].getLesson());
 		String current = mPairs[0].getLesson() + " до "
 				+ mPairs[0].endingTimeS() + " " + mPairs[0].getRoom();
 		Calendar d = Calendar.getInstance();

@@ -6,12 +6,16 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.LimitedViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,33 +24,78 @@ import by.bsuir.scheduler.AlarmClockReceiver;
 import by.bsuir.scheduler.DayPagerAdapter;
 import by.bsuir.scheduler.GridCellAdapter;
 import by.bsuir.scheduler.PairReceiver;
+import by.bsuir.scheduler.ParserService;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.model.DBAdapter;
 import by.bsuir.scheduler.model.DBAdapter.DayMatcherConditions;
 import by.bsuir.scheduler.parser.ParserListiner;
 
-public class SchedulerActivity extends Activity implements OnSemesterParametersChangeListiner{
+public class SchedulerActivity extends Activity implements
+		OnSemesterParametersChangeListiner {
+	public static final String PARSER_ACTION = "by.bsuir.scheduler.PARSER";
+	public static final String PARSER_EXCEPTION = "by.bsuir.scheduler.PARSER_EXCEPTION";
 	public static final int RESULT_DAY = 2;
+	private BroadcastReceiver mParserReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (mProgressDialog != null) {
+				mProgressDialog.cancel();
+			}
+//			init(System.currentTimeMillis());
+			Log.d("ParserReceiver", "Receive");
+			Intent activity = new Intent(getApplicationContext(), SchedulerActivity.class);
+			activity.putExtra(GridCellAdapter.DAY, System.currentTimeMillis());
+			context.sendBroadcast(new Intent(context.getApplicationContext(),
+					PairReceiver.class));
+			startActivity(activity);
+		}
+	};
+	private BroadcastReceiver mParserExceptionReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (mProgressDialog != null) {
+				mProgressDialog.cancel();
+			}
+			Toast.makeText(
+					getApplicationContext(),
+					"Очевидно, что-то пошло не так :("
+							+ System.getProperty("LINE_SEPARATOR")
+					// + e.getClass(),
+					, Toast.LENGTH_LONG).show();
+			if (!mAdapter.isFilling()) {
+				finish();
+			}
+		}
+	};
+	private ProgressDialog mProgressDialog;
 	private DayPagerAdapter dayPagerAdapter;
 	private LimitedViewPager viewPager;
 	private DBAdapter mAdapter;
-	private boolean mChooseMode = false; //I'm lovin' it
+	private boolean mChooseMode = false; // I'm lovin' it
 	private GregorianCalendar day;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		Log.d("SchedulerActivity", "Create");
+		registerReceiver(mParserReceiver, new IntentFilter(PARSER_ACTION));
+		registerReceiver(mParserExceptionReceiver, new IntentFilter(
+				PARSER_EXCEPTION));
 		mAdapter = DBAdapter.getInstance(getApplicationContext());
 		if (!mAdapter.isFilling()) {
 			startActivityForResult(
 					new Intent(this, ConfiguratorActivity.class), this
 							.getClass().hashCode());
 			mChooseMode = true;
-		}else{
-			sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
-			Intent intent = new Intent(getApplicationContext(), AlarmClockReceiver.class);
-			intent.putExtra(AlarmClockReceiver.ALARM_STATUS, AlarmClockReceiver.CHANGE);
+		} else {
+			sendBroadcast(new Intent(getApplicationContext(),
+					PairReceiver.class));
+			Intent intent = new Intent(getApplicationContext(),
+					AlarmClockReceiver.class);
+			intent.putExtra(AlarmClockReceiver.ALARM_STATUS,
+					AlarmClockReceiver.CHANGE);
 			sendBroadcast(intent);
 		}
 	}
@@ -93,20 +142,19 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 			default:
 				break;
 			}
-		} else
-			if (requestCode == SettingsActivity.CALL_CONFIG) {
-				if ((resultCode & SettingsActivity.GROUP_CHANGES) > 0) {
-					mChooseMode = true;
-					parse();
-				}else{
-					if ((resultCode & SettingsActivity.SEMESTER_CHANGES)>0) {
-						/*while (!mAdapter.isWorkDay(day)) {
-							day
-						}*/
-						init(day.getTimeInMillis());
-					}
+		} else if (requestCode == SettingsActivity.CALL_CONFIG) {
+			if ((resultCode & SettingsActivity.GROUP_CHANGES) > 0) {
+				mChooseMode = true;
+				parse();
+			} else {
+				if ((resultCode & SettingsActivity.SEMESTER_CHANGES) > 0) {
+					/*
+					 * while (!mAdapter.isWorkDay(day)) { day }
+					 */
+					init(day.getTimeInMillis());
 				}
-			}else
+			}
+		} else
 			super.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -114,6 +162,7 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		mChooseMode = true;
+		Log.d("SchedulerActivity:", "starting");
 		init(intent.getLongExtra(GridCellAdapter.DAY,
 				System.currentTimeMillis()));
 	}
@@ -132,7 +181,8 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 		case R.id.menu_item_day:
 			intent = new Intent(this, SchedulerActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			intent.putExtra(MonthActivity.EXTRA_MONTH, System.currentTimeMillis());
+			intent.putExtra(MonthActivity.EXTRA_MONTH,
+					System.currentTimeMillis());
 			startActivity(intent);
 			return true;
 
@@ -154,7 +204,7 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 
 		case R.id.menu_item_preferences:
 			intent = new Intent(this, SettingsActivity.class);
-			startActivityForResult(intent,SettingsActivity.CALL_CONFIG);
+			startActivityForResult(intent, SettingsActivity.CALL_CONFIG);
 			return true;
 
 		case R.id.menu_item_info_details:
@@ -173,108 +223,145 @@ public class SchedulerActivity extends Activity implements OnSemesterParametersC
 			day = new GregorianCalendar(Locale.getDefault());
 		}
 		day.setTimeInMillis(time);
-		if (mAdapter.dayMatcher(day)==DayMatcherConditions.OVERFLOW_LEFT) {
+		if (mAdapter.dayMatcher(day) == DayMatcherConditions.OVERFLOW_LEFT) {
 			day.setTimeInMillis(mAdapter.getStartTimeMillis());
 		}
-		if (mAdapter.dayMatcher(day)==DayMatcherConditions.OVERFLOW_RIGTH) {
+		if (mAdapter.dayMatcher(day) == DayMatcherConditions.OVERFLOW_RIGTH) {
 			day.setTimeInMillis(mAdapter.getLastDayMillis());
 		}
-		if (mAdapter.dayMatcher(day)==DayMatcherConditions.FIRST_DAY) {
-			while(!mAdapter.isWorkDay(day)){
-				day.add(Calendar.DAY_OF_YEAR, 1);	
+		if (mAdapter.dayMatcher(day) == DayMatcherConditions.FIRST_DAY) {
+			while (!mAdapter.isWorkDay(day)) {
+				day.add(Calendar.DAY_OF_YEAR, 1);
 			}
 		}
-		if (mAdapter.dayMatcher(day)==DayMatcherConditions.LAST_DAY && !mAdapter.isWorkDay(day)) {
-			while(!mAdapter.isWorkDay(day)){
-				day.add(Calendar.DAY_OF_YEAR, -1);	
+		if (mAdapter.dayMatcher(day) == DayMatcherConditions.LAST_DAY
+				&& !mAdapter.isWorkDay(day)) {
+			while (!mAdapter.isWorkDay(day)) {
+				day.add(Calendar.DAY_OF_YEAR, -1);
 			}
 		}
 		dayPagerAdapter = new DayPagerAdapter(this, day.getTimeInMillis());
 		viewPager = new LimitedViewPager(this);
 		viewPager.setAdapter(dayPagerAdapter);
 		viewPager.setCurrentItem(DayPagerAdapter.POSITION, false);
-		if (PairReceiver.existNotification(getApplicationContext(), PairReceiver.NOTIFICATION_ID)==null)
-			sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
+		if (PairReceiver.existNotification(getApplicationContext(),
+				PairReceiver.NOTIFICATION_ID) == null)
+			sendBroadcast(new Intent(getApplicationContext(),
+					PairReceiver.class));
 		setContentView(viewPager);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		moveTaskToBack(true);
 	}
-	
+
 	private void parse() {
 		final ProgressDialog pd = new ProgressDialog(this);
-		pd.setMessage(getString(R.string.start_parsing));
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		AsyncTask<String, String, Boolean> asc = new AsyncTask<String, String, Boolean>() {
-			private boolean succesfull = false;
-
-			@Override
-			protected Boolean doInBackground(String... params) {
-
-				DBAdapter.getInstance(getApplicationContext()).refreshSchedule(
-						prefs.getString(getString(R.string.group_number), ""
-								+ (-1)),
-						Integer.parseInt(prefs.getString(
-								getString(R.string.preference_sub_group_list),
-								"" + 0)), new ParserListiner() {
-
-							@Override
-							public void onException(final Exception e) {
-								pd.cancel();
-								// Looper.prepare();
-								runOnUiThread(new Runnable() {
-
-									@Override
-									public void run() {
-										Toast.makeText(
-												getApplicationContext(),
-												"Очевидно, что-то пошло не так :("
-														+ System.getProperty("LINE_SEPARATOR")
-														+ e.getClass(),
-												Toast.LENGTH_LONG).show();
-									}
-								});
-								succesfull = false;
-								/*if (!mAdapter.isFilling())*/ {
-									finish();
-								}
-							}
-
-							@Override
-							public void onComplete() {
-								pd.cancel();
-								runOnUiThread(new Runnable() {
-									public void run() {
-										init(System.currentTimeMillis());
-									}
-								});
-								sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
-								succesfull = true;
-							}
-						});
-				return succesfull;
-			}
-
-			@Override
-			protected void onProgressUpdate(String... values) {
-				pd.setTitle(values[0]);
-				super.onProgressUpdate(values);
-			}
-
-			@Override
-			protected void onPostExecute(Boolean result) {
-				pd.cancel();
-				super.onPostExecute(result);
-			}
-		};
-		asc.execute(new String[]{});
+		mProgressDialog = pd;
+		pd.setMessage(getString(R.string.start_parsing));/*
+														 * final
+														 * SharedPreferences
+														 * prefs =
+														 * PreferenceManager .
+														 * getDefaultSharedPreferences
+														 * (this);
+														 * AsyncTask<String,
+														 * String, Boolean> asc
+														 * = new
+														 * AsyncTask<String,
+														 * String, Boolean>() {
+														 * private boolean
+														 * succesfull = false;
+														 * 
+														 * @Override protected
+														 * Boolean
+														 * doInBackground
+														 * (String... params) {
+														 * 
+														 * DBAdapter.getInstance(
+														 * getApplicationContext
+														 * ()).refreshSchedule(
+														 * prefs
+														 * .getString(getString
+														 * (R
+														 * .string.group_number
+														 * ), "" + (-1)),
+														 * Integer
+														 * .parseInt(prefs
+														 * .getString(
+														 * getString(R.string.
+														 * preference_sub_group_list
+														 * ), "" + 0)), new
+														 * ParserListiner() {
+														 * 
+														 * @Override public void
+														 * onException(final
+														 * Exception e) {
+														 * pd.cancel(); //
+														 * Looper.prepare();
+														 * runOnUiThread(new
+														 * Runnable() {
+														 * 
+														 * @Override public void
+														 * run() {
+														 * Toast.makeText(
+														 * getApplicationContext
+														 * (),
+														 * "Очевидно, что-то пошло не так :("
+														 * + System.getProperty(
+														 * "LINE_SEPARATOR") +
+														 * e.getClass(),
+														 * Toast.LENGTH_LONG
+														 * ).show(); } });
+														 * succesfull = false;
+														 * /*if
+														 * (!mAdapter.isFilling
+														 * ())/ { finish(); } }
+														 * 
+														 * @Override public void
+														 * onComplete() {
+														 * pd.cancel();
+														 * runOnUiThread(new
+														 * Runnable() { public
+														 * void run() {
+														 * init(System
+														 * .currentTimeMillis
+														 * ()); } });
+														 * sendBroadcast(new
+														 * Intent
+														 * (getApplicationContext
+														 * (),
+														 * PairReceiver.class));
+														 * succesfull = true; }
+														 * }); return
+														 * succesfull; }
+														 * 
+														 * @Override protected
+														 * void
+														 * onProgressUpdate(
+														 * String... values) {
+														 * pd
+														 * .setTitle(values[0]);
+														 * super
+														 * .onProgressUpdate
+														 * (values); }
+														 * 
+														 * @Override protected
+														 * void
+														 * onPostExecute(Boolean
+														 * result) {
+														 * pd.cancel();
+														 * super.onPostExecute
+														 * (result); } };
+														 * asc.execute(new
+														 * String[]{});
+														 */
 		pd.setCancelable(false);
 		pd.setCanceledOnTouchOutside(false);
 		pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
+		startService(new Intent(getApplicationContext(), ParserService.class));
 		pd.show();
 		// FIXEME всё это в onComplete + возвращаться в тот день, который был
 		// текущим

@@ -43,14 +43,14 @@ class DBHelper extends SQLiteOpenHelper {
 				" (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ DBColumns.NAME + " TEXT);";
 		db.execSQL(sql);
-		Log.i(TAG, sql);
+		//Log.i(TAG, sql);
 		
 		/*=====Teacher=====*/
 		sql = "CREATE TABLE " + TEACHER_TABLE_NAME + 
 				" (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ DBColumns.NAME + " TEXT);";
 		db.execSQL(sql);
-		Log.i(TAG, sql);
+		//Log.i(TAG, sql);
 		
 		/*=====Time=====*/
 		sql = "CREATE TABLE " + TIME_TABLE_NAME + 
@@ -59,7 +59,7 @@ class DBHelper extends SQLiteOpenHelper {
 				+ DBColumns.START_MINUTES + " INTEGER, "
 				+ DBColumns.END_HOUR + " INTEGER, "
 				+ DBColumns.END_MINUTES + " INTEGER);";
-		Log.i(TAG, sql);
+		//Log.i(TAG, sql);
 		db.execSQL(sql);
 		
 		/*=====Schedule=====*/
@@ -79,7 +79,7 @@ class DBHelper extends SQLiteOpenHelper {
 				+ "FOREIGN KEY(" + DBColumns.DAY + ") REFERENCES " + DAY_TABLE_NAME + "(" + BaseColumns._ID + "), "
 				+ "FOREIGN KEY(" + DBColumns.TEACHER_ID + ") REFERENCES " + TEACHER_TABLE_NAME + "(" + BaseColumns._ID + "));";
 		
-		Log.i(TAG, sql);
+		//Log.i(TAG, sql);
 		db.execSQL(sql);
 		
 		/*=====Note=====*/
@@ -90,7 +90,7 @@ class DBHelper extends SQLiteOpenHelper {
 				+ DBColumns.DATE + " TEXT,"
 				+ "FOREIGN KEY(" + DBColumns.SCHEDULE_ID + ") REFERENCES " + SCHEDULE_TABLE_NAME + "(" + BaseColumns._ID + "));";
 		db.execSQL(sql);
-		Log.i(TAG, sql);
+		//Log.i(TAG, sql);
 		
 		/*=====Schedule_view=====*/
 		sql = "CREATE VIEW " + SCHEDULE_VIEW_NAME + " AS SELECT "
@@ -115,7 +115,7 @@ class DBHelper extends SQLiteOpenHelper {
 				 + SUBJECT_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.SUBJECT_ID + " and "
 				 + TIME_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.TIME_ID + " and "
 				 + TEACHER_TABLE_NAME + "." + BaseColumns._ID + " = " + SCHEDULE_TABLE_NAME + "." + DBColumns.TEACHER_ID + ";";
-		Log.i(TAG, sql);
+		//Log.i(TAG, sql);
 		db.execSQL(sql);
 	}
 
@@ -125,7 +125,7 @@ class DBHelper extends SQLiteOpenHelper {
 			return;
 		}
 
-		Log.i("DBAdapter", "db upgraded");
+		//Log.i("DBAdapter", "db upgraded");
 		dropTables(db);
 	}
 	
@@ -147,7 +147,7 @@ class DBHelper extends SQLiteOpenHelper {
 			long t = System.currentTimeMillis();
 			SQLiteDatabase db = this.getWritableDatabase();
 			mTotalTime += (System.currentTimeMillis()-t);
-			Log.d("Total time", ""+mTotalTime);
+			//Log.d("Total time", ""+mTotalTime);
 			Cursor cursor = db.query(
 					tableName,
 					new String[]{BaseColumns._ID, columnName},
@@ -165,11 +165,11 @@ class DBHelper extends SQLiteOpenHelper {
 				return result;
 			}
 		} catch (Exception e) {
-			Log.d(TAG, e.getMessage() 
+			/*Log.d(TAG, e.getMessage() 
 					+ "Cannot get item with column = " 
 					+ columnName 
 					+ " and value = " 
-					+ value);
+					+ value);*/
 			return -1;
 		} 
 	}
@@ -182,7 +182,7 @@ class DBHelper extends SQLiteOpenHelper {
 			SQLiteDatabase db = this.getWritableDatabase();
 
 			mTotalTime += (System.currentTimeMillis()-t);
-			Log.d("Total time", ""+mTotalTime);
+			//Log.d("Total time", ""+mTotalTime);
 			ContentValues values = new ContentValues();
 			values.put(DBColumns.NAME, subjectName);
 			itemId = db.insert(SUBJECT_TABLE_NAME, null, values);
@@ -201,7 +201,7 @@ class DBHelper extends SQLiteOpenHelper {
 			SQLiteDatabase db = this.getWritableDatabase();
 
 			mTotalTime += (System.currentTimeMillis()-t);
-			Log.d("Total time", ""+mTotalTime);
+			//Log.d("Total time", ""+mTotalTime);
 			ContentValues values = new ContentValues();
 			values.put(DBColumns.NAME, teacher );
 			itemId = db.insert(TEACHER_TABLE_NAME, null, values);
@@ -220,7 +220,7 @@ class DBHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		mTotalTime += (System.currentTimeMillis()-t);
-		Log.d("Total time", ""+mTotalTime);
+		//Log.d("Total time", ""+mTotalTime);
 		ContentValues values;
 		Cursor cursor;
 		switch (startHour) {
@@ -313,7 +313,7 @@ class DBHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		mTotalTime += (System.currentTimeMillis()-t);
-		Log.d("Total time", ""+mTotalTime);
+		//Log.d("Total time", ""+mTotalTime);
 		String qDate = (new SimpleDateFormat(DATE_FORMAT)).format(date.getTime());
 		
 		Cursor cursor = db.query(
@@ -346,7 +346,7 @@ class DBHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		mTotalTime += (System.currentTimeMillis()-t);
-		Log.d("Total time", ""+mTotalTime);
+		//Log.d("Total time", ""+mTotalTime);
 		ContentValues values = new ContentValues();
 		values.put(DBColumns.SCHEDULE_ID, scheduleId);
 		values.put(DBColumns.TEXT_NOTE, text);
@@ -396,7 +396,7 @@ class DBHelper extends SQLiteOpenHelper {
 		long t = System.currentTimeMillis();
 		SQLiteDatabase db = this.getWritableDatabase();
 		mTotalTime += (System.currentTimeMillis()-t);
-		Log.d("Total time", ""+mTotalTime);
+		//Log.d("Total time", ""+mTotalTime);
 		db.insert(SCHEDULE_TABLE_NAME, null, values);
 		db.close();
 	}

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="by.bsuir.scheduler"
-    android:versionCode="15"
-    android:versionName="0.9" >
+    android:versionCode="16"
+    android:versionName="0.91" >
 
     <uses-sdk android:minSdkVersion="8" />
 
@@ -80,6 +80,8 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
+        <service android:name=".ParserService"
+            android:enabled="true"></service>
     </application>
 
 </manifest>
