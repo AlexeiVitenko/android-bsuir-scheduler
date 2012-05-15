@@ -56,6 +56,7 @@ public class NonScrollableAdapter extends PagerAdapter {
 		c.set(Calendar.DAY_OF_MONTH, picker.getDayOfMonth());
 		CheckBox checkBox = (CheckBox)mViews.get(2).findViewById(R.id.iAmCrazy);
 		if (group.length()>0 && weeks.length()>0 && checkBox.isChecked()) {
+			
 			activity.setResult(group, subGroup, weeks, c.getTimeInMillis());
 		}
 	}

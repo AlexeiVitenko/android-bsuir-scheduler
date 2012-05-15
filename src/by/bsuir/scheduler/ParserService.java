@@ -36,6 +36,7 @@ public class ParserService extends IntentService {
 			
 								@Override
 								public void onException(final Exception e) {
+									Log.d("Error", "Error");
 									SharedPreferences.Editor prefsEditor = prefs.edit();
 									prefsEditor.putString(
 													getString(R.string.group_number),
@@ -45,6 +46,7 @@ public class ParserService extends IntentService {
 											getString(R.string.preference_sub_group_list),
 											prefs.getString(getString(R.string.last_sub_group_number),"" + -1)
 										);
+									prefsEditor.commit();
 									sendBroadcast(new Intent(SchedulerActivity.PARSER_EXCEPTION));
 									synchronized (mMonitor) {
 										mMonitor.notifyAll();	
@@ -54,6 +56,7 @@ public class ParserService extends IntentService {
 			
 								@Override
 								public void onComplete() {
+									Log.d("Complete", "Complete");
 									SharedPreferences.Editor prefsEditor = prefs.edit();
 									prefsEditor.putString(
 											getString(R.string.last_group_number),
@@ -63,6 +66,7 @@ public class ParserService extends IntentService {
 											getString(R.string.last_sub_group_number),
 											prefs.getString(getString(R.string.preference_sub_group_list),"" + -1)
 										);
+									prefsEditor.commit();
 									sendBroadcast(new Intent(SchedulerActivity.PARSER_ACTION));
 									synchronized (mMonitor) {
 										mMonitor.notifyAll();	

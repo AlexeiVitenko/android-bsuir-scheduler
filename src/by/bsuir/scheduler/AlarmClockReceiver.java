@@ -43,6 +43,7 @@ public class AlarmClockReceiver extends BroadcastReceiver {
 					"intent " + intent.getStringExtra(ALARM_STATUS));
 
 			// если вызывается будильник
+			//FIXME тут ругается на nullpointer
 			if (intent.getStringExtra(ALARM_STATUS).equals(CLOCK)) {
 				PowerManager.WakeLock wl;
 				PowerManager pm = (PowerManager) context.getSystemService(context.POWER_SERVICE);
