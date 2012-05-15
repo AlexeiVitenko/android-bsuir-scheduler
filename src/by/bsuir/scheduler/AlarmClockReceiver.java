@@ -37,26 +37,28 @@ public class AlarmClockReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		this.context = context;
 		alarmPref = PreferenceManager.getDefaultSharedPreferences(context);
-
+		
 		if (alarmPref.getBoolean(AlarmActivity.ALARM_CLOCK, false)) {
 			Log.i("AlarmClockReceiver",
 					"intent " + intent.getStringExtra(ALARM_STATUS));
 
 			// если вызывается будильник
 			//FIXME тут ругается на nullpointer
-			if (intent.getStringExtra(ALARM_STATUS).equals(CLOCK)) {
-				PowerManager.WakeLock wl;
-				PowerManager pm = (PowerManager) context.getSystemService(context.POWER_SERVICE);
-				wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP, "My Tag");
-				wl.acquire();
-				Log.d("wake","up");
-				Intent it = new Intent(context, AlarmClockActivity.class);
-				it.putExtras(intent.getExtras());
-				it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivity(it);
-			} else {
-				if (intent.getStringExtra(ALARM_STATUS).equals(CHANGE)) {
-					clearIntents(context);
+			if(intent.getExtras()!=null && intent.getExtras().containsKey(ALARM_STATUS)){
+				if (intent.getStringExtra(ALARM_STATUS).equals(CLOCK)) {
+					PowerManager.WakeLock wl;
+					PowerManager pm = (PowerManager) context.getSystemService(context.POWER_SERVICE);
+					wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP, "My Tag");
+					wl.acquire();
+					Log.d("wake","up");
+					Intent it = new Intent(context, AlarmClockActivity.class);
+					it.putExtras(intent.getExtras());
+					it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(it);
+				} else {
+					if (intent.getStringExtra(ALARM_STATUS).equals(CHANGE)) {
+						clearIntents(context);
+					}
 				}
 			}
 
