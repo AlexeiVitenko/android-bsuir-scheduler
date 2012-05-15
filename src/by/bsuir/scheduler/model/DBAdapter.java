@@ -288,6 +288,7 @@ public class DBAdapter implements Pushable, Closeable {
 					"Отсутсвует подключение к интеренту"));
 			return;
 		}
+		Log.d("Parsing", "Start");
 		mDBHelper.dropTables(mDBHelper.getWritableDatabase());
 		mDBHelper.close();
 		long startTime = System.currentTimeMillis();
