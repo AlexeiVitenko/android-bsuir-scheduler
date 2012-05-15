@@ -36,7 +36,7 @@ public class Parser {
 	private int mSubGroup;
 	private Pushable mBridge;
 	private ParserListiner mListiner;
-	
+	private String mBody;
 	private int counter = 0;
 	/**
 	 * 
@@ -108,7 +108,7 @@ public class Parser {
 	
 	public void parseSchedule(){
 		try {
-			String body = getBody();
+			String body = mBody;
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(body)));
 			NodeList list = doc.getElementsByTagName("table");
 			parseTable(list.item(0));
@@ -174,5 +174,29 @@ public class Parser {
 			mBridge.push(lesson);
 			counter++;
 		}
+	}
+
+	/**
+	 * 
+	 * @return true - если сайт доступе, и отдал расписание, которое можено распарсить, иначе false; 
+	 */
+	public boolean prepare() {
+		mBody = getBody();
+		Document doc;
+		try {
+			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(mBody)));
+			NodeList list = doc.getElementsByTagName("table");
+			return list.getLength()>0;
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			if (mListiner!=null) mListiner.onException(e);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			if (mListiner!=null) mListiner.onException(e);
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			if (mListiner!=null) mListiner.onException(e);
+		}
+		return false;
 	}
 }

@@ -289,13 +289,16 @@ public class DBAdapter implements Pushable, Closeable {
 			return;
 		}
 		Log.d("Parsing", "Start");
-		//TODO проверить лежит ли сайт бгуира
-		mDBHelper.dropTables(mDBHelper.getWritableDatabase());
-		mDBHelper.close();
-		long startTime = System.currentTimeMillis();
 		Parser p = new Parser(group, subGroup, this, listiner);
-		p.parseSchedule();
-		Log.d("Parse time", "" + (System.currentTimeMillis() - startTime));
+		if(p.prepare()){
+			mDBHelper.dropTables(mDBHelper.getWritableDatabase());
+			mDBHelper.close();
+			long startTime = System.currentTimeMillis();
+			p.parseSchedule();
+			Log.d("Parse time", "" + (System.currentTimeMillis() - startTime));
+		}else{
+			listiner.onException(new Exception("No such group"));
+		}
 	}
 
 	public boolean isFilling() {
