@@ -1,5 +1,6 @@
 package by.bsuir.scheduler;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -113,14 +114,18 @@ public class AlarmClockReceiver extends BroadcastReceiver {
 				context.getApplicationContext(), ALARM_ID, intent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), pi);
-
+		Calendar at = Calendar.getInstance();
+		String day = "";
+		if (at.get(Calendar.DAY_OF_YEAR)!=time.get(Calendar.DAY_OF_YEAR)) {
+			day = " " + context.getResources().getStringArray(R.array.days_of_week_abb)[time.get(Calendar.DAY_OF_WEEK)];
+		}
 		Toast.makeText(
 				context,
 				context.getResources().getString(R.string.app_name)
 						+ ". "
 						+ context.getResources()
 								.getString(R.string.alarm_toast) + " "
-						+ AlarmActivity.formatTime(time.getTimeInMillis()),
+						+ AlarmActivity.formatTime(time.getTimeInMillis())+day,
 				Toast.LENGTH_LONG).show();
 	}
 
