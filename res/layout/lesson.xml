@@ -99,6 +99,9 @@
         </LinearLayout>
     </LinearLayout>
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -110,7 +113,7 @@
             android:layout_height="wrap_content"
             android:text="@string/note"
             android:textSize="7pt" />
-
+        
         <TextView
             android:id="@+id/lesson_note"
             android:layout_width="fill_parent"
@@ -123,5 +126,6 @@
             android:textColor="@android:color/primary_text_dark"
             android:textSize="7pt" />
     </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
