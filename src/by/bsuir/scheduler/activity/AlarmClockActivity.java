@@ -62,12 +62,12 @@ public class AlarmClockActivity extends Activity {
 		PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP, "My Tag");
 		wl.acquire();
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		/*
+//		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
 		KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 
 		KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("Keyguard_Lock_Test");
-		 keyguardLock.disableKeyguard();*/
+		 keyguardLock.disableKeyguard();
 		setContentView(R.layout.alarm_clock_dialog);
 		setTitle(R.string.app_name);
 		
@@ -102,6 +102,7 @@ public class AlarmClockActivity extends Activity {
 			if (sharedPref.getBoolean(AlarmActivity.ALARM_VIBRATION, true)) {
 				vibrator.vibrate(6000);
 			}
+			mediaPlayer.setLooping(true);
 			mediaPlayer.start();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -119,7 +120,6 @@ public class AlarmClockActivity extends Activity {
 				finish();
 			}
 		});
-
 	}
 
 	@Override
