@@ -295,9 +295,9 @@ public class DBAdapter implements Pushable, Closeable {
 			long startTime = System.currentTimeMillis();
 			p.parseSchedule();
 			Log.d("Parse time", "" + (System.currentTimeMillis() - startTime));
-		}else{
+		}/*else{
 			listiner.onException(new Exception(mContext.getString(R.string.groupname_server_text)+" "+mContext.getString(R.string.group_probably_not_exsist)+" "+group));
-		}
+		}*/
 	}
 
 	public boolean isFilling() {
