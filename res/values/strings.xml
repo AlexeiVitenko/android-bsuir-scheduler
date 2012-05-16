@@ -14,7 +14,7 @@
     <string name="dialog_save">Save</string>
     <string name="dialog_clear">Clear</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="semester">Семестр</string>
+    <string name="semester">Semester</string>
     <string name="semester_length">Semester length</string>
     <string name="semester_length_weeks">semesterlengthweeks</string>
     <string name="semester_start_day">semester_start_day</string>
@@ -40,7 +40,7 @@
 	<string name="welcome">Thank you for choosing our product!\nTo start using it you need to enter some data.</string>
 	<string name="back">Back</string>
 	<string name="next">Next</string>
-	<string name="sorry">Надоело :)</string>
+	<string name="sorry">These data are unique for each group.\nThat\'s why, enter it by yourself, please.</string>
 	<string name="start_work">To start work click "Next".</string>
 	<string name="start_parsing">Downloading schedule</string>
 	<string name="room">room: </string>
@@ -54,7 +54,7 @@
 	<string name="notif_lights">notif_lights</string>
 	<string name="notification_sound">Sound</string>
     <string name="notification_lights">Lights</string>
-    <string name="crazy">This application distribute \"as is as\" and you use it on your own risk.\n</string>
+    <string name="crazy">This application distribute \"as is as\" and you use it on your own risk.\nWe are not responsible for breach your plans due to program errors</string>
     <string name="agree">Agree</string>
     <string name="key_alarm_clock">pref_alarm_clock</string>
     <string name="key_alarm_type">pref_alarm_type</string>
