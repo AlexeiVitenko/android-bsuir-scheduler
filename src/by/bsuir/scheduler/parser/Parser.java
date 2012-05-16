@@ -43,6 +43,7 @@ public class Parser {
 	private Node mTable;
 	private int counter = 0;
 	private Context mContext;
+	private String mGroup;
 	/**
 	 * 
 	 * @param group - группа. String
@@ -53,6 +54,7 @@ public class Parser {
 	public Parser(String group, int subGroup, Pushable bridge, ParserListiner listiner, Context context){
 		HttpParams params = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(params, 30000);
+		mGroup = group;
 		mClient = new DefaultHttpClient(params);
 		mUrl = URL + group;
 		mSubGroup = subGroup;
@@ -74,8 +76,10 @@ public class Parser {
 			body = mClient.execute(getMethod, respHandler);
 		} catch (ClientProtocolException e) {
 			if (mListiner!=null) mListiner.onException(e);
+			return null;
 		} catch (IOException e) {
-			if (mListiner!=null) mListiner.onException(e);
+			if (mListiner!=null) mListiner.onException(new Exception(e /*mContext.getString(R.string.internet_exception_text)*/));
+			return null;
 		}
 		return cleanBody(body);
 	}
@@ -177,6 +181,9 @@ public class Parser {
 	 */
 	public boolean prepare() {
 		mBody = getBody();
+		if (mBody == null) {
+			return false;
+		}
 		Document doc;
 		try {
 			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(mBody)));
@@ -185,6 +192,7 @@ public class Parser {
 				mTable = list.item(0);
 				return true;
 			} else {
+				if (mListiner!=null) mListiner.onException(new Exception(mContext.getString(R.string.groupname_server_text)+" "+mContext.getString(R.string.group_probably_not_exsist)+" "+mGroup));
 				return false;
 			}
 		} catch (SAXException e) {
