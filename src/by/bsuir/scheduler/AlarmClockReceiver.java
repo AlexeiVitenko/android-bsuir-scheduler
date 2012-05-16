@@ -117,7 +117,7 @@ public class AlarmClockReceiver extends BroadcastReceiver {
 		Calendar at = Calendar.getInstance();
 		String day = "";
 		if (at.get(Calendar.DAY_OF_YEAR)!=time.get(Calendar.DAY_OF_YEAR)) {
-			day = " " + context.getResources().getStringArray(R.array.days_of_week_abb)[time.get(Calendar.DAY_OF_WEEK)];
+			day = " " + context.getResources().getStringArray(R.array.days_of_week_abb)[time.get(Calendar.DAY_OF_WEEK)-1];
 		}
 		Toast.makeText(
 				context,
