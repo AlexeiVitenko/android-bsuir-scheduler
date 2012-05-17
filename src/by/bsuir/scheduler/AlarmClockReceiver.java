@@ -56,6 +56,13 @@ public class AlarmClockReceiver extends BroadcastReceiver {
 					it.putExtras(intent.getExtras());
 					it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(it);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					wl.release();
 				} else {
 					if (intent.getStringExtra(ALARM_STATUS).equals(CHANGE)) {
 						clearIntents(context);

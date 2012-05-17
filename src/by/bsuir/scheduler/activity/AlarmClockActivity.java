@@ -52,22 +52,22 @@ public class AlarmClockActivity extends Activity {
 	private Pair pair;
 	private MediaPlayer mediaPlayer;
 	private Vibrator vibrator;
-	
-
+	private PowerManager.WakeLock mWl;
+	private KeyguardLock mKeyguardLock;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		PowerManager.WakeLock wl;
+		
 		PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
-		wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP, "My Tag");
-		wl.acquire();
+		mWl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP, "My Tag");
+		mWl.acquire();
 //		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 		
 		KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 
-		KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("Keyguard_Lock_Test");
-		 keyguardLock.disableKeyguard();
+		mKeyguardLock = keyguardManager.newKeyguardLock("Keyguard_Lock_Test");
+		mKeyguardLock.disableKeyguard();
 		setContentView(R.layout.alarm_clock_dialog);
 		setTitle(R.string.app_name);
 		
@@ -142,4 +142,14 @@ public class AlarmClockActivity extends Activity {
 		}
 	}
 
+	@Override
+	protected void onStop() {
+		if (mKeyguardLock!=null) {
+			mKeyguardLock.reenableKeyguard();
+		}
+		if (mWl!=null) {
+			mWl.release();
+		}
+		super.onStop();
+	}
 }

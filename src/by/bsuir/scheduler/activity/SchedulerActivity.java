@@ -108,6 +108,8 @@ public class SchedulerActivity extends Activity implements
 			if (mAdapter.isFilling()) {
 				if (day == null) {
 					day = new GregorianCalendar(Locale.getDefault());
+					day.setTimeInMillis(getIntent().getLongExtra(GridCellAdapter.DAY,
+							System.currentTimeMillis()));
 				}
 				init(day.getTimeInMillis());
 			}
