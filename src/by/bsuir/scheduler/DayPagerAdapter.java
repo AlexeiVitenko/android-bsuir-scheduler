@@ -187,7 +187,7 @@ public class DayPagerAdapter extends PagerAdapter {
 		startDay.setTimeInMillis(mPref.getLong(
 				mContext.getString(R.string.semester_start_day), 0));
 		long diff = needed.getTimeInMillis() - startDay.getTimeInMillis();
-		int weeks = (int) (diff / (7 * 24 * 60 * 60 * 1000)) + 1;
+		int weeks = (needed.get(Calendar.DAY_OF_YEAR) - startDay.get(Calendar.DAY_OF_YEAR))/7+1; //(int) (diff / (7 * 24 * 60 * 60 * 1000)) + 1;
 		/*int current = needed.get(GregorianCalendar.DAY_OF_WEEK);
 		int start = startDay.get(GregorianCalendar.DAY_OF_WEEK);
 		if (current < start) {
