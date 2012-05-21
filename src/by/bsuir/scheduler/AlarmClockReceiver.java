@@ -25,7 +25,7 @@ public class AlarmClockReceiver extends BroadcastReceiver {
 	public static final String CHANGE = "change";
 	public static final String CLOCK = "alarm_clock";
 	public static final String ALARM_STATUS = "alarm_status";
-	public static final String ALARM_TIME = "alarm_status";
+	public static final String ALARM_TIME = "alarm_time_блеать";
 	public static final String ALARM_LESSON_ID = "lesson_id";
 
 	private Context context;
@@ -105,7 +105,7 @@ public class AlarmClockReceiver extends BroadcastReceiver {
 		Intent intent = new Intent(context.getApplicationContext(),
 				AlarmClockReceiver.class);
 		intent.putExtra("МАГИЯ", "НО БЕЗ ЭТОЙ ХЕРНИ НЕ РАБОТАЕТ?!");
-		intent.putExtra(ALARM_TIME, 0);
+		intent.putExtra(ALARM_TIME, time.getTimeInMillis());
 		intent.putExtra(ALARM_STATUS, CLOCK);
 
 		if (Integer.parseInt(alarmPref.getString(AlarmActivity.ALARM_TYPE,""+ 0)) == 1) {
