@@ -13,8 +13,10 @@ import by.bsuir.scheduler.model.Pair;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -25,7 +27,9 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.text.style.UpdateLayout;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -34,7 +38,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class AlarmClockActivity extends Activity {
-
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.d("state", "telState");
+			if (mediaPlayer!=null) {
+				if (mediaPlayer.isPlaying()) {
+					mediaPlayer.stop();
+				}
+			}
+			if (vibrator!=null) {
+				vibrator.cancel();
+			}
+	//		finish();
+		}
+	};
 	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat(
 			"dd.MM.yyyy HH:mm");
 
@@ -57,17 +76,19 @@ public class AlarmClockActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		
 		
 		PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
 		mWl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP, "My Tag");
 		mWl.acquire();
-//		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+		
 		
 		KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 
 		mKeyguardLock = keyguardManager.newKeyguardLock("Keyguard_Lock_Test");
 		mKeyguardLock.disableKeyguard();
+		//getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.alarm_clock_dialog);
 		setTitle(R.string.app_name);
 		
@@ -125,7 +146,7 @@ public class AlarmClockActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-
+		registerReceiver(mReceiver, new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED));
 		alarmTime.setText(AlarmActivity.formatTime(time.getTimeInMillis()));
 		if (Integer.parseInt(sharedPref.getString(AlarmActivity.ALARM_TYPE,""+0)) == 0) {
 			pairLayout.setEnabled(false);
@@ -141,15 +162,24 @@ public class AlarmClockActivity extends Activity {
 					times[1], times[2], times[3]));
 		}
 	}
-
+	
 	@Override
 	protected void onStop() {
+		if (mWl!=null) {
+			if (mWl.isHeld()) mWl.release();
+		}
 		if (mKeyguardLock!=null) {
 			mKeyguardLock.reenableKeyguard();
 		}
-		if (mWl!=null) {
-			mWl.release();
+		if (mediaPlayer!=null) {
+			if (mediaPlayer.isPlaying()) {
+				mediaPlayer.stop();
+			}
 		}
+		if (vibrator!=null) {
+			vibrator.cancel();
+		}
+		unregisterReceiver(mReceiver);
 		super.onStop();
 	}
 }
