@@ -24,13 +24,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import by.bsuir.scheduler.model.DBAdapter;
 import by.bsuir.scheduler.model.Pair;
+import by.bsuir.scheduler.model.Pair.PairStatus;
 
 public class DayListAdapter extends BaseAdapter {
 
 	private LayoutInflater inflater;
 	private List<Pair> mPairs;
 	private GregorianCalendar currentDay;
-
+	private int mCurrentPair;
+	
 	public DayListAdapter(Context context, GregorianCalendar day,
 			List<Pair> pairs) {
 		inflater = LayoutInflater.from(context);
@@ -38,6 +40,16 @@ public class DayListAdapter extends BaseAdapter {
 		currentDay = day;
 	}
 
+	public void refreshStatus(){
+		if (mCurrentPair>=mPairs.size()) {
+			return;
+		}
+		if (mPairs.get(mCurrentPair).getStatus().status==Pair.PAIR_STATUS_CURRENT) {
+			return;
+		}
+		notifyDataSetChanged();
+	}
+	
 	public void setList(List<Pair> mPairs) {
 		this.mPairs = mPairs;
 	}
@@ -101,6 +113,7 @@ public class DayListAdapter extends BaseAdapter {
 			holder.statusBar.setBackgroundColor(green);
 			break;
 		case Pair.PAIR_STATUS_CURRENT:
+			mCurrentPair = position;
 			float pct = ((float) status.progress) / status.pair_length;
 			holder.statusBar.setBackgroundDrawable(getProgress(green, pct));
 			break;

@@ -240,6 +240,17 @@ public class DayPagerAdapter extends PagerAdapter {
 		return view;
 	}
 
+	public void refreshStatus(ViewGroup container) {
+		try{
+		View v = ((LimitedViewPager) container).getChildAt(mCurrentDayPosition%3);
+		ListView lv = (ListView) v.findViewById(R.id.listView1);
+		DayListAdapter dla = (DayListAdapter) lv.getAdapter();
+		dla.refreshStatus();
+		}catch(Exception e){
+			
+		}
+	}
+	
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
 		((LimitedViewPager) container).removeView((View) object);

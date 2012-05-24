@@ -100,7 +100,17 @@ public class SchedulerActivity extends Activity implements
 			sendBroadcast(intent);
 		}
 	}
-
+	/*
+	 * TODO ругается на лики ресиверов
+	 * пока сайт лежит, не берусь проверять, как себя поведёт
+	 * по идее при сворачивании дальше onStop не пойдёт
+	@Override
+	protected void onDestroy() {
+		unregisterReceiver(mParserExceptionReceiver);
+		unregisterReceiver(mParserReceiver);
+		super.onDestroy();
+	}*/
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -118,6 +128,12 @@ public class SchedulerActivity extends Activity implements
 		}
 	}
 
+	@Override
+	protected void onResume() {
+		dayPagerAdapter.refreshStatus(viewPager);
+		super.onResume();
+	}
+	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		if (day == null) {
