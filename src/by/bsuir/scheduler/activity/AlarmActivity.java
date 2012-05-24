@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import by.bsuir.scheduler.AlarmClockReceiver;
+import by.bsuir.scheduler.PairReceiver;
 import by.bsuir.scheduler.R;
 import by.bsuir.scheduler.model.Day;
 import android.app.Dialog;
@@ -54,7 +55,7 @@ public class AlarmActivity extends PreferenceActivity {
 	private RingtonePreference alarmRingtone;
 	private Preference alarmVolume;
 	private CheckBoxPreference alarmVibration;
-
+	private int mStateChange = 0;
 	private static SharedPreferences sharedPref;
 
 	@Override
@@ -74,6 +75,15 @@ public class AlarmActivity extends PreferenceActivity {
 				R.array.alarm_types);
 		int indexOfType = Integer.parseInt(sharedPref.getString(AlarmActivity.ALARM_TYPE,""+ 0));
 		alarmType.setSummary(alarmTypes[indexOfType]);
+		
+		alarmClock.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				mStateChange++;
+				return true;
+			}
+		});
 		alarmBeforeLesson
 				.setEnabled(Integer.parseInt(alarmType.getValue()) == 1);
 		alarmType
@@ -198,7 +208,12 @@ public class AlarmActivity extends PreferenceActivity {
 				""+Integer.parseInt(alarmBeforeLesson.getValue()));
 		editor.putBoolean(ALARM_VIBRATION, alarmVibration.isChecked());
 		editor.commit();
-
+		
+		if (mStateChange%2 == 1) {
+			sendBroadcast(new Intent(SchedulerActivity.ALARM_STATUS_CHANGES));
+		}
+		sendBroadcast(new Intent(getApplicationContext(),
+				PairReceiver.class));
 		Intent intent = new Intent(getApplicationContext(), AlarmClockReceiver.class);
 		intent.putExtra(AlarmClockReceiver.ALARM_STATUS, AlarmClockReceiver.CHANGE);
 		sendBroadcast(intent);

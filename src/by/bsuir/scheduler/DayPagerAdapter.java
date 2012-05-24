@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -237,6 +238,14 @@ public class DayPagerAdapter extends PagerAdapter {
 		alarm.setText(AlarmActivity.getAlarmTimeString(mContext, day));
 
 		((LimitedViewPager) container).addView(view, position % 3);
+		boolean isActivated = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(AlarmActivity.ALARM_CLOCK, false);
+		if (isActivated) {
+			view.findViewById(R.id.alarm_time).setVisibility(View.VISIBLE);
+			((ImageView)view.findViewById(R.id.day_page_alarm_icon)).setImageResource(R.drawable.alarm);
+		}else{
+			view.findViewById(R.id.alarm_time).setVisibility(View.GONE);
+			((ImageView)view.findViewById(R.id.day_page_alarm_icon)).setImageResource(R.drawable.alarm_deactivated);
+		}
 		return view;
 	}
 

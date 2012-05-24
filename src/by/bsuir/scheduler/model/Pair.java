@@ -238,6 +238,14 @@ public class Pair{
 		return new Pair("Свободное время",beforeBreak.mEndingHours,beforeBreak.mEndingMinutes,mBeginningHours, mBeginningMinutes, mDate);
 	}
 	
+	protected Pair getAlarm(long time) {
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(time);
+		int mBH = c.get(Calendar.HOUR_OF_DAY);
+		int mBM = c.get(Calendar.MINUTE);
+		return new Pair("Будильник",mBH,mBM,mBH,mBM, mDate);
+	}
+	
 	public long getEndTimeMillis(){
 		mDate.set(mDate.get(Calendar.YEAR), mDate.get(Calendar.MONTH), mDate.get(Calendar.DAY_OF_MONTH), mEndingHours, mEndingMinutes, 0);
 		return mDate.getTimeInMillis();

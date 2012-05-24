@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -34,6 +35,7 @@ public class SchedulerActivity extends Activity implements
 		OnSemesterParametersChangeListiner {
 	public static final String PARSER_ACTION = "by.bsuir.scheduler.PARSER";
 	public static final String PARSER_EXCEPTION = "by.bsuir.scheduler.PARSER_EXCEPTION";
+	public static final String ALARM_STATUS_CHANGES = SchedulerActivity.class.getPackage().toString() + ".ALARM_STATUS_CHANGES"; 
 	public static final int RESULT_DAY = 2;
 	private BroadcastReceiver mParserReceiver = new BroadcastReceiver() {
 
@@ -70,11 +72,20 @@ public class SchedulerActivity extends Activity implements
 			}
 		}
 	};
+	private BroadcastReceiver mAlarmStateReceiver = new BroadcastReceiver() {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (viewPager!=null) {
+				viewPager.getAdapter().notifyDataSetChanged();
+			}
+		}
+	};
 	private ProgressDialog mProgressDialog;
 	private DayPagerAdapter dayPagerAdapter;
 	private LimitedViewPager viewPager;
 	private DBAdapter mAdapter;
-	private boolean mChooseMode = false; // I'm lovin' it
+	private boolean mChooseMode = false; // I'm lovin' it!
 	private GregorianCalendar day;
 
 	@Override
@@ -84,6 +95,7 @@ public class SchedulerActivity extends Activity implements
 		registerReceiver(mParserReceiver, new IntentFilter(PARSER_ACTION));
 		registerReceiver(mParserExceptionReceiver, new IntentFilter(
 				PARSER_EXCEPTION));
+		registerReceiver(mAlarmStateReceiver, new IntentFilter(ALARM_STATUS_CHANGES));
 		mAdapter = DBAdapter.getInstance(getApplicationContext());
 		if (!mAdapter.isFilling()) {
 			startActivityForResult(

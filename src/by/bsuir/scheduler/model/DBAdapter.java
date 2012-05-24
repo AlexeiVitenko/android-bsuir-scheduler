@@ -390,7 +390,16 @@ public class DBAdapter implements Pushable, Closeable {
 			d = getDay(day);
 			Pair p = d.getPair(0);
 			p1 = p.getPreviuosBreak(p0);
-		}
+		}/*s
+		long nextAlarmTime = PreferenceManager.getDefaultSharedPreferences(mContext).getLong(mContext.getString(R.string.key_get_next_pairs_and_alarm), Long.MAX_VALUE);
+		if (p0.getEndTimeMillis()>=nextAlarmTime) {
+			p1 = p0;
+			p0 = p0.getAlarm(nextAlarmTime);
+		} else {
+			if (p1.getStartTimeMillis()>=nextAlarmTime) {
+				p0 = p1.getAlarm(nextAlarmTime);
+			}
+		}*/
 		return new Pair[] { p0, p1 };
 	}
 }
