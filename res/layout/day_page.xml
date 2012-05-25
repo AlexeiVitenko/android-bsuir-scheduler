@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
     <LinearLayout
+        android:layout_alignParentTop="true"
+        android:id="@+id/layout_date"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#808080"
@@ -37,13 +38,15 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_below="@id/layout_date"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:layout_marginTop="2dp"
         android:background="#616161"
         android:gravity="center_horizontal"
-        android:orientation="horizontal" >
+        android:orientation="horizontal" 
+        android:id="@+id/weeks_info">
 
         <TextView
             android:id="@+id/day_page_week_of_month"
@@ -58,43 +61,36 @@
             android:layout_marginLeft="10dp"
             android:text="(00/00)" />
     </LinearLayout>
-
-    <RelativeLayout
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/alarm_layout"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="wrap_content"
+        android:background="#80808080"
+        android:gravity="center"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal" >
 
-        <LinearLayout
-            android:id="@+id/alarm_layout"
-            android:layout_width="fill_parent"
+        <ImageView
+            android:id="@+id/day_page_alarm_icon"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="#80808080"
-            android:gravity="center"
-            android:orientation="horizontal" >
+            android:padding="5dp"
+            android:src="@drawable/alarm" />
 
-            <ImageView
-                android:id="@+id/day_page_alarm_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/alarm_time"
-                android:src="@drawable/alarm" />
-
-            <TextView
-                android:id="@+id/alarm_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="00:00"
-                android:textSize="15pt" />
-        </LinearLayout>
-
-        <ListView
-            android:id="@+id/listView1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@id/alarm_layout" >
-        </ListView>
-    </RelativeLayout>
-
-</LinearLayout>
+        <TextView
+            android:id="@+id/alarm_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="00:00"
+            android:textSize="15pt" />
+    </LinearLayout>
+    <ListView
+        android:layout_below="@id/weeks_info"
+        android:layout_above="@id/alarm_layout"
+        android:id="@+id/listView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+</RelativeLayout>
