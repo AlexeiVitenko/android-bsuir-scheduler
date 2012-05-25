@@ -43,10 +43,10 @@ public class DayListAdapter extends BaseAdapter {
 	public void refreshStatus(){
 		if (mCurrentPair>=mPairs.size()) {
 			return;
-		}
+		}/*
 		if (mPairs.get(mCurrentPair).getStatus().status==Pair.PAIR_STATUS_CURRENT) {
 			return;
-		}
+		}*/
 		notifyDataSetChanged();
 	}
 	
