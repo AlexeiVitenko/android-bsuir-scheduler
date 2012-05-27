@@ -92,10 +92,6 @@ public class SchedulerActivity extends Activity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d("SchedulerActivity", "Create");
-		registerReceiver(mParserReceiver, new IntentFilter(PARSER_ACTION));
-		registerReceiver(mParserExceptionReceiver, new IntentFilter(
-				PARSER_EXCEPTION));
-		registerReceiver(mAlarmStateReceiver, new IntentFilter(ALARM_STATUS_CHANGES));
 		mAdapter = DBAdapter.getInstance(getApplicationContext());
 		if (!mAdapter.isFilling()) {
 			startActivityForResult(
@@ -112,20 +108,25 @@ public class SchedulerActivity extends Activity implements
 			sendBroadcast(intent);
 		}
 	}
-	/*
+	/**
 	 * TODO ругается на лики ресиверов
 	 * пока сайт лежит, не берусь проверять, как себя поведёт
 	 * по идее при сворачивании дальше onStop не пойдёт
+	 */
 	@Override
-	protected void onDestroy() {
+	protected void onStop() {
 		unregisterReceiver(mParserExceptionReceiver);
 		unregisterReceiver(mParserReceiver);
-		super.onDestroy();
-	}*/
+		unregisterReceiver(mAlarmStateReceiver);
+		super.onStop();
+	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
+		registerReceiver(mParserReceiver, new IntentFilter(PARSER_ACTION));
+		registerReceiver(mParserExceptionReceiver, new IntentFilter(PARSER_EXCEPTION));
+		registerReceiver(mAlarmStateReceiver, new IntentFilter(ALARM_STATUS_CHANGES));
 		if (!mChooseMode) {
 			if (mAdapter.isFilling()) {
 				if (day == null) {
@@ -142,8 +143,8 @@ public class SchedulerActivity extends Activity implements
 
 	@Override
 	protected void onResume() {
-		dayPagerAdapter.refreshStatus(viewPager);
 		super.onResume();
+		dayPagerAdapter.refreshStatus(viewPager);
 	}
 	
 	@Override
