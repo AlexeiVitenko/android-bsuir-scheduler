@@ -52,11 +52,12 @@ public class PairReceiver extends BroadcastReceiver {
 			pi.cancel();
 		}
 		if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(
-				mContext.getString(R.string.notifications_enabled), true)) {
-			getNextAction();
-			setNextNotification();
-			setNextAlarm();
-		}
+				mContext.getString(R.string.notifications_enabled), true)) 
+			if (mAdapter.isFilling()){
+				getNextAction();
+				setNextNotification();
+				setNextAlarm();
+			}
 		//setNextAlarmClock();
 	}
 
