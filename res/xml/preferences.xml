@@ -40,7 +40,7 @@
             android:defaultValue="false"/>
         <CheckBoxPreference android:title="@string/alarm_vibration"
             android:key="@string/notif_vibrate"
-            android:defaultValue="true"/>
+            android:defaultValue="false"/>
         <CheckBoxPreference android:title="@string/notification_lights"
             android:key="@string/notif_lights"
             android:defaultValue="false"/>

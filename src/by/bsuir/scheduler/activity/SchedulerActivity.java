@@ -91,6 +91,9 @@ public class SchedulerActivity extends Activity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		registerReceiver(mParserReceiver, new IntentFilter(PARSER_ACTION));
+		registerReceiver(mParserExceptionReceiver, new IntentFilter(PARSER_EXCEPTION));
+		registerReceiver(mAlarmStateReceiver, new IntentFilter(ALARM_STATUS_CHANGES));
 		Log.d("SchedulerActivity", "Create");
 		mAdapter = DBAdapter.getInstance(getApplicationContext());
 		if (!mAdapter.isFilling()) {
@@ -114,19 +117,16 @@ public class SchedulerActivity extends Activity implements
 	 * по идее при сворачивании дальше onStop не пойдёт
 	 */
 	@Override
-	protected void onStop() {
+	protected void onDestroy() {
 		unregisterReceiver(mParserExceptionReceiver);
 		unregisterReceiver(mParserReceiver);
 		unregisterReceiver(mAlarmStateReceiver);
-		super.onStop();
+		super.onDestroy();
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
-		registerReceiver(mParserReceiver, new IntentFilter(PARSER_ACTION));
-		registerReceiver(mParserExceptionReceiver, new IntentFilter(PARSER_EXCEPTION));
-		registerReceiver(mAlarmStateReceiver, new IntentFilter(ALARM_STATUS_CHANGES));
 		if (!mChooseMode) {
 			if (mAdapter.isFilling()) {
 				if (day == null) {
@@ -144,7 +144,7 @@ public class SchedulerActivity extends Activity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-		dayPagerAdapter.refreshStatus(viewPager);
+		if(dayPagerAdapter!=null) dayPagerAdapter.refreshStatus(viewPager);
 	}
 	
 	@Override
