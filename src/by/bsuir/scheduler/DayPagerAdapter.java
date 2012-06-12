@@ -98,17 +98,7 @@ public class DayPagerAdapter extends PagerAdapter {
 	public Object instantiateItem(ViewGroup container, int position) {
 		View view = null;
 		GregorianCalendar needed;
-		int shift;/*
-		switch (mAdapter.dayMatcher(mCurrentDay)) {
-		case FIRST_DAY:
-			((LimitedViewPager)container).setLeftBorder(mCurrentDayPosition);
-			break;
-		case LAST_DAY:
-			mSize = position+2;
-			break;
-		default:
-			break;
-		}*/
+		int shift;
 		if (position - mCurrentDayPosition > 0) {
 			shift = 1;
 			needed = dayRight;
@@ -135,17 +125,7 @@ public class DayPagerAdapter extends PagerAdapter {
 				view = new  View(mContext);
 				((LimitedViewPager) container).addView(view, position % 3);
 				return view;
-			}/*
-			if (mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_LEFT || mAdapter.dayMatcher(needed) == DayMatcherConditions.OVERFLOW_RIGTH) {
-				view = new  View(mContext);/*
-				needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
-				if (mAdapter.dayMatcher(needed)==DayMatcherConditions.FIRST_DAY && mAdapter.isWorkDay(needed)) {
-					*
-				//} else {
-					((LimitedViewPager) container).addView(view, position % 3);
-					return view;
-				//}
-			}*/
+			}
 			needed.add(GregorianCalendar.DAY_OF_YEAR, shift);
 		}
 		if (mAdapter.dayMatcher(needed) == DayMatcherConditions.LAST_DAY) {
@@ -188,12 +168,8 @@ public class DayPagerAdapter extends PagerAdapter {
 		startDay.setTimeInMillis(mPref.getLong(
 				mContext.getString(R.string.semester_start_day), 0));
 		long diff = needed.getTimeInMillis() - startDay.getTimeInMillis();
-		int weeks = (needed.get(Calendar.DAY_OF_YEAR) - startDay.get(Calendar.DAY_OF_YEAR))/7+1; //(int) (diff / (7 * 24 * 60 * 60 * 1000)) + 1;
-		/*int current = needed.get(GregorianCalendar.DAY_OF_WEEK);
-		int start = startDay.get(GregorianCalendar.DAY_OF_WEEK);
-		if (current < start) {
-			weeks++;
-		}*/
+		int weeks = (needed.get(Calendar.DAY_OF_YEAR) - startDay.get(Calendar.DAY_OF_YEAR))/7+1;
+      
 		((TextView) view.findViewById(R.id.day_page_week_of_semester))
 				.setText("("
 						+ weeks
