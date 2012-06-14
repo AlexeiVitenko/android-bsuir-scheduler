@@ -28,9 +28,6 @@ import by.bsuir.scheduler.model.Pair;
 public class PairReceiver extends BroadcastReceiver {
 	public static final String DAY = "day";
 	public static final String PAIR_NUMBER = "pair_number";
-	/*
-	 * true - Начало False - конец пары. Сделано для облегчения доступа к базе
-	 */
 	public static final String PAIR_STATUS = "pair_status";
 	public static final int NOTIFICATION_ID = 1927;
 	private Context mContext;
