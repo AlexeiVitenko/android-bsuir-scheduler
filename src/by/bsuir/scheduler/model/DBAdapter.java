@@ -103,7 +103,7 @@ public class DBAdapter implements Pushable, Closeable {
 			if (day.getMinimalDaysInFirstWeek() != 7) {
 				weeks--;
 			}
-			weeks += (new GregorianCalendar(2011, 11, 31)
+			weeks += (new GregorianCalendar(septFirst.get(Calendar.YEAR), 11, 31)
 					.get(Calendar.WEEK_OF_YEAR) - septFirst
 					.get(Calendar.WEEK_OF_YEAR)) + 1;
 			weeks += day.get(Calendar.WEEK_OF_YEAR);
@@ -111,7 +111,8 @@ public class DBAdapter implements Pushable, Closeable {
 			weeks = day.get(Calendar.WEEK_OF_YEAR)
 					- septFirst.get(Calendar.WEEK_OF_YEAR) + 1;
 		}
-		return weeks % 4 + 1;
+		Log.d("week",""+ weeks);
+		return weeks % 4;
 	}
 
 	//FIXME эти методы различаются только запросом, поэтому надо бы сделать перегрузку.
@@ -208,9 +209,9 @@ public class DBAdapter implements Pushable, Closeable {
 
 		if (mStartDay.get(Calendar.MONTH) < 8) {
 			septFirst = new GregorianCalendar(mStartDay.get(Calendar.YEAR) - 1,
-					9, 1);
+					8, 1);
 		} else {
-			septFirst = new GregorianCalendar(mStartDay.get(Calendar.YEAR), 9,
+			septFirst = new GregorianCalendar(mStartDay.get(Calendar.YEAR), 8,
 					1);
 		}
 
