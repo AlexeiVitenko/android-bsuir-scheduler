@@ -109,7 +109,7 @@ public class DBAdapter implements Pushable, Closeable {
 			weeks += day.get(Calendar.WEEK_OF_YEAR);
 		} else {
 			weeks = day.get(Calendar.WEEK_OF_YEAR)
-					- septFirst.get(Calendar.WEEK_OF_YEAR) + 1;
+					- septFirst.get(Calendar.WEEK_OF_YEAR);
 		}
 		Log.d("week",""+ weeks);
 		return weeks % 4;
