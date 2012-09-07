@@ -149,7 +149,7 @@ public class DayPagerAdapter extends PagerAdapter {
 		((TextView) view.findViewById(R.id.day_date)).setText(needed.get(GregorianCalendar.DAY_OF_MONTH) + " ");
 		((TextView) view.findViewById(R.id.month_genitive)).setText(months[needed.get(GregorianCalendar.MONTH)]);
 		((TextView) view.findViewById(R.id.day_page_week_of_month)).setText(mContext.getResources().getStringArray(
-				R.array.weeks)[day.getWeek()]);
+				R.array.weeks)[day.getWeek() - 1]);
 
 		// неделя "(00/00)"
 		SharedPreferences mPref = PreferenceManager.getDefaultSharedPreferences(mContext);
