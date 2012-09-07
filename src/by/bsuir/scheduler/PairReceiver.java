@@ -91,7 +91,8 @@ public class PairReceiver extends BroadcastReceiver {
 		Notification notification = new Notification(R.drawable.ic_app,
 				mPairs[0].getLesson() + " " + mPairs[0].getRoom(),
 				System.currentTimeMillis());
-		notification.flags = Notification.FLAG_NO_CLEAR;
+		//notification.flags = Notification.FLAG_NO_CLEAR;
+		notification.flags = Notification.FLAG_ONGOING_EVENT;
 		int counter = 0;
 		int flag = 0;
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
