@@ -112,7 +112,7 @@ public class DBAdapter implements Pushable, Closeable {
 					- septFirst.get(Calendar.WEEK_OF_YEAR);
 		}
 		Log.d("week",""+ weeks);
-		return weeks % 4;
+		return weeks % 4 + 1;
 	}
 
 	//FIXME эти методы различаются только запросом, поэтому надо бы сделать перегрузку.
