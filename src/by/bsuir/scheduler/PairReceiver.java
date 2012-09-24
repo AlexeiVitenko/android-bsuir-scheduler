@@ -114,7 +114,6 @@ public class PairReceiver extends BroadcastReceiver {
 			notification.defaults = flag;
 		}
 		
-		// Notification.FLAG_NO_CLEAR - использовать его
 		Intent notifyIntent = new Intent(mContext.getApplicationContext(),
 				SchedulerActivity.class);
 		notifyIntent.setAction(Intent.ACTION_VIEW);
@@ -122,7 +121,7 @@ public class PairReceiver extends BroadcastReceiver {
 				.getTimeInMillis());
 		PendingIntent nPendingIntent = PendingIntent.getActivity(
 				mContext.getApplicationContext(), NOTIFICATION_ID,
-				notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+				notifyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		//Log.d("p0", mPairs[0].getLesson());
 		//Log.d("p1null", "" + (mPairs[1] == null));
 		//Log.d("p1", mPairs[1].getLesson());
