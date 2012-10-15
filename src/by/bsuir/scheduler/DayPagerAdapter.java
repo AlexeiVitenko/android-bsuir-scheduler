@@ -186,6 +186,7 @@ public class DayPagerAdapter extends PagerAdapter {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(mContext, AlarmActivity.class);
+				intent.putExtra(AlarmActivity.PAIR_NUMBER, day.getCount());
 				mContext.startActivity(intent);
 			}
 		});
