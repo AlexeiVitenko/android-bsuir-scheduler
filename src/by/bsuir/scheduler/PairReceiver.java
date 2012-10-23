@@ -117,6 +117,7 @@ public class PairReceiver extends BroadcastReceiver {
 		Intent notifyIntent = new Intent(mContext.getApplicationContext(),
 				SchedulerActivity.class);
 		notifyIntent.setAction(Intent.ACTION_VIEW);
+		notifyIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		notifyIntent.putExtra(GridCellAdapter.DAY, mPairs[0].getDate()
 				.getTimeInMillis());
 		PendingIntent nPendingIntent = PendingIntent.getActivity(
