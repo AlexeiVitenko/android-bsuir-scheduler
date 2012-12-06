@@ -403,4 +403,16 @@ public class DBAdapter implements Pushable, Closeable {
 		}*/
 		return new Pair[] { p0, p1 };
 	}
+	
+	public void addAlarm(Day d, int pair){
+	    mDBHelper.addAlarm(d.getWeek(), d.getDate().get(Calendar.DAY_OF_WEEK), pair, -1, -1);
+	}
+	
+	public void addAlarm(Day d, int sh, int sm){
+	    mDBHelper.addAlarm(d.getWeek(), d.getDate().get(Calendar.DAY_OF_WEEK), -1, sh, sm);
+    }
+	
+	public Alarm getAlarm(Day d){
+	    return mDBHelper.getAlarm(d.getWeek(), d.getDate().get(Calendar.DAY_OF_WEEK));
+	}
 }
