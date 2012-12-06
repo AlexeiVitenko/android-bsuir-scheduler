@@ -22,5 +22,6 @@ class DBColumns {
 	//public static final String VIEW_SUBJECT_TYPE = "subject_type";
 	public static final String VIEW_DAY = "day";
 	public static final String VIEW_TEACHER = "teacher";
+	public static final String PAIR_NUMBER = "pair_number";
 	
 }

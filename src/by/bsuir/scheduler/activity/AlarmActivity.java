@@ -190,6 +190,7 @@ public class AlarmActivity extends PreferenceActivity {
         editor.commit();
 
         if (wasModified) {
+            
             sendBroadcast(new Intent(SchedulerActivity.ALARM_STATUS_CHANGES));
             sendBroadcast(new Intent(getApplicationContext(), PairReceiver.class));
             Intent intent = new Intent(getApplicationContext(), AlarmClockReceiver.class);
