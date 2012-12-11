@@ -16,7 +16,7 @@ class DBHelper extends SQLiteOpenHelper {
     private long mTotalTime = 0;
 
     private static final String DATABASE_NAME = "scheduledb";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     private static final String SCHEDULE_TABLE_NAME = "schedule";
     private static final String NOTE_TABLE_NAME = "note";
     private static final String SUBJECT_TABLE_NAME = "subject";
@@ -80,10 +80,11 @@ class DBHelper extends SQLiteOpenHelper {
                 + BaseColumns._ID + "));";
         db.execSQL(sql);
 
-        /* =====Note===== */
+        /* =====Alarms===== */
         sql = "CREATE TABLE " + ALARMS_TABLE_NAME + " (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + DBColumns.WEEK + " INTEGER, " + DBColumns.DAY + " INTEGER, " + DBColumns.PAIR_NUMBER + " INTEGER, "
-                + DBColumns.START_HOUR + " INTEGER, " + DBColumns.START_MINUTES + " INTEGER);";
+                + DBColumns.WEEK + " INTEGER, " + DBColumns.ACTIVE + " INTEGER, " + DBColumns.DAY + " INTEGER, "
+                + DBColumns.PAIR_NUMBER + " INTEGER, " + DBColumns.START_HOUR + " INTEGER, " + DBColumns.START_MINUTES
+                + " INTEGER);";
         db.execSQL(sql);
         // Log.i(TAG, sql);
 
@@ -337,14 +338,16 @@ class DBHelper extends SQLiteOpenHelper {
 
     Alarm getAlarm(int week, int day) {
         SQLiteDatabase db = getWritableDatabase();
-        Cursor c = db.query(ALARMS_TABLE_NAME, new String[] { BaseColumns._ID, DBColumns.WEEK, DBColumns.DAY },
-                DBColumns.WEEK + " = " + week + " AND " + DBColumns.DAY, null, null, null, null);
+        Cursor c = db.query(ALARMS_TABLE_NAME, new String[] { BaseColumns._ID, DBColumns.WEEK, DBColumns.DAY,
+                DBColumns.START_HOUR, DBColumns.ACTIVE, DBColumns.START_MINUTES }, DBColumns.WEEK + " = " + week
+                + " AND " + DBColumns.DAY, null, null, null, null);
         Alarm a = null;
         if (c.moveToFirst()) {
             a = new Alarm(c.getInt(c.getColumnIndex(DBColumns.WEEK)), c.getInt(c.getColumnIndex(DBColumns.DAY)),
                     c.getInt(c.getColumnIndex(DBColumns.START_HOUR)), c.getInt(c
                             .getColumnIndex(DBColumns.START_MINUTES)),
-                    c.getInt(c.getColumnIndex(DBColumns.PAIR_NUMBER)));
+                    c.getInt(c.getColumnIndex(DBColumns.PAIR_NUMBER)),
+                    c.getInt(c.getColumnIndex(DBColumns.ACTIVE)) == 1);
         }
         db.close();
         return a;

@@ -63,7 +63,7 @@ public class AlarmActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.alarm);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);// getSharedPreferences(ALARM_PREF,
+      //  sharedPref = PreferenceManager.getDefaultSharedPreferences(this);// getSharedPreferences(ALARM_PREF,
                                                                          // MODE_PRIVATE);
         alarmClock = (CheckBoxPreference) findPreference(ALARM_CLOCK);
         alarmType = (ListPreference) findPreference(ALARM_TYPE);
