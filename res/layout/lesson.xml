@@ -101,31 +101,43 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="3dp" >
+        android:layout_height="wrap_content" >
 
-        <TextView
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/note"
-            android:textSize="7pt" />
-        
-        <TextView
-            android:id="@+id/lesson_note"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:background="#616161"
-            android:minLines="10"
-            android:padding="5dp"
-            android:text="Текст заметки..."
-            android:textColor="@android:color/primary_text_dark"
-            android:textSize="7pt" />
-    </LinearLayout>
+            android:orientation="vertical"
+            android:padding="3dp" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/note"
+                android:textSize="7pt" />
+
+            <TextView
+                android:id="@+id/lesson_note"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:background="#616161"
+                android:minLines="5"
+                android:padding="5dp"
+                android:text="Текст заметки..."
+                android:textColor="@android:color/primary_text_dark"
+                android:textSize="7pt" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/labs"
+                android:textSize="7pt" />
+
+            <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+            </ListView>
+        </LinearLayout>
     </ScrollView>
 
 </LinearLayout>

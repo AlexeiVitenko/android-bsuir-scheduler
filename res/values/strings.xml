@@ -3,7 +3,7 @@
     
     <string name="date">Date:</string>
     <string name="hello">Hello World, SchedulerActivity!</string>
-    <string name="app_name">Scheduler</string>
+    <string name="app_name">BSUIR Schedule</string>
     <string name="menu_item_day">Day</string>
     <string name="menu_item_week">Week</string>
     <string name="menu_item_month">Month</string>
@@ -74,4 +74,5 @@
     <string name="group_probably_not_exsist">or this group don\'t exsist: </string>
     <string name="sax_exception">XML not valid. It seems that document structure was changed on the website</string> 
     <string name="magic">Do you like... magic?</string>
+    <string name="labs">Labs</string>
 </resources>
