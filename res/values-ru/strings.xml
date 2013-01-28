@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="date">Дата:</string>
-    <string name="app_name">Scheduler</string>
     <string name="menu_item_day">День</string>
     <string name="menu_item_week">Неделя</string>
     <string name="menu_item_month">Месяц</string>
     <string name="menu_item_refresh">Обновить</string>
     <string name="menu_item_preferences">Настройки</string>
-    <string name="menu_item_info_details">О Scheduler</string>
     <string name="note">Заметка</string>
     <string name="dialog_save">Сохранить</string>
     <string name="dialog_clear">Очистить</string>
@@ -53,5 +51,5 @@
     <string name="group_probably_not_exsist">либо такой группы не существует: </string> 
     <string name="sax_exception">XML не валиден. Скорее всего поменялась структура расписания на сайте</string>
     <string name="indian_code">Парсер настроен неверно.\nНапинайте разработчикам</string>
-    <string name="magic">Do you like... magic?</string>
+    <string name="labs">Лабы</string>
 </resources>
