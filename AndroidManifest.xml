@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="by.bsuir.scheduler"
     android:versionCode="21"
-    android:versionName="183" >
+    android:versionName="185" >
 
     <uses-sdk android:minSdkVersion="8" />
 
