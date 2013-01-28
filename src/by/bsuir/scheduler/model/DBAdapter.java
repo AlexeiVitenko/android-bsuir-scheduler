@@ -30,7 +30,7 @@ public class DBAdapter implements Pushable, Closeable {
 		OVERFLOW_LEFT, OVERFLOW_RIGTH, FIRST_DAY, LAST_DAY, HOLYDAY, WORK_DAY
 	}
 
-	protected static DBAdapter mInstance;
+  protected static DBAdapter mInstance;
 
 	public static DBAdapter getInstance(Context context) {
 		if (mInstance == null) {
@@ -103,7 +103,7 @@ public class DBAdapter implements Pushable, Closeable {
 			if (day.getMinimalDaysInFirstWeek() != 7) {
 				weeks--;
 			}
-			weeks += (new GregorianCalendar(septFirst.get(Calendar.YEAR), 11, 31)
+			weeks += (new GregorianCalendar(septFirst.get(Calendar.YEAR), 11, 30)
 					.get(Calendar.WEEK_OF_YEAR) - septFirst
 					.get(Calendar.WEEK_OF_YEAR)) + 1;
 			weeks += day.get(Calendar.WEEK_OF_YEAR);
