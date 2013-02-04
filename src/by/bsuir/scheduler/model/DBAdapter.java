@@ -6,6 +6,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Weeks;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -98,20 +102,16 @@ public class DBAdapter implements Pushable, Closeable {
 	 * @return
 	 */
 	private int getWeekNumber(GregorianCalendar day) {
-		int weeks = 0;
-		if (day.get(Calendar.YEAR) > septFirst.get(Calendar.YEAR)) {
-			if (day.getMinimalDaysInFirstWeek() != 7) {
-				weeks--;
-			}
-			weeks += (new GregorianCalendar(septFirst.get(Calendar.YEAR), 11, 30)
-					.get(Calendar.WEEK_OF_YEAR) - septFirst
-					.get(Calendar.WEEK_OF_YEAR)) + 1;
-			weeks += day.get(Calendar.WEEK_OF_YEAR);
-		} else {
-			weeks = day.get(Calendar.WEEK_OF_YEAR)
-					- septFirst.get(Calendar.WEEK_OF_YEAR);
-		}
-		Log.d("week",""+ weeks);
+		int days = Days.daysBetween(new DateTime(septFirst), new DateTime(day)).getDays() + 1;
+		int sp;
+		if ((sp = septFirst.get(Calendar.DAY_OF_WEEK)) > 1) {
+      days -= 9 - sp;
+    } else {
+      days -= sp;
+    }
+		int weeks = days / 7;
+		if (days % 7 > 0)
+		  weeks ++;
 		return weeks % 4 + 1;
 	}
 
